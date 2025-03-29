@@ -11,6 +11,7 @@
     "@aws-sdk/client-dynamodb": "^3.774.0",
     "@aws-sdk/lib-dynamodb": "^3.774.0",
     "@aws-sdk/util-dynamodb": "^3.774.0",
+    "@types/aws-lambda": "^8.10.148",
     "@types/jest": "^29.5.14",
     "@types/lodash": "^4.17.16",
     "aws-sdk-client-mock": "^4.1.0",

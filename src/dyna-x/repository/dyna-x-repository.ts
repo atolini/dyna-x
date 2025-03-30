@@ -22,12 +22,15 @@ import {
 } from "@aws-sdk/client-dynamodb";
 import { marshall, unmarshall } from "@aws-sdk/util-dynamodb";
 import { merge } from 'lodash';
-import { ConditionBuilder } from "./condition-builder";
-import { DynaXSchema } from "./dyna-x-schema";
-import { UpdateBuilder } from "./update-builder";
+import { ConditionBuilder } from "../condition-builder/condition-builder";
+import { DynaXSchema } from "../schema/dyna-x-schema";
+import { UpdateBuilder } from "../update-builder/update-builder";
 import * as _ from "lodash";
 import { Logger } from "@aws-lambda-powertools/logger";
-import { MaxItemsExceededError } from "./max-item-exceeded-error";
+import { MaxItemsExceededError } from "../util/max-item-exceeded-error";
+import { IRepository } from "@database/repository/i-repository";
+import { ConditionExpressionResult } from "../condition-builder/condition-expression-result";
+import { UpdateExpressionResult } from "../update-builder/update-expression-result";
 
 export interface Key {
     primaryKey: any;
@@ -40,7 +43,7 @@ export interface Key {
  *
  * @template T - The type of item stored in the DynamoDB table.
  */
-export class DynaXRepository<T> {
+export class DynaXRepository<T> implements IRepository<T, Key, ConditionExpressionResult, UpdateExpressionResult> {
     private schema: DynaXSchema;
     private client: DynamoDBClient;
     private logger: Logger;
@@ -58,7 +61,7 @@ export class DynaXRepository<T> {
         schema: DynaXSchema,
         client: DynamoDBClient,
         logger: Logger,
-        maxBatchItems = 1000
+        maxBatchItems: number = 1000
     ) {
         this.schema = schema;
         this.client = client;

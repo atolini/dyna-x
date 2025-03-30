@@ -1,4 +1,7 @@
-export class ConditionBuilder {
+import { IConditionBuilder } from "@database/condition-builder/i-condition-builder";
+import { ConditionExpressionResult } from "./condition-expression-result";
+
+export class ConditionBuilder implements IConditionBuilder<ConditionExpressionResult> {
     private expressions: string[] = [];
     private attributeNames: Record<string, string> = {};
     private attributeValues: Record<string, any> = {};

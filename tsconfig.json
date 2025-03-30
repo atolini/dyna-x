@@ -6,10 +6,12 @@
         "rootDir": "./src",
         "strict": false,
         "moduleResolution": "node",
-       
         "declaration": true, 
         "declarationMap": true, 
-        "emitDeclarationOnly": false
+        "emitDeclarationOnly": false, 
+        "paths": {
+            "@database/*": ["./src/database/*"], 
+        }
     },
     "include": [
         "src/**/*"

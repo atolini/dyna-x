@@ -1,4 +1,7 @@
-export class UpdateBuilder {
+import { IUpdateBuilder } from "@database/update-builder/i-update-builder";
+import { UpdateExpressionResult } from "./update-expression-result";
+
+export class UpdateBuilder implements IUpdateBuilder<UpdateExpressionResult> {
     private updateExpressions: string[] = [];
     private expressionAttributeNames: Record<string, string> = {};
     private expressionAttributeValues: Record<string, any> = {};

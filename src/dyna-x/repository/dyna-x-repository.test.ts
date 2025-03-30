@@ -12,10 +12,10 @@ import {
     UpdateItemCommand,
 } from "@aws-sdk/client-dynamodb";
 import { AwsStub, mockClient } from 'aws-sdk-client-mock';
-import { ConditionBuilder } from "./condition-builder";
+import { ConditionBuilder } from "../condition-builder/condition-builder";
 import { DynaXRepository } from "./dyna-x-repository";
-import { DynaXSchema } from "./dyna-x-schema";
-import { UpdateBuilder } from "./update-builder";
+import { DynaXSchema } from "../dyna-x-schema";
+import { UpdateBuilder } from "../update-builder/update-builder";
 import { Logger } from "@aws-lambda-powertools/logger";
 
 describe("DynaXRepository", () => {

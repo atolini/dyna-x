@@ -12,8 +12,6 @@ describe("ConditionBuilder", () => {
             builder.eq("name", "John");
             const result = builder.build();
 
-            console.log(result);
-
             expect(result.ConditionExpression).toContain("#attr0 = :val0");
             expect(result.ExpressionAttributeNames).toHaveProperty("#attr0", "name");
             expect(result.ExpressionAttributeValues).toHaveProperty(":val0", { S: "John" });
@@ -24,8 +22,6 @@ describe("ConditionBuilder", () => {
         it("should add a not equal condition", () => {
             builder.ne("age", 30);
             const result = builder.build();
-
-            console.log(result);
 
             expect(result.ConditionExpression).toContain("#attr0 <> :val0");
             expect(result.ExpressionAttributeNames).toHaveProperty("#attr0", "age");
@@ -38,8 +34,6 @@ describe("ConditionBuilder", () => {
             builder.gt("score", 100);
             const result = builder.build();
 
-            console.log(result);
-
             expect(result.ConditionExpression).toContain("#attr0 > :val0");
             expect(result.ExpressionAttributeNames).toHaveProperty("#attr0", "score");
             expect(result.ExpressionAttributeValues).toHaveProperty(":val0", { N: "100" });
@@ -50,8 +44,6 @@ describe("ConditionBuilder", () => {
         it("should add a less than condition", () => {
             builder.lt("score", 50);
             const result = builder.build();
-
-            console.log(result);
 
             expect(result.ConditionExpression).toContain("#attr0 < :val0");
             expect(result.ExpressionAttributeNames).toHaveProperty("#attr0", "score");
@@ -64,8 +56,6 @@ describe("ConditionBuilder", () => {
             builder.eq("status", "active").and().ne("age", 30);
             const result = builder.build();
 
-            console.log(result);
-
             expect(result.ConditionExpression).toContain("AND");
             expect(result.ConditionExpression).toContain("#attr1 <> :val1");
             expect(result.ConditionExpression).toContain("#attr0 = :val0");
@@ -77,8 +67,6 @@ describe("ConditionBuilder", () => {
             builder.eq("status", "active").or().lt("score", 50);
             const result = builder.build();
 
-            console.log(result);
-
             expect(result.ConditionExpression).toContain("OR");
             expect(result.ConditionExpression).toContain("#attr1 < :val1");
             expect(result.ConditionExpression).toContain("#attr0 = :val0");
@@ -89,8 +77,7 @@ describe("ConditionBuilder", () => {
         it("should return a valid condition expression object", () => {
             builder.eq("name", "Alice").and().gt("score", 80);
             const result = builder.build();
-            
-            console.log(result);
+        
 
             expect(result.ConditionExpression).toContain("#attr0 = :val0");
             expect(result.ConditionExpression).toContain("AND");
@@ -112,7 +99,7 @@ describe("ConditionBuilder", () => {
         });
 
         it("should format number values correctly", () => {
-            expect(builder).toEqual({ N: "42" });
+            expect(builder["formatValue"](42)).toEqual({ N: "42" });
         });
 
         it("should format boolean values correctly", () => {

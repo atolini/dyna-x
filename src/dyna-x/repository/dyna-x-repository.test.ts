@@ -14,7 +14,7 @@ import {
 import { AwsStub, mockClient } from 'aws-sdk-client-mock';
 import { ConditionBuilder } from "../condition-builder/condition-builder";
 import { DynaXRepository } from "./dyna-x-repository";
-import { DynaXSchema } from "../dyna-x-schema";
+import { DynaXSchema } from "../schema/dyna-x-schema";
 import { UpdateBuilder } from "../update-builder/update-builder";
 import { Logger } from "@aws-lambda-powertools/logger";
 
@@ -22,7 +22,7 @@ describe("DynaXRepository", () => {
     let repository: DynaXRepository<any>;
     let client: DynamoDBClient;
     let schema: DynaXSchema;
-    let ddbMock: AwsStub<ServiceInputTypes, ServiceOutputTypes, DynamoDBClientResolvedConfig>;
+    let ddbMock: any;
 
     beforeEach(() => {
         client = new DynamoDBClient({});

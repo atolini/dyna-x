@@ -12,8 +12,6 @@ describe("UpdateBuilder", () => {
             builder.set("name", "John Doe");
             const result = builder.build();
 
-            console.log(result);
-
             expect(result.UpdateExpression).toContain("SET");
             expect(result.ExpressionAttributeNames).toHaveProperty("#attr0", "name");
             expect(result.ExpressionAttributeValues).toHaveProperty(":val0", { S: "John Doe" });
@@ -25,8 +23,6 @@ describe("UpdateBuilder", () => {
             builder.remove("age");
             const result = builder.build();
 
-            console.log(result);
-
             expect(result.UpdateExpression).toContain("REMOVE #attr0");
             expect(result.ExpressionAttributeNames).toHaveProperty("#attr0", "age");
         });
@@ -36,8 +32,6 @@ describe("UpdateBuilder", () => {
         it("should add an ADD update expression", () => {
             builder.add("score", 10);
             const result = builder.build();
-
-            console.log(result);
 
             expect(result.UpdateExpression).toContain("ADD #attr0 = :val0");
             expect(result.ExpressionAttributeNames).toHaveProperty("#attr0", "score");
@@ -49,8 +43,6 @@ describe("UpdateBuilder", () => {
         it("should return a valid update expression object", () => {
             builder.set("name", "Alice").add("points", 5).remove("status");
             const result = builder.build();
-
-            console.log(result);
 
             expect(result.UpdateExpression).toContain("SET #attr0 = :val0");
             expect(result.UpdateExpression).toContain("ADD #attr1 = :val1");

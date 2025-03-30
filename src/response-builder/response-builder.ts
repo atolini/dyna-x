@@ -1,7 +1,7 @@
 import { APIGatewayProxyResult } from 'aws-lambda';
-import { IApiResponse } from './i-api-response';
+import { IResponseBuilder } from './i-response-builder';
 
-export class ApiResponse implements IApiResponse<APIGatewayProxyResult> {
+export class ResponseBuilder implements IResponseBuilder<APIGatewayProxyResult> {
   ok<T>(data: T): APIGatewayProxyResult {
     return {
       statusCode: 200,

@@ -1,5 +1,5 @@
 import { Logger } from "@aws-lambda-powertools/logger";
-import { IApiResponse } from "../api-response";
+import { IResponseBuilder } from "@response-builder/i-response-builder";
 import { DynamoErrorHandler } from "./handlers/dynamo-error-handler";
 import { ErrorActions } from "./error-actions";
 
@@ -11,7 +11,7 @@ import { ErrorActions } from "./error-actions";
  * @template T - The type of the response returned by the handler (e.g., API response type).
  * @template R - The response builder type that implements the `IApiResponse<T>` interface.
  */
-export class ErrorHandler<T, R extends IApiResponse<T>> {
+export class ErrorHandler<T, R extends IResponseBuilder<T>> {
   private handlers: ErrorActions<T, R>[];  // List of error handlers
   private logger: Logger;  // Logger instance for error logging
   private resBuilder: R;  // Response builder (used to create error responses)

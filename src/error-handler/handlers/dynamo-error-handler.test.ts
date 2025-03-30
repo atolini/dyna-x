@@ -3,12 +3,13 @@ import {
   ProvisionedThroughputExceededException,
   RequestLimitExceeded
 } from "@aws-sdk/client-dynamodb";
-import { IApiResponse } from "../../api-response";
 import { DynamoErrorHandler } from "./dynamo-error-handler";
 import { ErrorHandler } from "../error-handler";
+import { IResponseBuilder } from "../../response-builder/i-response-builder";
+
 
 // Mocked Response Builder to simulate IApiResponse behavior
-class MockResponseBuilder implements IApiResponse<any> {
+class MockResponseBuilder implements IResponseBuilder<any> {
   ok<T>(data: T) {
     return { statusCode: 200, body: JSON.stringify(data) };
   }

@@ -1,5 +1,5 @@
 import { Logger } from "@aws-lambda-powertools/logger";
-import { IApiResponse } from "../api-response";
+import { IResponseBuilder } from "@response-builder/i-response-builder";
 
 /**
  * Interface for defining error handling actions with generics `T` (response type) and `R` (response builder).
@@ -8,7 +8,7 @@ import { IApiResponse } from "../api-response";
  * @template T - The type of the response returned by the handler (e.g., API response type).
  * @template R - The response builder type that implements the `IApiResponse<T>` interface.
  */
-export interface ErrorActions<T, R extends IApiResponse<T>> {
+export interface ErrorActions<T, R extends IResponseBuilder<T>> {
   /**
    * Handles the error by processing it and generating an appropriate response.
    * 

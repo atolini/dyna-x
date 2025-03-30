@@ -1,9 +1,15 @@
-import { ApiResponse } from './api-response';
+import { ResponseBuilder } from './response-builder';
 
 describe('ApiResponse', () => {
+  let responseBuilder: ResponseBuilder;
+
+  beforeEach(() => {
+    responseBuilder = new ResponseBuilder();
+  });
+
   it('should return a 200 OK response', () => {
     const data = { message: 'Success' };
-    const response = ApiResponse.ok(data);
+    const response = responseBuilder.ok(data);
 
     expect(response).toEqual({
       statusCode: 200,
@@ -14,7 +20,7 @@ describe('ApiResponse', () => {
 
   it('should return a 201 Created response', () => {
     const data = { id: 1, message: 'Resource created' };
-    const response = ApiResponse.created(data);
+    const response = responseBuilder.created(data);
 
     expect(response).toEqual({
       statusCode: 201,
@@ -26,7 +32,7 @@ describe('ApiResponse', () => {
   it('should return a 400 Bad Request response', () => {
     const message = 'Invalid request';
     const details = { field: 'email', error: 'Required' };
-    const response = ApiResponse.badRequest(message, details);
+    const response = responseBuilder.badRequest(message, details);
 
     expect(response).toEqual({
       statusCode: 400,
@@ -36,7 +42,7 @@ describe('ApiResponse', () => {
   });
 
   it('should return a 500 Internal Server Error response with default message', () => {
-    const response = ApiResponse.internalError();
+    const response = responseBuilder.internalError();
 
     expect(response).toEqual({
       statusCode: 500,
@@ -46,7 +52,7 @@ describe('ApiResponse', () => {
   });
 
   it('should return a 500 Internal Server Error response with custom message', () => {
-    const response = ApiResponse.internalError('Unexpected failure');
+    const response = responseBuilder.internalError('Unexpected failure');
 
     expect(response).toEqual({
       statusCode: 500,
@@ -60,7 +66,7 @@ describe('ApiResponse', () => {
     const success = false;
     const payload = { error: 'This is a teapot' };
 
-    const response = ApiResponse.custom(statusCode, success, payload);
+    const response = responseBuilder.custom(statusCode, success, payload);
 
     expect(response).toEqual({
       statusCode,

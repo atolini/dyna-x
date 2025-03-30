@@ -8,7 +8,7 @@ import {
 } from "@aws-sdk/client-dynamodb";
 import { ErrorActions } from "../error-actions";
 import { Logger } from "@aws-lambda-powertools/logger";
-import { IApiResponse } from "../../api-response";
+import { IResponseBuilder } from "@response-builder/i-response-builder";
 
 /**
  * Class responsible for handling errors related to DynamoDB, specifically retryable errors.
@@ -19,7 +19,7 @@ import { IApiResponse } from "../../api-response";
  * @template T - The type of the response returned by the handler (e.g., API response type).
  * @template R - The response builder type that implements the `IApiResponse<T>` interface.
  */
-export class DynamoErrorHandler<T, R extends IApiResponse<T>> implements ErrorActions<T, R> {
+export class DynamoErrorHandler<T, R extends IResponseBuilder<T>> implements ErrorActions<T, R> {
   private readonly retryableErrors = new Set([
     ProvisionedThroughputExceededException,
     RequestLimitExceeded,

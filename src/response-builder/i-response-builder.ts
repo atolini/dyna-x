@@ -6,7 +6,7 @@ import { APIGatewayProxyResult } from 'aws-lambda';
  *
  * @template R - The expected return type for the methods (default: `APIGatewayProxyResult`).
  */
-export interface IApiResponse<R = APIGatewayProxyResult> {
+export interface IResponseBuilder<R = APIGatewayProxyResult> {
   /**
    * Returns a success response with status 200 (OK).
    *

@@ -1,7 +1,8 @@
 import { APIGatewayProxyResult } from 'aws-lambda';
+import { IApiResponse } from './i-api-response';
 
-export class ApiResponse {
-  static ok<T>(data: T): APIGatewayProxyResult {
+export class ApiResponse implements IApiResponse<APIGatewayProxyResult> {
+  ok<T>(data: T): APIGatewayProxyResult {
     return {
       statusCode: 200,
       headers: { 'Content-Type': 'application/json' },
@@ -9,7 +10,7 @@ export class ApiResponse {
     };
   }
 
-  static created<T>(data: T): APIGatewayProxyResult {
+  created<T>(data: T): APIGatewayProxyResult {
     return {
       statusCode: 201,
       headers: { 'Content-Type': 'application/json' },
@@ -17,7 +18,7 @@ export class ApiResponse {
     };
   }
 
-  static badRequest(message: string, details?: unknown): APIGatewayProxyResult {
+  badRequest(message: string, details?: unknown): APIGatewayProxyResult {
     return {
       statusCode: 400,
       headers: { 'Content-Type': 'application/json' },
@@ -25,7 +26,7 @@ export class ApiResponse {
     };
   }
 
-  static internalError(message = 'Internal Server Error', details?: unknown): APIGatewayProxyResult {
+  internalError(message = 'Internal Server Error', details?: unknown): APIGatewayProxyResult {
     return {
       statusCode: 500,
       headers: { 'Content-Type': 'application/json' },
@@ -33,7 +34,7 @@ export class ApiResponse {
     };
   }
 
-  static custom<T>(statusCode: number, success: boolean, payload: T): APIGatewayProxyResult {
+  custom<T>(statusCode: number, success: boolean, payload: T): APIGatewayProxyResult {
     return {
       statusCode,
       headers: { 'Content-Type': 'application/json' },

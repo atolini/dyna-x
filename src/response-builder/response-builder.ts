@@ -26,6 +26,14 @@ export class ResponseBuilder implements IResponseBuilder<APIGatewayProxyResult> 
     };
   }
 
+  notFound(message: string): APIGatewayProxyResult {
+    return {
+      statusCode: 404,
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ success: false, message }),
+    };
+  }
+
   internalError(message = 'Internal Server Error', details?: unknown): APIGatewayProxyResult {
     return {
       statusCode: 500,

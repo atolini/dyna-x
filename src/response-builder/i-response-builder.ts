@@ -26,6 +26,14 @@ export interface IResponseBuilder<R = APIGatewayProxyResult> {
   created<T>(data: T): R;
 
   /**
+   * Returns an error response with status 404 (Not Found).
+   *
+   * @param message - The message explaining what was not found.
+   * @returns A formatted response of type `R`.
+   */
+  notFound(message: string): R;
+
+  /**
    * Returns an error response with status 400 (Bad Request).
    *
    * @param message - The error message to be returned.

@@ -1,6 +1,7 @@
 import { S3Client, PutObjectCommand, GetObjectCommand, DeleteObjectCommand, ListObjectsV2Command } from "@aws-sdk/client-s3";
 import { Readable } from "stream";
 import { IStorageService } from "./i-storage-service";
+import { S3FileNotFoundError } from "./s3-file-not-found-error";
 
 /**
  * Implementation of IStorageService for AWS S3 storage.
@@ -30,7 +31,6 @@ export class S3StorageService implements IStorageService {
    * @param {Buffer | Readable | string} body - The file content to upload.
    * @param {string} contentType - The MIME type of the file.
    * @returns {Promise<void>} Resolves when the upload is complete.
-   * @throws {Error} If the upload fails.
    */
   async uploadFile(key: string, body: Buffer | Readable | string, contentType: string): Promise<void> {
     const command = new PutObjectCommand({
@@ -58,7 +58,7 @@ export class S3StorageService implements IStorageService {
     const response = await this.s3.send(command);
 
     if (!response.Body) {
-      throw new Error("File not found");
+      throw new S3FileNotFoundError(key);
     }
 
     const chunks: Uint8Array[] = [];

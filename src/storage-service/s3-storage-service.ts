@@ -20,8 +20,8 @@ export class S3StorageService implements IStorageService {
    * @param {string} region - The AWS region where the bucket is located (e.g., 'us-east-1').
    * @param {string} bucketName - The name of the S3 bucket to operate on.
    */
-  constructor(region: string, bucketName: string) {
-    this.s3 = new S3Client({ region });
+  constructor(bucketName: string, region?: string) {
+    this.s3 = new S3Client(region ? { region } : { });
     this.bucketName = bucketName;
   }
 

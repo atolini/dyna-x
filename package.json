@@ -24,6 +24,7 @@
     "@aws-lambda-powertools/logger": "^2.17.0",
     "@aws-sdk/client-s3": "^3.779.0",
     "@aws-sdk/client-ses": "^3.782.0",
+    "@aws-sdk/client-verifiedpermissions": "^3.782.0",
     "aws-lambda": "^1.0.7",
     "handlebars": "^4.7.8",
     "lodash": "^4.17.21"

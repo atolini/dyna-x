@@ -1,5 +1,5 @@
 import { SESClient, SendEmailCommand } from "@aws-sdk/client-ses";
-import { IEmailService, EmailMessage } from "./i-email-service";
+import { IEmailService, EmailMessage } from "./interfaces";
 
 /**
  * AWS SES implementation of IEmailService.

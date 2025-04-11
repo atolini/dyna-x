@@ -13,7 +13,7 @@ import {
     AuthorizationResponse,
     BatchAuthorizationRequest,
     BatchAuthorizationResponse,
-} from "./i-authorization-service";
+} from "./interfaces";
 
 
 /**

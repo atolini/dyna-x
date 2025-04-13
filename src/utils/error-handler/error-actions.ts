@@ -1,4 +1,4 @@
-import { Logger } from "@aws-lambda-powertools/logger";
+import { ILogger } from "@logger/i-logger";
 import { IResponseBuilder } from "@response-builder/i-response-builder";
 
 /**
@@ -19,7 +19,7 @@ export interface ErrorActions<T, R extends IResponseBuilder<T>> {
    */
   handle(
     error: Error,
-    logger: Logger,
+    logger: ILogger<any>,
     resBuilder: R
   ): T;
 

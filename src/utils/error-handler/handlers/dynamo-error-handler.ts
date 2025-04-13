@@ -7,8 +7,8 @@ import {
   LimitExceededException
 } from "@aws-sdk/client-dynamodb";
 import { ErrorActions } from "../error-actions";
-import { Logger } from "@aws-lambda-powertools/logger";
 import { IResponseBuilder } from "@response-builder/i-response-builder";
+import { ILogger } from "@logger/i-logger";
 
 /**
  * Class responsible for handling errors related to DynamoDB, specifically retryable errors.
@@ -52,12 +52,13 @@ export class DynamoErrorHandler<T, R extends IResponseBuilder<T>> implements Err
    */
   handle(
     error: Error,
-    logger: Logger,
+    logger: ILogger<any>,
     resBuilder: R
   ): T {
     // Handling ProvisionedThroughputExceededException error
     if (error instanceof ProvisionedThroughputExceededException) {
-      logger.error("DynamoDB throughput exceeded", {
+      logger.error({
+        description: "DynamoDB throughput exceeded",
         error: error.name,
         message: error.message,
         details: "The request rate is too high for the provisioned capacity. Consider increasing RCPU/WCPU or using adaptive capacity.",
@@ -67,7 +68,8 @@ export class DynamoErrorHandler<T, R extends IResponseBuilder<T>> implements Err
 
     // Handling RequestLimitExceeded error
     else if (error instanceof RequestLimitExceeded) {
-      logger.error("DynamoDB request limit exceeded", {
+      logger.error({
+        description: "DynamoDB request limit exceeded",
         error: error.name,
         message: error.message,
         details: "Too many concurrent requests to DynamoDB.",
@@ -77,7 +79,8 @@ export class DynamoErrorHandler<T, R extends IResponseBuilder<T>> implements Err
 
     // Handling ConditionalCheckFailedException error
     else if (error instanceof ConditionalCheckFailedException) {
-      logger.warn("DynamoDB conditional check failed", {
+      logger.warn({
+        description: "DynamoDB conditional check failed",
         error: error.name,
         message: error.message,
         details: "The conditional update/delete operation failed because conditions were not met.",
@@ -87,7 +90,8 @@ export class DynamoErrorHandler<T, R extends IResponseBuilder<T>> implements Err
 
     // Handling ItemCollectionSizeLimitExceededException error
     else if (error instanceof ItemCollectionSizeLimitExceededException) {
-      logger.error("DynamoDB item collection size limit exceeded", {
+      logger.error({
+        description: "DynamoDB item collection size limit exceeded",
         error: error.name,
         message: error.message,
         details: "The item collection (table + LSI/GSI) exceeded the 10GB limit per partition key.",
@@ -97,7 +101,8 @@ export class DynamoErrorHandler<T, R extends IResponseBuilder<T>> implements Err
 
     // Handling InternalServerError error
     else if (error instanceof InternalServerError) {
-      logger.error("DynamoDB internal server error", {
+      logger.error({
+        description: "DynamoDB internal server error",
         error: error.name,
         message: error.message,
         details: "A temporary server-side issue occurred.",
@@ -107,7 +112,8 @@ export class DynamoErrorHandler<T, R extends IResponseBuilder<T>> implements Err
 
     // Handling LimitExceededException error
     else if (error instanceof LimitExceededException) {
-      logger.error("DynamoDB service limit exceeded", {
+      logger.error({
+        description: "DynamoDB service limit exceeded",
         error: error.name,
         message: error.message,
         details: "Exceeded AWS account/table limits (e.g., maximum tables, indexes).",

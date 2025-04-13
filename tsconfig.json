@@ -12,7 +12,8 @@
         "paths": {
             "@database/*": ["./src/database/*"], 
             "@response-builder/*": ["./src/utils/response-builder/*"],
-            "@storage-service/*": ["./src/services/storage-service/*"]
+            "@storage-service/*": ["./src/services/storage-service/*"], 
+            "@logger/*": ["./src/utils/logger/*"],
         }
     },
     "include": [

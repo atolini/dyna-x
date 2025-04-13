@@ -1,4 +1,4 @@
-import { Logger } from "@aws-lambda-powertools/logger";
+import { ILogger } from "@logger/i-logger";
 import { IResponseBuilder } from "@response-builder/i-response-builder";
 import { DynamoErrorHandler } from "./handlers/dynamo-error-handler";
 import { ErrorActions } from "./error-actions";
@@ -13,7 +13,7 @@ import { ErrorActions } from "./error-actions";
  */
 export class ErrorHandler<T, R extends IResponseBuilder<T>> {
   private handlers: ErrorActions<T, R>[];  // List of error handlers
-  private logger: Logger;  // Logger instance for error logging
+  private logger: ILogger<any>;  // Logger instance for error logging
   private resBuilder: R;  // Response builder (used to create error responses)
 
   /**
@@ -25,11 +25,11 @@ export class ErrorHandler<T, R extends IResponseBuilder<T>> {
    */
   constructor(
     resBuilder: R,
-    logger?: Logger,
+    logger: ILogger<any>,
     handlers?: ErrorActions<T, R>[]
   ) {
     this.resBuilder = resBuilder;
-    this.logger = logger ?? new Logger();
+    this.logger = logger;
     this.handlers = handlers ?? [
       new DynamoErrorHandler<T, R>()  // Default handler for DynamoDB-related errors
     ];
@@ -52,8 +52,9 @@ export class ErrorHandler<T, R extends IResponseBuilder<T>> {
     }
     
     // If no handler is found, log a generic error
-    this.logger.error(
-      "An unexpected error occurred. Please check the application logs for more details.", {
+    this.logger.error({
+      description: "An unexpected error occurred. Please check the application logs for more details.",
+      message: error.message,
       name: error.name,
       error: error
     });

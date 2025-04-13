@@ -11,8 +11,8 @@
         "emitDeclarationOnly": false, 
         "paths": {
             "@database/*": ["./src/database/*"], 
-            "@response-builder/*": ["./src/response-builder/*"],
-            "@storage-service/*": ["./src/storage-service/*"]
+            "@response-builder/*": ["./src/utils/response-builder/*"],
+            "@storage-service/*": ["./src/services/storage-service/*"]
         }
     },
     "include": [

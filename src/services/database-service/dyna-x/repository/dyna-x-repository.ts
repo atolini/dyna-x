@@ -26,9 +26,9 @@ import { ConditionBuilder } from "../condition-builder/condition-builder";
 import { DynaXSchema } from "../schema/dyna-x-schema";
 import { UpdateBuilder } from "../update-builder/update-builder";
 import * as _ from "lodash";
-import { Logger } from "@aws-lambda-powertools/logger";
-import { MaxItemsExceededError } from "../util/max-item-exceeded-error";
-import { IRepository } from "@database/abstraction-layer/repository/i-repository";
+import { ILogger } from "@logger/i-logger";
+import { MaxItemsExceededError } from "../errors/max-item-exceeded-error";
+import { IRepository } from "../../abstraction-layer/repository/i-repository";
 import { ConditionExpressionResult } from "../condition-builder/condition-expression-result";
 import { UpdateExpressionResult } from "../update-builder/update-expression-result";
 
@@ -46,7 +46,7 @@ export interface Key {
 export class DynaXRepository<T> implements IRepository<T, Key, ConditionExpressionResult, UpdateExpressionResult> {
     private schema: DynaXSchema;
     private client: DynamoDBClient;
-    private logger: Logger;
+    private logger: ILogger<any>;
     private maxBatchItems: number;
 
     /**
@@ -60,7 +60,7 @@ export class DynaXRepository<T> implements IRepository<T, Key, ConditionExpressi
     constructor(
         schema: DynaXSchema,
         client: DynamoDBClient,
-        logger: Logger,
+        logger: ILogger<any>,
         maxBatchItems: number = 1000
     ) {
         this.schema = schema;

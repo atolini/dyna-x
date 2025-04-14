@@ -10,7 +10,7 @@
         "declarationMap": true, 
         "emitDeclarationOnly": false, 
         "paths": {
-            "@database/*": ["./src/database/*"], 
+            "@database/*": ["./src/services/database-service/*"], 
             "@response-builder/*": ["./src/utils/response-builder/*"],
             "@storage-service/*": ["./src/services/storage-service/*"], 
             "@logger/*": ["./src/utils/logger/*"],

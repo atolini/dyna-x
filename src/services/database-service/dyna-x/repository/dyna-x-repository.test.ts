@@ -1,22 +1,19 @@
+import { Logger } from "../../../../utils/logger/logger";
 import {
     BatchWriteItemCommand,
     DeleteItemCommand,
     DynamoDBClient,
-    DynamoDBClientResolvedConfig,
     GetItemCommand,
     GetItemCommandOutput,
     PutItemCommand,
     QueryCommand,
-    ServiceInputTypes,
-    ServiceOutputTypes,
-    UpdateItemCommand,
+    UpdateItemCommand
 } from "@aws-sdk/client-dynamodb";
-import { AwsStub, mockClient } from 'aws-sdk-client-mock';
+import { mockClient } from 'aws-sdk-client-mock';
 import { ConditionBuilder } from "../condition-builder/condition-builder";
-import { DynaXRepository } from "./dyna-x-repository";
 import { DynaXSchema } from "../schema/dyna-x-schema";
 import { UpdateBuilder } from "../update-builder/update-builder";
-import { Logger } from "@aws-lambda-powertools/logger";
+import { DynaXRepository } from "./dyna-x-repository";
 
 describe("DynaXRepository", () => {
     let repository: DynaXRepository<any>;

@@ -1,6 +1,6 @@
 import { Logger } from "@aws-lambda-powertools/logger";
 import { IResponseBuilder } from "@response-builder/i-response-builder";
-import { ErrorActions } from "../error-actions";
+import { ErrorActions } from "../../error-actions";
 import { S3FileNotFoundError } from "@storage-service/s3-file-not-found-error";
 import { NoSuchBucket } from "@aws-sdk/client-s3";
 

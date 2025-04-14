@@ -1,6 +1,6 @@
 import { ILogger } from "@logger/i-logger";
 import { IResponseBuilder } from "@response-builder/i-response-builder";
-import { DynamoErrorHandler } from "./handlers/dynamo-error-handler";
+import { DynamoErrorHandler } from "./handlers/dynamo-error-handler/dynamo-error-handler";
 import { ErrorActions } from "./error-actions";
 
 /**

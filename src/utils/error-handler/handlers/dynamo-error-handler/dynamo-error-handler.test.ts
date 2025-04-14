@@ -1,12 +1,12 @@
-import { ILogger } from "../../logger/i-logger";
-import { Logger } from "../../logger/logger";
+import { ILogger } from "../../../logger/i-logger";
+import { Logger } from "../../../logger/logger";
 import {
   ProvisionedThroughputExceededException,
   RequestLimitExceeded
 } from "@aws-sdk/client-dynamodb";
 import { DynamoErrorHandler } from "./dynamo-error-handler";
-import { ErrorHandler } from "../error-handler";
-import { IResponseBuilder } from "../../response-builder/i-response-builder";
+import { ErrorHandler } from "../../error-handler";
+import { IResponseBuilder } from "../../../response-builder/i-response-builder";
 
 // Mocked Response Builder to simulate IApiResponse behavior
 class MockResponseBuilder implements IResponseBuilder<any> {

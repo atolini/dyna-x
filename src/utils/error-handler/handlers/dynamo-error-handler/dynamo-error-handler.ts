@@ -6,7 +6,7 @@ import {
   InternalServerError,
   LimitExceededException
 } from "@aws-sdk/client-dynamodb";
-import { ErrorActions } from "../error-actions";
+import { ErrorActions } from "../../error-actions";
 import { IResponseBuilder } from "@response-builder/i-response-builder";
 import { ILogger } from "@logger/i-logger";
 

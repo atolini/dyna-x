@@ -1,4 +1,4 @@
-import { IUpdateBuilder } from "@database/update-builder/i-update-builder";
+import { IUpdateBuilder } from "@database/abstraction-layer/update-builder/i-update-builder";
 import { UpdateExpressionResult } from "./update-expression-result";
 
 export class UpdateBuilder implements IUpdateBuilder<UpdateExpressionResult> {

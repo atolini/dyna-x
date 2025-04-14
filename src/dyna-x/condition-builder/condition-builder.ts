@@ -1,4 +1,4 @@
-import { IConditionBuilder } from "@database/condition-builder/i-condition-builder";
+import { IConditionBuilder } from "@database/abstraction-layer/condition-builder/i-condition-builder";
 import { ConditionExpressionResult } from "./condition-expression-result";
 
 export class ConditionBuilder implements IConditionBuilder<ConditionExpressionResult> {

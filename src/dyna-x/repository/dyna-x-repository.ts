@@ -28,7 +28,7 @@ import { UpdateBuilder } from "../update-builder/update-builder";
 import * as _ from "lodash";
 import { Logger } from "@aws-lambda-powertools/logger";
 import { MaxItemsExceededError } from "../util/max-item-exceeded-error";
-import { IRepository } from "@database/repository/i-repository";
+import { IRepository } from "@database/abstraction-layer/repository/i-repository";
 import { ConditionExpressionResult } from "../condition-builder/condition-expression-result";
 import { UpdateExpressionResult } from "../update-builder/update-expression-result";
 

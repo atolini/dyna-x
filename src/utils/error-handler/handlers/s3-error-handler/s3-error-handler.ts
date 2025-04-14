@@ -1,4 +1,4 @@
-import { Logger } from "@aws-lambda-powertools/logger";
+import { ILogger } from "@logger/i-logger";
 import { IResponseBuilder } from "@response-builder/i-response-builder";
 import { ErrorActions } from "../../error-actions";
 import { S3FileNotFoundError } from "@storage-service/s3-file-not-found-error";
@@ -18,11 +18,12 @@ export class S3ErrorHandler<T, R extends IResponseBuilder<T>> implements ErrorAc
     );
   }
 
-  handle(error: Error, logger: Logger, resBuilder: R): T {
+  handle(error: Error, logger: ILogger<any>, resBuilder: R): T {
     const message = "S3 operation failed";
   
     if (error instanceof S3FileNotFoundError) {
-      logger.error(`${message}: File not found in S3`, {
+      logger.error({
+        description: `${message}: File not found in S3`,
         name: error.name,
         message: error.message,
         details: `The object with key "${error.key}" was not found in the S3 bucket.`,
@@ -32,7 +33,8 @@ export class S3ErrorHandler<T, R extends IResponseBuilder<T>> implements ErrorAc
     }
   
     if (error instanceof NoSuchBucket) {
-      logger.error(`${message}: Bucket not found`, {
+      logger.error({
+        description: `${message}: Bucket not found`,
         name: error.name,
         message: error.message,
         details: `The specified S3 bucket may be missing, deleted, or the name is incorrect.`,

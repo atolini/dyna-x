@@ -11,7 +11,7 @@ import {
     CreateUserInput,
     UpdateUserAttributesInput,
     DeleteUserInput
-} from "./interfaces"; // ajuste conforme o caminho real
+} from "./interfaces";
 
 
 /**

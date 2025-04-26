@@ -1,5 +1,5 @@
-import { ILogger } from '@logger/i-logger';
-import { IResponseBuilder } from '@response-builder/i-response-builder';
+import { ILogger } from '../../../../../logger/contracts';
+import { IResponseBuilder } from '../../../../../response-builder/contracts';
 import { IErrorActions } from '../../../../contracts/i-error-actions';
 import { S3FileNotFoundError } from '../../../../../../services/storage/implementations/s3/s3-file-not-found-error';
 import { NoSuchBucket } from '@aws-sdk/client-s3';

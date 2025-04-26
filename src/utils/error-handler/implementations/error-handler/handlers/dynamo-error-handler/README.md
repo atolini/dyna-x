@@ -1,5 +1,3 @@
----
-
 # DynamoErrorHandler
 
 ## Description

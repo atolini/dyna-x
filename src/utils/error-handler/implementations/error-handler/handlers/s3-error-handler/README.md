@@ -1,5 +1,3 @@
----
-
 # S3ErrorHandler
 
 ## Description

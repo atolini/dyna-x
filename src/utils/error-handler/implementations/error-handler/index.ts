@@ -1,7 +1,9 @@
 import { ILogger } from '../../../logger/contracts';
 import { IResponseBuilder } from '../../../response-builder/contracts';
-import { DynamoErrorHandler } from './handlers/dynamo-error-handler/dynamo-error-handler';
+import { DynamoErrorHandler } from './handlers/dynamo-error-handler';
 import { IErrorActions } from '../../contracts/i-error-actions';
+import { S3ErrorHandler } from './handlers/s3-error-handler';
+import { CognitoErrorHandler } from './handlers/cognito-error-handler';
 
 /**
  * ErrorHandler class handles errors by using specific error action handlers.
@@ -32,6 +34,8 @@ export class ErrorHandler<T, R extends IResponseBuilder<T>> {
     this.logger = logger;
     this.handlers = handlers ?? [
       new DynamoErrorHandler<T, R>(), // Default handler for DynamoDB-related errors
+      new S3ErrorHandler<T, R>(), // Default handler for S3-related errors
+      new CognitoErrorHandler<T, R>(), // Default handler for Cognito-related errors
     ];
   }
 

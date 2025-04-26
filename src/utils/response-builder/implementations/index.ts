@@ -4,6 +4,15 @@ import { IResponseBuilder } from '../contracts';
 export class ResponseBuilder
   implements IResponseBuilder<APIGatewayProxyResult>
 {
+
+  tooManyRequests(message = 'Too Many Requests', details?: unknown): APIGatewayProxyResult {
+    return {
+      statusCode: 429,
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ success: false, message, details }),
+    };
+  }
+  
   ok<T>(data: T): APIGatewayProxyResult {
     return {
       statusCode: 200,

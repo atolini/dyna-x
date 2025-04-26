@@ -50,6 +50,15 @@ export interface IResponseBuilder<R> {
   internalError(message?: string, details?: unknown): R;
 
   /**
+   * Returns an error response with status 429 (Too Many Requests).
+   *
+   * @param message - (Optional) Custom error message. Default: `'Too Many Requests'`.
+   * @param details - (Optional) Additional details about the error, such as retry-after time.
+   * @returns A formatted response of type `R`.
+   */
+  tooManyRequests(message?: string, details?: unknown): R;
+
+  /**
    * Returns a custom response with a user-defined status and structure.
    *
    * @template T - The type of the data returned in the response.

@@ -50,5 +50,3 @@ Below are examples of the error responses returned for each type of error.
   "details": "The specified S3 bucket may be missing, deleted, or the name is incorrect."
 }
 ```
-
----

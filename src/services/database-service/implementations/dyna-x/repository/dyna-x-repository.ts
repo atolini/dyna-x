@@ -28,7 +28,7 @@ import { UpdateBuilder } from "../update-builder/update-builder";
 import * as _ from "lodash";
 import { ILogger } from "@logger/i-logger";
 import { MaxItemsExceededError } from "../errors/max-item-exceeded-error";
-import { IRepository } from "../../abstraction-layer/repository/i-repository";
+import { IRepository } from "../../../contracts/repository/i-repository";
 import { ConditionExpressionResult } from "../condition-builder/condition-expression-result";
 import { UpdateExpressionResult } from "../update-builder/update-expression-result";
 

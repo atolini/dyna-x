@@ -1,7 +1,9 @@
 import { APIGatewayProxyResult } from 'aws-lambda';
 import { IResponseBuilder } from '../contracts';
 
-export class ResponseBuilder implements IResponseBuilder<APIGatewayProxyResult> {
+export class ResponseBuilder
+  implements IResponseBuilder<APIGatewayProxyResult>
+{
   ok<T>(data: T): APIGatewayProxyResult {
     return {
       statusCode: 200,
@@ -34,7 +36,10 @@ export class ResponseBuilder implements IResponseBuilder<APIGatewayProxyResult> 
     };
   }
 
-  internalError(message = 'Internal Server Error', details?: unknown): APIGatewayProxyResult {
+  internalError(
+    message = 'Internal Server Error',
+    details?: unknown,
+  ): APIGatewayProxyResult {
     return {
       statusCode: 500,
       headers: { 'Content-Type': 'application/json' },
@@ -42,7 +47,11 @@ export class ResponseBuilder implements IResponseBuilder<APIGatewayProxyResult> 
     };
   }
 
-  custom<T>(statusCode: number, success: boolean, payload: T): APIGatewayProxyResult {
+  custom<T>(
+    statusCode: number,
+    success: boolean,
+    payload: T,
+  ): APIGatewayProxyResult {
     return {
       statusCode,
       headers: { 'Content-Type': 'application/json' },

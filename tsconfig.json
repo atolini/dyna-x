@@ -1,22 +1,16 @@
 {
-    "compilerOptions": {
-        "target": "ES2022",
-        "module": "ESNext",
-        "outDir": "./dist",
-        "rootDir": "./src",
-        "strict": false,
-        "moduleResolution": "node",
-        "declaration": true, 
-        "declarationMap": true, 
-        "emitDeclarationOnly": false, 
-        "paths": {},
-    },
-    "include": [
-        "src/**/*"
-    ],
-    "exclude": [
-        "src/**/*.test.ts",
-        "src/**/*.spec.ts",
-        "node_modules"
-    ]
+  "compilerOptions": {
+    "target": "ES2022",
+    "module": "ESNext",
+    "outDir": "./dist",
+    "rootDir": "./src",
+    "strict": false,
+    "moduleResolution": "node",
+    "declaration": true,
+    "declarationMap": true,
+    "emitDeclarationOnly": false,
+    "paths": {}
+  },
+  "include": ["src/**/*"],
+  "exclude": ["src/**/*.test.ts", "src/**/*.spec.ts", "node_modules"]
 }

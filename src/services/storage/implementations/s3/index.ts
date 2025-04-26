@@ -1,12 +1,18 @@
-import { S3Client, PutObjectCommand, GetObjectCommand, DeleteObjectCommand, ListObjectsV2Command } from "@aws-sdk/client-s3";
-import { Readable } from "stream";
-import { IStorageService } from "../../contracts";
-import { S3FileNotFoundError } from "./s3-file-not-found-error";
+import {
+  S3Client,
+  PutObjectCommand,
+  GetObjectCommand,
+  DeleteObjectCommand,
+  ListObjectsV2Command,
+} from '@aws-sdk/client-s3';
+import { Readable } from 'stream';
+import { IStorageService } from '../../contracts';
+import { S3FileNotFoundError } from './s3-file-not-found-error';
 
 /**
  * Implementation of IStorageService for AWS S3 storage.
  * Provides methods to upload, retrieve, delete, and list files in an S3 bucket.
- * 
+ *
  * @example
  * const storage = new S3StorageService('us-east-1', 'my-bucket');
  * await storage.uploadFile('path/to/file.txt', 'content', 'text/plain');
@@ -21,7 +27,7 @@ export class S3StorageService implements IStorageService {
    * @param {string} bucketName - The name of the S3 bucket to operate on.
    */
   constructor(bucketName: string, region?: string) {
-    this.s3 = new S3Client(region ? { region } : { });
+    this.s3 = new S3Client(region ? { region } : {});
     this.bucketName = bucketName;
   }
 
@@ -32,7 +38,11 @@ export class S3StorageService implements IStorageService {
    * @param {string} contentType - The MIME type of the file.
    * @returns {Promise<void>} Resolves when the upload is complete.
    */
-  async uploadFile(key: string, body: Buffer | Readable | string, contentType: string): Promise<void> {
+  async uploadFile(
+    key: string,
+    body: Buffer | Readable | string,
+    contentType: string,
+  ): Promise<void> {
     const command = new PutObjectCommand({
       Bucket: this.bucketName,
       Key: key,
@@ -95,6 +105,6 @@ export class S3StorageService implements IStorageService {
     });
 
     const response = await this.s3.send(command);
-    return response.Contents?.map((item) => item.Key || "") || [];
+    return response.Contents?.map((item) => item.Key || '') || [];
   }
 }

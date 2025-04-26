@@ -47,7 +47,10 @@ describe('ApiResponse', () => {
     expect(response).toEqual({
       statusCode: 500,
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ success: false, message: 'Internal Server Error' }),
+      body: JSON.stringify({
+        success: false,
+        message: 'Internal Server Error',
+      }),
     });
   });
 
@@ -62,7 +65,7 @@ describe('ApiResponse', () => {
   });
 
   it('should return a custom response with provided status code and payload', () => {
-    const statusCode = 418; 
+    const statusCode = 418;
     const success = false;
     const payload = { error: 'This is a teapot' };
 

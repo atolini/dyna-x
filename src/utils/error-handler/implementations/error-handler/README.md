@@ -1,21 +1,22 @@
 ---
-
 # ❗ ErrorHandler — Generic Error Processing System
 
-A flexible, extensible system for handling errors with custom logic per error type.  
+A flexible, extensible system for handling errors with custom logic per error type.
 Promotes clean separation of concerns using the **Chain of Responsibility** pattern.
-
 ---
 
 ## 📦 Components Overview
 
-### 1. `ErrorActions<T, R>`  
+### 1. `ErrorActions<T, R>`
+
 Defines the **contract** for error-handling actions.
 
-### 2. `ErrorHandler<T, R>`  
+### 2. `ErrorHandler<T, R>`
+
 Central class that delegates errors to the first handler capable of processing them.
 
-### 3. Custom Handlers (e.g. `DynamoErrorHandler`)  
+### 3. Custom Handlers (e.g. `DynamoErrorHandler`)
+
 Plug-and-play error resolvers implementing `ErrorActions`.
 
 ---
@@ -29,10 +30,10 @@ export interface ErrorActions<T, R extends IResponseBuilder<T>> {
 }
 ```
 
-| Method      | Description                                                                 |
-|-------------|-----------------------------------------------------------------------------|
-| `handle`    | Processes the error and returns a built response using `resBuilder`.       |
-| `canHandle` | Returns `true` if the handler can process the given error.                 |
+| Method      | Description                                                          |
+| ----------- | -------------------------------------------------------------------- |
+| `handle`    | Processes the error and returns a built response using `resBuilder`. |
+| `canHandle` | Returns `true` if the handler can process the given error.           |
 
 > 🔁 **Extensible**: Create multiple handlers, each focused on specific error types.
 
@@ -50,11 +51,11 @@ export class ErrorHandler<T, R extends IResponseBuilder<T>> { ... }
 new ErrorHandler(resBuilder: R, logger: ILogger<any>, handlers?: ErrorActions<T, R>[])
 ```
 
-| Param        | Type                           | Description                                                        |
-|--------------|--------------------------------|--------------------------------------------------------------------|
-| `resBuilder` | `R`                            | A response builder implementing `IResponseBuilder<T>`.             |
-| `logger`     | `ILogger<any>`                 | Logger instance for capturing details of unexpected errors.        |
-| `handlers`   | `ErrorActions<T, R>[]` (opt.)  | Optional list of custom error handlers. Uses defaults if omitted.  |
+| Param        | Type                          | Description                                                       |
+| ------------ | ----------------------------- | ----------------------------------------------------------------- |
+| `resBuilder` | `R`                           | A response builder implementing `IResponseBuilder<T>`.            |
+| `logger`     | `ILogger<any>`                | Logger instance for capturing details of unexpected errors.       |
+| `handlers`   | `ErrorActions<T, R>[]` (opt.) | Optional list of custom error handlers. Uses defaults if omitted. |
 
 ### Method: `handleError`
 
@@ -72,11 +73,11 @@ If no handler matches, logs the error and returns a generic internal server erro
 ```ts
 const handler = new ErrorHandler<MyApiResponseType, MyResponseBuilder>(
   new MyResponseBuilder(),
-  new MyLogger()
+  new MyLogger(),
 );
 
 try {
-  throw new SomeCustomError("Oops");
+  throw new SomeCustomError('Oops');
 } catch (error) {
   const response = handler.handleError(error);
   return response;
@@ -90,9 +91,11 @@ try {
 Just implement the `ErrorActions` interface:
 
 ```ts
-class ValidationErrorHandler<T, R extends IResponseBuilder<T>> implements ErrorActions<T, R> {
+class ValidationErrorHandler<T, R extends IResponseBuilder<T>>
+  implements ErrorActions<T, R>
+{
   canHandle(error: Error): boolean {
-    return error.name === "ValidationError";
+    return error.name === 'ValidationError';
   }
 
   handle(error: Error, logger: ILogger<any>, resBuilder: R): T {

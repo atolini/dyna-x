@@ -1,10 +1,8 @@
 ---
-
 # 📦 Logger
 
-A lightweight and structured logger designed for **Node.js** environments, ideal for AWS Lambda and CloudWatch usage.  
+A lightweight and structured logger designed for **Node.js** environments, ideal for AWS Lambda and CloudWatch usage.
 Follows a flexible interface-first design, making it easy to **swap** or **extend** the logging implementation across different environments or log providers.
-
 ---
 
 ## 📚 Table of Contents
@@ -21,6 +19,7 @@ Follows a flexible interface-first design, making it easy to **swap** or **exten
 ## 🔍 Overview
 
 This logger is designed to:
+
 - Print structured JSON logs to `stdout`.
 - Include **consistent contextual metadata** (e.g., request ID, service name).
 - Support all common log levels: `info`, `warn`, and `error`.
@@ -61,19 +60,20 @@ new Logger<T>(contextItem: T)
 
 Creates a logger instance with a static base context that will be merged into every log line.
 
-| Param         | Type                  | Description                                     |
-|---------------|-----------------------|-------------------------------------------------|
+| Param         | Type                    | Description                                                                      |
+| ------------- | ----------------------- | -------------------------------------------------------------------------------- |
 | `contextItem` | `Record<string,string>` | Flat key-value object with static context info (e.g. `requestId`, `serviceName`) |
 
 ### Methods
 
-| Method     | Description                                                                 |
-|------------|-----------------------------------------------------------------------------|
-| `info`     | Logs an `info`-level message or object.                                     |
-| `warn`     | Logs a `warn`-level message or object.                                      |
-| `error`    | Logs an `error`-level message or object.                                    |
+| Method  | Description                              |
+| ------- | ---------------------------------------- |
+| `info`  | Logs an `info`-level message or object.  |
+| `warn`  | Logs a `warn`-level message or object.   |
+| `error` | Logs an `error`-level message or object. |
 
 All messages are serialized to JSON and automatically include:
+
 - `level` (`info` | `warn` | `error`)
 - `timestamp` in ISO 8601 format
 - All fields from the base context

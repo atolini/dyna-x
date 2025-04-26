@@ -1,125 +1,94 @@
-# 👥 CognitoUserService — AWS Cognito User Management via Interface
+# CognitoUserService - Auth Implementation
 
-A concrete, provider-specific implementation of the `IUserService<T>` interface for managing users using **AWS Cognito User Pools**.  
-Built with **interface-driven architecture**, allowing seamless replacement with other identity providers.
+This package provides a concrete implementation of the [`Auth Service`](../../contracts/README.md) using [Amazon Cognito](https://docs.aws.amazon.com/cognito/latest/developerguide/cognito-user-identity-pools.html) as the underlying engine.
 
----
-
-## 📦 Components Overview
-
-### 1. `IUserService<T>`  
-Defines the **contract** for user management providers.
-
-### 2. `CognitoUserService<T>`  
-Implements user creation, update, and deletion via AWS Cognito.
-
-### 3. DTOs (`CreateUserInput`, `UpdateUserAttributesInput`, `DeleteUserInput`)  
-Standardized input types shared across any `IUserService` implementation.
+It fulfills the abstraction defined by the [`IUserService<T>`](../../contracts/README.md), enabling integration with systems expecting a standardized service contract for user management operations.
 
 ---
 
-## 🧩 Interface: `IUserService<T>`
+## ✨ Overview
 
-```ts
-export interface IUserService<T> {
-  createUser(input: CreateUserInput<T>): Promise<void>;
-  updateUserAttributes(input: UpdateUserAttributesInput<T>): Promise<void>;
-  deleteUser(input: DeleteUserInput): Promise<void>;
-}
+- **Technology**: Amazon Cognito
+- **Implements**: [`IUserService<T>`](../../contracts/README.md)
+- **Key Features**:
+  - Create users in a Cognito User Pool.
+  - Update user attributes.
+  - Delete users from a User Pool.
+
+---
+
+## 📁 Package Structure
+
+```
+cognito/
+├── index.ts
+├── cognito-user-service.test.ts
+└── README.md
 ```
 
-| Method               | Description                                            |
-|----------------------|--------------------------------------------------------|
-| `createUser`         | Registers a new user using custom attributes.          |
-| `updateUserAttributes` | Updates existing user attributes.                   |
-| `deleteUser`         | Deletes the user by login/username.                   |
+---
 
-> 🔁 **Extensible**: Implement this interface to support other providers like Firebase, Auth0, etc.
+## 📘 Service Details
+
+This service is composed of a single main class that provides a full user management implementation for AWS Cognito.
+
+### 1. `CognitoUserService`
+
+**Implements**: [`IUserService<T>`](../../contracts/README.md)
+
+**Main Methods:**
+
+- `createUser(input: CreateUserInput<T>): Promise<void>` — Creates a new user in the specified Cognito User Pool.
+- `updateUserAttributes(input: UpdateUserAttributesInput<T>): Promise<void>` — Updates user attributes for an existing user in the Cognito User Pool.
+- `deleteUser(input: DeleteUserInput): Promise<void>` — Deletes a user from the Cognito User Pool.
 
 ---
 
-## ⚙️ Class: `CognitoUserService<T>`
+## 🚀 Usage Example
 
-```ts
-export class CognitoUserService<T> implements IUserService<T> { ... }
-```
-
-### Constructor
-
-```ts
-new CognitoUserService(userPoolId: string, region: string)
-```
-
-| Param         | Type     | Description                             |
-|---------------|----------|-----------------------------------------|
-| `userPoolId`  | `string` | AWS Cognito User Pool ID                |
-| `region`      | `string` | AWS region (e.g., `us-east-1`)         |
-
-### Implements:
-
-- `createUser`
-- `updateUserAttributes`
-- `deleteUser`
-
-Internally uses the AWS SDK v3 `CognitoIdentityProviderClient`.
-
----
-
-## 🛠️ Usage Example
-
-```ts
-import { CognitoUserService } from './CognitoUserService';
+```typescript
+import { CognitoUserService } from './cognito';
 import { AttributeType } from '@aws-sdk/client-cognito-identity-provider';
 
 const userService = new CognitoUserService<AttributeType>(
-  'us-east-1_XXXXXXXXX',
-  'us-east-1'
+  'your-user-pool-id',
+  'your-region',
 );
 
+// Creating a user
 await userService.createUser({
-  login: 'jane.doe@example.com',
+  login: 'example@example.com',
+  temporaryPassword: 'TemporaryPassword123!',
   userAttributes: [
-    { Name: 'email', Value: 'jane.doe@example.com' },
-    { Name: 'name', Value: 'Jane Doe' }
+    { Name: 'email', Value: 'example@example.com' },
+    { Name: 'name', Value: 'Example User' },
   ],
-  suppressMessage: true
+  suppressMessage: true,
+});
+
+// Updating user attributes
+await userService.updateUserAttributes({
+  id: 'example@example.com',
+  userAttributes: [{ Name: 'custom:role', Value: 'admin' }],
+});
+
+// Deleting a user
+await userService.deleteUser({
+  id: 'example@example.com',
 });
 ```
 
 ---
 
-## 🧾 DTOs
+## 📄 Related Links
 
-### `CreateUserInput<T>`
-
-```ts
-interface CreateUserInput<T> {
-  login: string;
-  userAttributes: T[];
-  temporaryPassword?: string;
-  suppressMessage?: boolean;
-}
-```
+- [`IUserService<T>` Contract Interface](../../contracts/README.md)
+- [Amazon Cognito Documentation](https://docs.aws.amazon.com/cognito/latest/developerguide/cognito-user-identity-pools.html)
 
 ---
 
-### `UpdateUserAttributesInput<T>`
+## 📢 Notes
 
-```ts
-interface UpdateUserAttributesInput<T> {
-  id: string;
-  userAttributes: T[];
-}
-```
-
----
-
-### `DeleteUserInput`
-
-```ts
-interface DeleteUserInput {
-  id: string;
-}
-```
-
----
+- This implementation uses the AWS SDK v3 (`@aws-sdk/client-cognito-identity-provider`).
+- Ensure that the Cognito User Pool is correctly configured before using the service.
+- Future enhancements could include support for multi-factor authentication (MFA), user group management, and account status updates.

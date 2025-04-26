@@ -4,7 +4,7 @@ import { ITemplateService } from '../../contracts';
 /**
  * Service responsible for compiling Handlebars templates.
  */
-export class Handlebars implements ITemplateService {
+export class TemplateService implements ITemplateService {
   private readonly template: TemplateDelegate;
 
   /**

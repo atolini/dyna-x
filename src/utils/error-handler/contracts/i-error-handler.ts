@@ -1,5 +1,5 @@
-import { ILogger } from "../../logger/contracts";
-import { IResponseBuilder } from "../../response-builder/contracts";
+import { ILogger } from '../../logger/contracts';
+import { IResponseBuilder } from '../../response-builder/contracts';
 
 /**
  * Interface for an ErrorHandler that processes errors using specific handlers.

@@ -1,1 +1,1 @@
-export * from "./i-update-builder";
+export * from './i-update-builder';

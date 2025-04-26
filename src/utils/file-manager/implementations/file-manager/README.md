@@ -1,10 +1,8 @@
 ---
-
 # 📁 FileManager
 
-A simple, local file management utility for Node.js environments.  
+A simple, local file management utility for Node.js environments.
 Follows a clean interface-driven architecture that enables easy **extension** and **replacement** — for example, switching to cloud storage or mocking file operations in tests.
-
 ---
 
 ## 📚 Table of Contents
@@ -22,6 +20,7 @@ Follows a clean interface-driven architecture that enables easy **extension** an
 
 The `FileManager` class provides synchronous operations for managing files in a specified directory.  
 Key features:
+
 - Auto-creates the target directory if it does not exist.
 - Provides full control over file lifecycle: list, read, write, delete.
 - Built on top of Node's native `fs` and `path` modules.
@@ -60,9 +59,9 @@ new FileManager(relativePath: string)
 Initializes a new `FileManager` scoped to a local directory.  
 The directory will be created if it doesn't already exist.
 
-| Param           | Type     | Description                                          |
-|-----------------|----------|------------------------------------------------------|
-| `relativePath`  | `string` | Relative path from the current working directory.    |
+| Param          | Type     | Description                                       |
+| -------------- | -------- | ------------------------------------------------- |
+| `relativePath` | `string` | Relative path from the current working directory. |
 
 ---
 
@@ -89,15 +88,15 @@ Deletes a file if it exists. No error is thrown if the file is not found.
 ## 💡 Usage Example
 
 ```ts
-import { FileManager } from "./file-manager";
+import { FileManager } from './file-manager';
 
-const fm = new FileManager("./data");
+const fm = new FileManager('./data');
 
-fm.writeFile("example.txt", "Hello, world!");
-console.log(fm.readFile("example.txt")); // "Hello, world!"
-console.log(fm.listFiles());             // ["example.txt"]
+fm.writeFile('example.txt', 'Hello, world!');
+console.log(fm.readFile('example.txt')); // "Hello, world!"
+console.log(fm.listFiles()); // ["example.txt"]
 
-fm.deleteFile("example.txt");
+fm.deleteFile('example.txt');
 ```
 
 ---
@@ -133,6 +132,7 @@ class InMemoryFileManager implements IFileManager {
 ## 🔒 Type Safety
 
 By programming against the interface `IFileManager`, you make your services easier to:
+
 - Test in isolation (with mocks or in-memory versions).
 - Swap to other storage backends.
 - Comply with **SOLID** principles — especially **Dependency Inversion**.

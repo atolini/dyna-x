@@ -4,11 +4,16 @@ import {
   AdminCreateUserCommand,
   AdminUpdateUserAttributesCommand,
   AdminDeleteUserCommand,
-  AttributeType
+  AttributeType,
 } from '@aws-sdk/client-cognito-identity-provider';
 
-import { CognitoUserService } from './cognito-user-service'; 
-import { IUserService, CreateUserInput, UpdateUserAttributesInput, DeleteUserInput } from '../../contracts';
+import { CognitoUserService } from './';
+import {
+  IUserService,
+  CreateUserInput,
+  UpdateUserAttributesInput,
+  DeleteUserInput,
+} from '../../contracts';
 
 describe('CognitoUserService', () => {
   const cognitoMock = mockClient(CognitoIdentityProviderClient);
@@ -26,10 +31,10 @@ describe('CognitoUserService', () => {
       login: 'user@example.com',
       userAttributes: [
         { Name: 'email', Value: 'user@example.com' },
-        { Name: 'email_verified', Value: 'true' }
+        { Name: 'email_verified', Value: 'true' },
       ],
       temporaryPassword: 'Temp@123',
-      suppressMessage: true
+      suppressMessage: true,
     };
 
     it('should create user successfully', async () => {
@@ -39,36 +44,44 @@ describe('CognitoUserService', () => {
     });
 
     it('should throw error if Cognito fails to create user', async () => {
-      cognitoMock.on(AdminCreateUserCommand).rejects(new Error('Create failed'));
+      cognitoMock
+        .on(AdminCreateUserCommand)
+        .rejects(new Error('Create failed'));
 
-      await expect(userService.createUser(input)).rejects.toThrow('Create failed');
+      await expect(userService.createUser(input)).rejects.toThrow(
+        'Create failed',
+      );
     });
   });
 
   describe('updateUserAttributes', () => {
     const input: UpdateUserAttributesInput<AttributeType> = {
       id: 'user@example.com',
-      userAttributes: [
-        { Name: 'custom:role', Value: 'admin' }
-      ]
+      userAttributes: [{ Name: 'custom:role', Value: 'admin' }],
     };
 
     it('should update user attributes successfully', async () => {
       cognitoMock.on(AdminUpdateUserAttributesCommand).resolves({});
 
-      await expect(userService.updateUserAttributes(input)).resolves.not.toThrow();
+      await expect(
+        userService.updateUserAttributes(input),
+      ).resolves.not.toThrow();
     });
 
     it('should throw error if Cognito fails to update attributes', async () => {
-      cognitoMock.on(AdminUpdateUserAttributesCommand).rejects(new Error('Update failed'));
+      cognitoMock
+        .on(AdminUpdateUserAttributesCommand)
+        .rejects(new Error('Update failed'));
 
-      await expect(userService.updateUserAttributes(input)).rejects.toThrow('Update failed');
+      await expect(userService.updateUserAttributes(input)).rejects.toThrow(
+        'Update failed',
+      );
     });
   });
 
   describe('deleteUser', () => {
     const input: DeleteUserInput = {
-      id: 'user@example.com'
+      id: 'user@example.com',
     };
 
     it('should delete user successfully', async () => {
@@ -78,9 +91,13 @@ describe('CognitoUserService', () => {
     });
 
     it('should throw error if Cognito fails to delete user', async () => {
-      cognitoMock.on(AdminDeleteUserCommand).rejects(new Error('Delete failed'));
+      cognitoMock
+        .on(AdminDeleteUserCommand)
+        .rejects(new Error('Delete failed'));
 
-      await expect(userService.deleteUser(input)).rejects.toThrow('Delete failed');
+      await expect(userService.deleteUser(input)).rejects.toThrow(
+        'Delete failed',
+      );
     });
   });
 });

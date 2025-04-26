@@ -1,5 +1,5 @@
-import { SESClient, SendEmailCommand } from "@aws-sdk/client-ses";
-import { IEmailService, EmailMessage } from "../../contracts";
+import { SESClient, SendEmailCommand } from '@aws-sdk/client-ses';
+import { IEmailService, EmailMessage } from '../../contracts';
 
 /**
  * AWS SES implementation of IEmailService.
@@ -27,11 +27,11 @@ export class SESEmailService implements IEmailService {
       Message: {
         Subject: {
           Data: subject,
-          Charset: "UTF-8",
+          Charset: 'UTF-8',
         },
         Body: {
-          Text: bodyText ? { Data: bodyText, Charset: "UTF-8" } : undefined,
-          Html: bodyHtml ? { Data: bodyHtml, Charset: "UTF-8" } : undefined,
+          Text: bodyText ? { Data: bodyText, Charset: 'UTF-8' } : undefined,
+          Html: bodyHtml ? { Data: bodyHtml, Charset: 'UTF-8' } : undefined,
         },
       },
     });

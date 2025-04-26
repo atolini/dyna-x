@@ -34,9 +34,9 @@ describe('EmailService', () => {
           Subject: { Data: baseEmail.subject, Charset: 'UTF-8' },
           Body: {
             Text: { Data: baseEmail.bodyText, Charset: 'UTF-8' },
-            Html: { Data: baseEmail.bodyHtml, Charset: 'UTF-8' }
-          }
-        }
+            Html: { Data: baseEmail.bodyHtml, Charset: 'UTF-8' },
+          },
+        },
       });
     });
 
@@ -45,7 +45,7 @@ describe('EmailService', () => {
 
       const customFrom = 'custom@example.com';
       await expect(
-        emailService.sendEmail({ ...baseEmail, from: customFrom })
+        emailService.sendEmail({ ...baseEmail, from: customFrom }),
       ).resolves.not.toThrow();
 
       expect(sesMock.calls()[0].args[0].input['Source']).toEqual(customFrom);
@@ -56,16 +56,20 @@ describe('EmailService', () => {
 
       const multipleTo = ['one@example.com', 'two@example.com'];
       await expect(
-        emailService.sendEmail({ ...baseEmail, to: multipleTo })
+        emailService.sendEmail({ ...baseEmail, to: multipleTo }),
       ).resolves.not.toThrow();
 
-      expect(sesMock.calls()[0].args[0].input["Destination"].ToAddresses).toEqual(multipleTo);
+      expect(
+        sesMock.calls()[0].args[0].input['Destination'].ToAddresses,
+      ).toEqual(multipleTo);
     });
 
     it('should throw error when SES fails', async () => {
       sesMock.on(SendEmailCommand).rejects(new Error('SES error'));
 
-      await expect(emailService.sendEmail(baseEmail)).rejects.toThrow('SES error');
+      await expect(emailService.sendEmail(baseEmail)).rejects.toThrow(
+        'SES error',
+      );
     });
   });
 });

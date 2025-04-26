@@ -18,7 +18,7 @@ These interfaces are intended to provide a consistent contract for database oper
 
 ```
 database/
-└── abstraction-layer/
+└── contracts /
     ├── repository/
     │   └── i-repository.ts
     ├── condition-builder/
@@ -36,12 +36,14 @@ database/
 Generic repository interface that encapsulates CRUD operations, queries, and conditional updates.
 
 **Type Parameters:**
+
 - `T` — Item type
 - `K` — Key type used to identify items
 - `C` — Condition build result type
 - `U` — Update build result type
 
 **Main Methods:**
+
 - `getItem(key: K): Promise<T | null>`
 - `putItem(item: T): Promise<T>`
 - `deleteItem(key: K): Promise<void>`
@@ -56,6 +58,7 @@ Generic repository interface that encapsulates CRUD operations, queries, and con
 Fluent interface for constructing complex conditional expressions.
 
 **Main Methods:**
+
 - `eq(field: string, value: any)`
 - `ne(field: string, value: any)`
 - `gt(field: string, value: any)`
@@ -71,6 +74,7 @@ Fluent interface for constructing complex conditional expressions.
 Fluent interface for creating structured update expressions.
 
 **Main Methods:**
+
 - `set(field: string, value: any)`
 - `remove(field: string)`
 - `add(field: string, value: number)`
@@ -81,36 +85,7 @@ Fluent interface for creating structured update expressions.
 ## 🚀 Use Case
 
 This package is ideal for projects that require:
+
 - A consistent repository interface for interacting with various databases.
 - Custom implementations of query and update logic using builders.
 - Separation of concerns between business logic and data persistence.
-
----
-
-## 🛠️ How to Use
-
-You can implement the interfaces in your infrastructure layer, like so:
-
-```ts
-class DynamoRepository implements IRepository<MyEntity, MyKey, DynamoConditionResult, DynamoUpdateResult> {
-  // implement all methods here using DynamoDB SDK
-}
-```
-
----
-
-## 📦 Installation
-
-This is a local/internal package. To use it in your monorepo or project, import it directly:
-
-```ts
-import { IRepository } from 'database/abstraction-layer/repository/i-repository';
-```
-
----
-
-## 🧪 Testing
-
-To ensure consistent behavior, each interface can have corresponding test suites (e.g., mock repositories or expression builders) to validate conformity with expected contracts.
-
----

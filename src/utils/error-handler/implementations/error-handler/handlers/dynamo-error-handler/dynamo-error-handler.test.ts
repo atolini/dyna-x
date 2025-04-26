@@ -1,12 +1,13 @@
-import { ILogger } from "../../../logger/i-logger";
-import { Logger } from "../../../logger/logger";
 import {
   ProvisionedThroughputExceededException,
-  RequestLimitExceeded
-} from "@aws-sdk/client-dynamodb";
-import { DynamoErrorHandler } from "./dynamo-error-handler";
-import { ErrorHandler } from "../../error-handler";
-import { IResponseBuilder } from "../../../response-builder/i-response-builder";
+  RequestLimitExceeded,
+} from '@aws-sdk/client-dynamodb';
+import { ILogger } from '../../../../../logger/contracts';
+import { Logger } from '../../../../../logger/implementations/logger';
+import { IResponseBuilder } from '../../../../../response-builder/contracts';
+import { IErrorHandler } from '../../../../contracts/i-error-handler';
+import { ErrorHandler } from '../../index';
+import { DynamoErrorHandler } from './dynamo-error-handler';
 
 // Mocked Response Builder to simulate IApiResponse behavior
 class MockResponseBuilder implements IResponseBuilder<any> {
@@ -35,45 +36,50 @@ class MockResponseBuilder implements IResponseBuilder<any> {
   }
 }
 
-describe("ErrorHandler", () => {
-  let errorHandler: ErrorHandler<any, MockResponseBuilder>;
+describe('ErrorHandler', () => {
+  let errorHandler: IErrorHandler<any, MockResponseBuilder>;
   let logger: ILogger<any>;
   let resBuilder: MockResponseBuilder;
 
   beforeEach(() => {
     logger = new Logger({
-      format: "json"
+      format: 'json',
     });
     resBuilder = new MockResponseBuilder();
-    errorHandler = new ErrorHandler(resBuilder, logger, [new DynamoErrorHandler<any, MockResponseBuilder>()]);
+    errorHandler = new ErrorHandler(resBuilder, logger, [
+      new DynamoErrorHandler<any, MockResponseBuilder>(),
+    ]);
   });
 
-  it("should return internal error response when no handler can process the error", () => {
-    const error = new Error("Unknown error");
+  it('should return internal error response when no handler can process the error', () => {
+    const error = new Error('Unknown error');
     const result = errorHandler.handleError(error);
     expect(result.statusCode).toBe(500);
-    expect(JSON.parse(result.body).message).toBe("Unhandled error");
+    expect(JSON.parse(result.body).message).toBe('Unhandled error');
   });
 
-  it("should handle ProvisionedThroughputExceededException and return an appropriate response", () => {
+  it('should handle ProvisionedThroughputExceededException and return an appropriate response', () => {
     const error = new ProvisionedThroughputExceededException({
       $metadata: {},
-      message: 'ProvisionedThroughputExceededException'
+      message: 'ProvisionedThroughputExceededException',
     });
 
     const result = errorHandler.handleError(error);
     expect(result.statusCode).toBe(500);
-    expect(JSON.parse(result.body).message).toBe("DynamoDB throughput exceeded");
+    expect(JSON.parse(result.body).message).toBe(
+      'DynamoDB throughput exceeded',
+    );
   });
 
-
-  it("should handle RequestLimitExceeded and return an appropriate response", () => {
+  it('should handle RequestLimitExceeded and return an appropriate response', () => {
     const error = new RequestLimitExceeded({
       $metadata: {},
-      message: 'RequestLimitExceeded'
+      message: 'RequestLimitExceeded',
     });
     const result = errorHandler.handleError(error);
     expect(result.statusCode).toBe(500);
-    expect(JSON.parse(result.body).message).toBe("DynamoDB request limit exceeded");
+    expect(JSON.parse(result.body).message).toBe(
+      'DynamoDB request limit exceeded',
+    );
   });
 });

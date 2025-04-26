@@ -1,8 +1,8 @@
-import { ILogger } from "@logger/i-logger";
-import { IResponseBuilder } from "@response-builder/i-response-builder";
-import { IErrorActions } from "../../../../contracts/i-error-actions";
-import { S3FileNotFoundError } from "../../../../../../services/storage/implementations/s3/s3-file-not-found-error";
-import { NoSuchBucket } from "@aws-sdk/client-s3";
+import { ILogger } from '@logger/i-logger';
+import { IResponseBuilder } from '@response-builder/i-response-builder';
+import { IErrorActions } from '../../../../contracts/i-error-actions';
+import { S3FileNotFoundError } from '../../../../../../services/storage/implementations/s3/s3-file-not-found-error';
+import { NoSuchBucket } from '@aws-sdk/client-s3';
 
 /**
  * Handles S3-related errors and builds appropriate responses.
@@ -10,17 +10,18 @@ import { NoSuchBucket } from "@aws-sdk/client-s3";
  * @template T - Response type
  * @template R - Response builder type
  */
-export class S3ErrorHandler<T, R extends IResponseBuilder<T>> implements IErrorActions<T, R> {
+export class S3ErrorHandler<T, R extends IResponseBuilder<T>>
+  implements IErrorActions<T, R>
+{
   canHandle(error: Error): boolean {
     return (
-      error instanceof S3FileNotFoundError ||
-      error instanceof NoSuchBucket 
+      error instanceof S3FileNotFoundError || error instanceof NoSuchBucket
     );
   }
 
   handle(error: Error, logger: ILogger<any>, resBuilder: R): T {
-    const message = "S3 operation failed";
-  
+    const message = 'S3 operation failed';
+
     if (error instanceof S3FileNotFoundError) {
       logger.error({
         description: `${message}: File not found in S3`,
@@ -28,10 +29,10 @@ export class S3ErrorHandler<T, R extends IResponseBuilder<T>> implements IErrorA
         message: error.message,
         details: `The object with key "${error.key}" was not found in the S3 bucket.`,
       });
-  
+
       return resBuilder.notFound(error.message) as T;
     }
-  
+
     if (error instanceof NoSuchBucket) {
       logger.error({
         description: `${message}: Bucket not found`,
@@ -39,8 +40,8 @@ export class S3ErrorHandler<T, R extends IResponseBuilder<T>> implements IErrorA
         message: error.message,
         details: `The specified S3 bucket may be missing, deleted, or the name is incorrect.`,
       });
-  
-      return resBuilder.internalError("S3 bucket does not exist") as T;
+
+      return resBuilder.internalError('S3 bucket does not exist') as T;
     }
-  }  
+  }
 }

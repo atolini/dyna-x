@@ -1,13 +1,13 @@
 import { mockClient } from 'aws-sdk-client-mock';
-import { 
-    S3Client, 
-    PutObjectCommand, 
-    GetObjectCommand, 
-    DeleteObjectCommand, 
-    ListObjectsV2Command 
+import {
+  S3Client,
+  PutObjectCommand,
+  GetObjectCommand,
+  DeleteObjectCommand,
+  ListObjectsV2Command,
 } from '@aws-sdk/client-s3';
 import { Readable } from 'stream';
-import { S3StorageService } from './s3-storage-service';
+import { S3StorageService } from './';
 import { IStorageService } from '../../contracts';
 
 describe('S3StorageService', () => {
@@ -29,7 +29,9 @@ describe('S3StorageService', () => {
 
       s3Mock.on(PutObjectCommand).resolves({});
 
-      await expect(storageService.uploadFile(key, body, contentType)).resolves.not.toThrow();
+      await expect(
+        storageService.uploadFile(key, body, contentType),
+      ).resolves.not.toThrow();
     });
 
     it('should throw error when upload fails', async () => {
@@ -39,7 +41,9 @@ describe('S3StorageService', () => {
 
       s3Mock.on(PutObjectCommand).rejects(new Error('Upload failed'));
 
-      await expect(storageService.uploadFile(key, body, contentType)).rejects.toThrow('Upload failed');
+      await expect(
+        storageService.uploadFile(key, body, contentType),
+      ).rejects.toThrow('Upload failed');
     });
   });
 
@@ -52,15 +56,15 @@ describe('S3StorageService', () => {
           read() {
             this.push(fileContent);
             this.push(null); // EOF
-          }
-        }), 
+          },
+        }),
         {
-          transformToString: async () => fileContent
-        }
+          transformToString: async () => fileContent,
+        },
       );
 
       s3Mock.on(GetObjectCommand).resolves({
-        Body: mockStream as any
+        Body: mockStream as any,
       });
 
       const result = await storageService.getFile(key);
@@ -72,10 +76,12 @@ describe('S3StorageService', () => {
       const key = 'nonexistent.txt';
 
       s3Mock.on(GetObjectCommand).resolves({
-        Body: undefined
+        Body: undefined,
       });
 
-      await expect(storageService.getFile(key)).rejects.toThrow('File not found');
+      await expect(storageService.getFile(key)).rejects.toThrow(
+        'File not found',
+      );
     });
 
     it('should throw error when retrieval fails', async () => {
@@ -83,7 +89,9 @@ describe('S3StorageService', () => {
 
       s3Mock.on(GetObjectCommand).rejects(new Error('Retrieval failed'));
 
-      await expect(storageService.getFile(key)).rejects.toThrow('Retrieval failed');
+      await expect(storageService.getFile(key)).rejects.toThrow(
+        'Retrieval failed',
+      );
     });
   });
 
@@ -101,7 +109,9 @@ describe('S3StorageService', () => {
 
       s3Mock.on(DeleteObjectCommand).rejects(new Error('Deletion failed'));
 
-      await expect(storageService.deleteFile(key)).rejects.toThrow('Deletion failed');
+      await expect(storageService.deleteFile(key)).rejects.toThrow(
+        'Deletion failed',
+      );
     });
   });
 
@@ -110,11 +120,11 @@ describe('S3StorageService', () => {
       const mockFiles = [
         { Key: 'file1.txt' },
         { Key: 'file2.txt' },
-        { Key: 'folder/file3.txt' }
+        { Key: 'folder/file3.txt' },
       ];
 
       s3Mock.on(ListObjectsV2Command).resolves({
-        Contents: mockFiles
+        Contents: mockFiles,
       });
 
       const result = await storageService.listFiles();
@@ -123,7 +133,7 @@ describe('S3StorageService', () => {
 
     it('should return empty array when bucket is empty', async () => {
       s3Mock.on(ListObjectsV2Command).resolves({
-        Contents: undefined
+        Contents: undefined,
       });
 
       const result = await storageService.listFiles();
@@ -133,7 +143,9 @@ describe('S3StorageService', () => {
     it('should throw error when listing fails', async () => {
       s3Mock.on(ListObjectsV2Command).rejects(new Error('Listing failed'));
 
-      await expect(storageService.listFiles()).rejects.toThrow('Listing failed');
+      await expect(storageService.listFiles()).rejects.toThrow(
+        'Listing failed',
+      );
     });
   });
 });

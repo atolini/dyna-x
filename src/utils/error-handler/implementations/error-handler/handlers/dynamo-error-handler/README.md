@@ -12,14 +12,14 @@ It implements the `ErrorActions` interface, ensuring that it can be used in a mo
 
 ## Supported Errors
 
-| Error Class                                      | Response Type       | Log Level |
-|--------------------------------------------------|---------------------|-----------|
-| `ProvisionedThroughputExceededException`         | `internalError`     | `error`   |
-| `RequestLimitExceeded`                           | `internalError`     | `error`   |
-| `ConditionalCheckFailedException`                | `badRequest`        | `warn`    |
-| `ItemCollectionSizeLimitExceededException`       | `internalError`     | `error`   |
-| `InternalServerError`                            | `internalError`     | `error`   |
-| `LimitExceededException`                         | `internalError`     | `error`   |
+| Error Class                                | Response Type   | Log Level |
+| ------------------------------------------ | --------------- | --------- |
+| `ProvisionedThroughputExceededException`   | `internalError` | `error`   |
+| `RequestLimitExceeded`                     | `internalError` | `error`   |
+| `ConditionalCheckFailedException`          | `badRequest`    | `warn`    |
+| `ItemCollectionSizeLimitExceededException` | `internalError` | `error`   |
+| `InternalServerError`                      | `internalError` | `error`   |
+| `LimitExceededException`                   | `internalError` | `error`   |
 
 ---
 

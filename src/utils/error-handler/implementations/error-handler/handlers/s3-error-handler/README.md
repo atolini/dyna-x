@@ -12,10 +12,10 @@ It is part of an error-handling mechanism that processes S3-specific exceptions 
 
 ## Supported Errors
 
-| Error Class                | Response Type       | Log Level |
-|----------------------------|---------------------|-----------|
-| `S3FileNotFoundError`       | `notFound`          | `error`   |
-| `NoSuchBucket`              | `internalError`     | `error`   |
+| Error Class           | Response Type   | Log Level |
+| --------------------- | --------------- | --------- |
+| `S3FileNotFoundError` | `notFound`      | `error`   |
+| `NoSuchBucket`        | `internalError` | `error`   |
 
 ---
 

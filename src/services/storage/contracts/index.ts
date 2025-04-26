@@ -1,4 +1,4 @@
-import { Readable } from "stream";
+import { Readable } from 'stream';
 
 export interface IStorageService {
   /**
@@ -7,7 +7,11 @@ export interface IStorageService {
    * @param body - The content of the file (Buffer, Readable stream, or string).
    * @param contentType - The MIME type of the file.
    */
-  uploadFile(key: string, body: Buffer | Readable | string, contentType: string): Promise<void>;
+  uploadFile(
+    key: string,
+    body: Buffer | Readable | string,
+    contentType: string,
+  ): Promise<void>;
 
   /**
    * Retrieves a file from the storage.

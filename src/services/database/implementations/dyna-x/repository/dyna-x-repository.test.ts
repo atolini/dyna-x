@@ -1,182 +1,183 @@
-import { Logger } from "../../../../../utils/logger/logger";
+import { Logger } from '../../../../../utils/logger/implementations/logger';
 import {
-    BatchWriteItemCommand,
-    DeleteItemCommand,
-    DynamoDBClient,
-    GetItemCommand,
-    GetItemCommandOutput,
-    PutItemCommand,
-    QueryCommand,
-    UpdateItemCommand
-} from "@aws-sdk/client-dynamodb";
+  BatchWriteItemCommand,
+  DeleteItemCommand,
+  DynamoDBClient,
+  GetItemCommand,
+  GetItemCommandOutput,
+  PutItemCommand,
+  QueryCommand,
+  UpdateItemCommand,
+} from '@aws-sdk/client-dynamodb';
 import { mockClient } from 'aws-sdk-client-mock';
-import { ConditionBuilder } from "../condition-builder/condition-builder";
-import { DynaXSchema } from "../schema/dyna-x-schema";
-import { UpdateBuilder } from "../update-builder/update-builder";
-import { DynaXRepository } from "./dyna-x-repository";
+import { ConditionBuilder } from '../condition-builder';
+import { DynaXSchema } from '../schema';
+import { UpdateBuilder } from '../update-builder';
+import { DynaXRepository } from './';
 
-describe("DynaXRepository", () => {
-    let repository: DynaXRepository<any>;
-    let client: DynamoDBClient;
-    let schema: DynaXSchema;
-    let ddbMock: any;
+describe('DynaXRepository', () => {
+  let repository: DynaXRepository<any>;
+  const ddbMock = mockClient(DynamoDBClient);
+  const logger = new Logger({
+    serviceName: 'TestingService',
+  });
+  const schema = {
+    getTableName: jest.fn().mockReturnValue('TestTable'),
+  } as unknown as DynaXSchema;
+  const region = 'us-east-1';
 
-    beforeEach(() => {
-        client = new DynamoDBClient({});
-        schema = { getTableName: jest.fn().mockReturnValue("TestTable") } as unknown as DynaXSchema;
-        ddbMock = mockClient(client);
-        const logger = new Logger({
-            serviceName: "TestingService"
-        });
-        repository = new DynaXRepository(schema, client,logger);
+  beforeEach(() => {
+    ddbMock.reset();
+    repository = new DynaXRepository(schema, logger, region);
+  });
+
+  test('getItem should retrieve an item', async () => {
+    const mockResponse = { Item: { id: { S: '123' }, name: { S: 'Test' } } };
+
+    ddbMock.on(GetItemCommand).resolves(mockResponse);
+
+    const result: GetItemCommandOutput = await repository.getItem({
+      id: '123',
     });
 
-    test("getItem should retrieve an item", async () => {
-        const mockResponse = { Item: { id: { S: "123" }, name: { S: "Test" } } };
+    expect(result).toEqual({ id: '123', name: 'Test' });
+  });
 
-        ddbMock.on(GetItemCommand).resolves(mockResponse);
+  test('putItem should insert an item', async () => {
+    const item = { id: '123', name: 'Test' };
+    const mockResponse = {
+      Attributes: { id: { S: '123' }, name: { S: 'Test' } },
+    };
 
-        const result: GetItemCommandOutput = await repository.getItem({
-            "id": "123"
-        });
+    ddbMock.on(PutItemCommand).resolves(mockResponse);
 
-        expect(result).toEqual({ id: "123", name: "Test" });
-    });
+    const result = await repository.putItem(item);
 
-    test("putItem should insert an item", async () => {
-        const item = { id: "123", name: "Test" };
-        const mockResponse = { Attributes: { id: { S: "123" }, name: { S: "Test" } } };
+    expect(result).toEqual(item);
+  });
 
-        ddbMock.on(PutItemCommand).resolves(mockResponse);
+  test('deleteItem should remove an item', async () => {
+    const key = { id: { S: '123' } };
 
-        const result = await repository.putItem(item);
+    ddbMock.on(DeleteItemCommand).resolves({ Attributes: undefined });
 
-        expect(result).toEqual(item);
-    });
+    expect(repository.deleteItem(key)).resolves.not.toThrow();
+  });
 
-    test("deleteItem should remove an item", async () => {
-        const key = { id: { S: "123" } };
+  test('batchWriteItems should handle batch writes', async () => {
+    const items = Array.from({ length: 100 }, (_, index) => ({
+      id: String(index + 1).padStart(2, '0'),
+    }));
 
-        ddbMock.on(DeleteItemCommand).resolves({ Attributes: undefined });
-
-        expect(repository.deleteItem(key))
-            .resolves
-            .not.toThrow();
-    });
-
-    test("batchWriteItems should handle batch writes", async () => {
-        const items = Array.from({ length: 100 }, (_, index) => ({
-            id: String(index + 1).padStart(2, '0')
-        }));
-
-        ddbMock.on(BatchWriteItemCommand)
-            .resolvesOnce({ UnprocessedItems: {} })
-            .resolvesOnce({ UnprocessedItems: 
-                { 
-                    "TestTable": [
-                        {
-                            PutRequest: {
-                                Item: {
-                                    "id": {
-                                        S: "12"
-                                    }
-                                }
-                            }
-                        }
-                    ] 
-                } 
-            })
-            .resolvesOnce({ UnprocessedItems: {} })
-            .resolvesOnce({ UnprocessedItems: 
-                { 
-                    "TestTable": [
-                        {
-                            PutRequest: {
-                                Item: {
-                                    "id": {
-                                        S: "22"
-                                    }
-                                }
-                            }
-                        }
-                    ] 
-                } 
-            })
-            .resolvesOnce({ UnprocessedItems: 
-                { 
-                    "TestTable": [
-                        {
-                            DeleteRequest: {
-                                Key: {
-                                    "id": {
-                                        S: "32"
-                                    }
-                                }
-                            }
-                        }
-                    ] 
-                } 
-            })
-        
-        const result = await repository.batchWriteItems(items, [
+    ddbMock
+      .on(BatchWriteItemCommand)
+      .resolvesOnce({ UnprocessedItems: {} })
+      .resolvesOnce({
+        UnprocessedItems: {
+          TestTable: [
             {
-                primaryKey: {
-                    "id": "32"
-                }
-            }
-        ]);
+              PutRequest: {
+                Item: {
+                  id: {
+                    S: '12',
+                  },
+                },
+              },
+            },
+          ],
+        },
+      })
+      .resolvesOnce({ UnprocessedItems: {} })
+      .resolvesOnce({
+        UnprocessedItems: {
+          TestTable: [
+            {
+              PutRequest: {
+                Item: {
+                  id: {
+                    S: '22',
+                  },
+                },
+              },
+            },
+          ],
+        },
+      })
+      .resolvesOnce({
+        UnprocessedItems: {
+          TestTable: [
+            {
+              DeleteRequest: {
+                Key: {
+                  id: {
+                    S: '32',
+                  },
+                },
+              },
+            },
+          ],
+        },
+      });
 
-        expect(result).toEqual([
-            {"type":"put","item":{"id":"12"}},
-            {"type":"put","item":{"id":"22"}},
-            {"type":"delete","item":{"id":"32"}}
-        ]);
+    const result = await repository.batchWriteItems(items, [
+      {
+        primaryKey: {
+          id: '32',
+        },
+      },
+    ]);
+
+    expect(result).toEqual([
+      { type: 'put', item: { id: '12' } },
+      { type: 'put', item: { id: '22' } },
+      { type: 'delete', item: { id: '32' } },
+    ]);
+  });
+
+  test('query should return matching items', async () => {
+    const condition = {
+      build: jest.fn().mockReturnValue({
+        ConditionExpression: '#id = :id',
+        ExpressionAttributeNames: { '#id': 'id' },
+        ExpressionAttributeValues: { ':id': { S: '123' } },
+      }),
+    } as unknown as ConditionBuilder;
+
+    ddbMock.on(QueryCommand).resolves({
+      Items: [
+        {
+          id: {
+            S: '123',
+          },
+        },
+      ],
     });
 
-    test("query should return matching items", async () => {
-        const condition = {
-            build: jest.fn().mockReturnValue({
-                ConditionExpression: "#id = :id",
-                ExpressionAttributeNames: { "#id": "id" },
-                ExpressionAttributeValues: { ":id": { S: "123" } }
-            })
-        } as unknown as ConditionBuilder;
+    const result = await repository.query(condition);
 
-        ddbMock.on(QueryCommand).resolves({
-            Items: [
-                {
-                    id: {
-                        S: "123"
-                    }
-                }
-            ]
-        }); 
+    expect(result).toEqual([{ id: '123' }]);
+  });
 
-        const result = await repository.query(condition);
+  test('update should modify an item', async () => {
+    const key = { primaryKey: '123' };
+    const update = {
+      build: jest.fn().mockReturnValue({
+        UpdateExpression: 'SET #name = :name',
+        ExpressionAttributeNames: { '#name': 'name' },
+        ExpressionAttributeValues: { ':name': { S: 'Updated' } },
+      }),
+    } as unknown as UpdateBuilder;
 
-        expect(result).toEqual([{ "id": "123" }]);
+    ddbMock.on(UpdateItemCommand).resolves({
+      Attributes: {
+        name: {
+          S: 'Updated',
+        },
+      },
     });
 
-    test("update should modify an item", async () => {
-        const key = { primaryKey: "123" };
-        const update = {
-            build: jest.fn().mockReturnValue({
-                UpdateExpression: "SET #name = :name",
-                ExpressionAttributeNames: { "#name": "name" },
-                ExpressionAttributeValues: { ":name": { S: "Updated" } }
-            })
-        } as unknown as UpdateBuilder;
+    const result = await repository.update(update, key);
 
-        ddbMock.on(UpdateItemCommand).resolves({
-           Attributes: {
-                "name": {
-                    "S": "Updated"
-                }
-           }
-        }); 
-
-        const result = await repository.update(update, key);
-
-        expect(result).toEqual({ name: 'Updated' });
-    });
+    expect(result).toEqual({ name: 'Updated' });
+  });
 });

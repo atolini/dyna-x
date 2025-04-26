@@ -7,10 +7,10 @@
  * @template R The type that identifies the resource (e.g., resource ID or ARN).
  */
 export interface AuthorizationRequest<A, I, C, R> {
-    entityId: I;
-    action: A;
-    context?: C;
-    resourceId: R;
+  entityId: I;
+  action: A;
+  context?: C;
+  resourceId: R;
 }
 
 /**
@@ -22,7 +22,7 @@ export interface AuthorizationRequest<A, I, C, R> {
  * @template R The type that identifies the resource.
  */
 export interface BatchAuthorizationRequest<A, I, C, R> {
-    requests: AuthorizationRequest<A, I, C, R>[];
+  requests: AuthorizationRequest<A, I, C, R>[];
 }
 
 /**
@@ -31,8 +31,8 @@ export interface BatchAuthorizationRequest<A, I, C, R> {
  * @template R The type that identifies the resource.
  */
 export interface AuthorizationResponse<R> {
-    recourseId: R;
-    decision: 'ALLOW' | 'DENY';
+  recourseId: R;
+  decision: 'ALLOW' | 'DENY';
 }
 
 /**
@@ -41,7 +41,7 @@ export interface AuthorizationResponse<R> {
  * @template R The type that identifies the resource.
  */
 export interface BatchAuthorizationResponse<R> {
-    results: AuthorizationResponse<R>[];
+  results: AuthorizationResponse<R>[];
 }
 
 /**
@@ -53,23 +53,23 @@ export interface BatchAuthorizationResponse<R> {
  * @template R The type that identifies the resource.
  */
 export interface IAuthorizationService<A, I, C, R> {
-    /**
-     * Validates whether the given identity is authorized to perform the specified action on the resource.
-     *
-     * @param request The authorization request.
-     * @returns A promise resolving to the result of the authorization check.
-     */
-    isAuthorized(
-        request: AuthorizationRequest<A, I, C, R>
-    ): Promise<AuthorizationResponse<R>>;
+  /**
+   * Validates whether the given identity is authorized to perform the specified action on the resource.
+   *
+   * @param request The authorization request.
+   * @returns A promise resolving to the result of the authorization check.
+   */
+  isAuthorized(
+    request: AuthorizationRequest<A, I, C, R>,
+  ): Promise<AuthorizationResponse<R>>;
 
-    /**
-     * Validates a batch of authorization requests in a single operation.
-     *
-     * @param request The batch of authorization requests.
-     * @returns A promise resolving to the batch authorization results.
-     */
-    batchIsAuthorized(
-        request: BatchAuthorizationRequest<A, I, C, R>
-    ): Promise<BatchAuthorizationResponse<R>>;
+  /**
+   * Validates a batch of authorization requests in a single operation.
+   *
+   * @param request The batch of authorization requests.
+   * @returns A promise resolving to the batch authorization results.
+   */
+  batchIsAuthorized(
+    request: BatchAuthorizationRequest<A, I, C, R>,
+  ): Promise<BatchAuthorizationResponse<R>>;
 }

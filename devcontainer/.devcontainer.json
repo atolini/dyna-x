@@ -1,10 +1,9 @@
 {
-    "name": "Node.js & TypeScript",
-    "image": "mcr.microsoft.com/devcontainers/typescript-node:1-20-bullseye",
-    "features": {
-      "ghcr.io/devcontainers-contrib/features/npm-package:1": {}
-    },
-    "runArgs": ["--privileged"],
-    "postStartCommand": [
-    ]
+  "name": "Node.js & TypeScript",
+  "image": "mcr.microsoft.com/devcontainers/typescript-node:1-20-bullseye",
+  "features": {
+    "ghcr.io/devcontainers-contrib/features/npm-package:1": {}
+  },
+  "runArgs": ["--privileged"],
+  "postStartCommand": []
 }

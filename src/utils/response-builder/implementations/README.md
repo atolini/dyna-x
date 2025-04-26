@@ -1,10 +1,8 @@
 ---
-
 # 📦 ResponseBuilder
 
-A lightweight utility class for building consistent API responses in **AWS Lambda** environments.  
+A lightweight utility class for building consistent API responses in **AWS Lambda** environments.
 Implements a flexible interface, allowing you to easily swap or extend the response format according to your project needs.
-
 ---
 
 ## 📚 Table of Contents

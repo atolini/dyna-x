@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "jest --detectOpenHandles --silent --forceExit",
+    "docs": "typedoc --out docs/ --entryPointStrategy expand src/",
     "format": "prettier --write ."
   },
   "keywords": [],
@@ -17,6 +18,7 @@
     "prettier": "^3.5.3",
     "ts-jest": "^29.3.0",
     "ts-node": "^10.9.2",
+    "typedoc": "^0.28.3",
     "typescript": "^5.8.2"
   },
   "dependencies": {

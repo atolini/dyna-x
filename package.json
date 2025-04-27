@@ -6,7 +6,8 @@
   "scripts": {
     "test": "jest --detectOpenHandles --silent --forceExit",
     "docs": "typedoc --out docs/ --entryPointStrategy expand src/",
-    "format": "prettier --write ."
+    "format": "prettier --write .", 
+    "compile": "tsc --outDir dist"
   },
   "keywords": [],
   "author": "",

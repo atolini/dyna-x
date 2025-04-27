@@ -39,6 +39,12 @@ export class AVPAuthorizationService
     this.client = new VerifiedPermissionsClient({});
   }
 
+  /**
+   * Checks if a principal is authorized for a specific action on a resource.
+   *
+   * @param request - The authorization request containing the principal, action, resource, and context.
+   * @returns A promise that resolves to an authorization response.
+   */
   async isAuthorized(
     request: AuthorizationRequest<
       ActionIdentifier,
@@ -64,6 +70,13 @@ export class AVPAuthorizationService
       decision: response.decision ?? 'DENY',
     };
   }
+
+  /**
+   * Checks if a principal is authorized for multiple actions on multiple resources.
+   *
+   * @param request - The batch authorization request containing multiple authorization requests.
+   * @returns A promise that resolves to a batch authorization response.
+   */
   async batchIsAuthorized(
     request: BatchAuthorizationRequest<
       ActionIdentifier,

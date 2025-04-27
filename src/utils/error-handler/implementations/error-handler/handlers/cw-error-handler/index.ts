@@ -46,7 +46,9 @@ export class CloudWatchLogErrorHandler<T, R extends IResponseBuilder<T>>
         details: `The sequence token provided is invalid. Possibly the log stream has received newer events.`,
       });
 
-      return resBuilder.badRequest('Invalid sequence token for log stream') as T;
+      return resBuilder.badRequest(
+        'Invalid sequence token for log stream',
+      ) as T;
     }
 
     if (error instanceof DataAlreadyAcceptedException) {

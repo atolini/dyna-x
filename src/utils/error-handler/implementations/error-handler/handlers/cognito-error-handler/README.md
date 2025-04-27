@@ -11,12 +11,12 @@ It forms part of a robust error-handling system that ensures clear communication
 
 ## Supported Errors
 
-| Error Class                  | Response Type        | Log Level |
-| ----------------------------- | -------------------- | --------- |
-| `UserNotFoundException`       | `notFound`            | `error`   |
-| `InvalidParameterException`   | `badRequest`          | `error`   |
-| `UsernameExistsException`     | `badRequest`          | `error`   |
-| `LimitExceededException`      | `tooManyRequests`     | `error`   |
+| Error Class                 | Response Type     | Log Level |
+| --------------------------- | ----------------- | --------- |
+| `UserNotFoundException`     | `notFound`        | `error`   |
+| `InvalidParameterException` | `badRequest`      | `error`   |
+| `UsernameExistsException`   | `badRequest`      | `error`   |
+| `LimitExceededException`    | `tooManyRequests` | `error`   |
 
 ---
 

@@ -1,7 +1,10 @@
 import { ILogger } from '../../../../../logger/contracts';
 import { IResponseBuilder } from '../../../../../response-builder/contracts';
 import { IErrorActions } from '../../../../contracts/i-error-actions';
-import { ResourceNotFoundException, AccessDeniedException } from '@aws-sdk/client-verifiedpermissions';
+import {
+  ResourceNotFoundException,
+  AccessDeniedException,
+} from '@aws-sdk/client-verifiedpermissions';
 
 /**
  * Handles Amazon Verified Permissions (AVP) related errors and builds appropriate responses.
@@ -41,7 +44,9 @@ export class AVPAuthorizationErrorHandler<T, R extends IResponseBuilder<T>>
         details: `The caller does not have permission to perform the requested action on the resource.`,
       });
 
-      return resBuilder.forbidden('Access denied for the requested action') as T;
+      return resBuilder.forbidden(
+        'Access denied for the requested action',
+      ) as T;
     }
   }
 }

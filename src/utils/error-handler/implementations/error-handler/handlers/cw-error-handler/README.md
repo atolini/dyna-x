@@ -11,11 +11,11 @@ It helps maintain reliable communication with clients when CloudWatch Logs opera
 
 ## Supported Errors
 
-| Error Class                     | Response Type   | Log Level |
-| -------------------------------- | --------------- | --------- |
-| `ResourceNotFoundException`      | `notFound`      | `error`   |
-| `InvalidSequenceTokenException`  | `badRequest`    | `error`   |
-| `DataAlreadyAcceptedException`   | `badRequest`    | `error`   |
+| Error Class                     | Response Type | Log Level |
+| ------------------------------- | ------------- | --------- |
+| `ResourceNotFoundException`     | `notFound`    | `error`   |
+| `InvalidSequenceTokenException` | `badRequest`  | `error`   |
+| `DataAlreadyAcceptedException`  | `badRequest`  | `error`   |
 
 ---
 

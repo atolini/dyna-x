@@ -1,7 +1,12 @@
 import { ILogger } from '../../../../../logger/contracts';
 import { IResponseBuilder } from '../../../../../response-builder/contracts';
 import { IErrorActions } from '../../../../contracts/i-error-actions';
-import { InvalidParameterException, UserNotFoundException, UsernameExistsException, LimitExceededException } from '@aws-sdk/client-cognito-identity-provider';
+import {
+  InvalidParameterException,
+  UserNotFoundException,
+  UsernameExistsException,
+  LimitExceededException,
+} from '@aws-sdk/client-cognito-identity-provider';
 
 /**
  * Handles Cognito-related errors and builds appropriate responses.
@@ -65,7 +70,9 @@ export class CognitoErrorHandler<T, R extends IResponseBuilder<T>>
         details: `The request limit for Cognito has been exceeded. Please try again later.`,
       });
 
-      return resBuilder.tooManyRequests('Request limit exceeded for Cognito') as T;
+      return resBuilder.tooManyRequests(
+        'Request limit exceeded for Cognito',
+      ) as T;
     }
   }
 }

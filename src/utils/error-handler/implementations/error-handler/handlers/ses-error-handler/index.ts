@@ -57,7 +57,9 @@ export class SESEmailErrorHandler<T, R extends IResponseBuilder<T>>
         details: `The configuration set specified in the request does not exist.`,
       });
 
-      return resBuilder.internalError('SES configuration set does not exist') as T;
+      return resBuilder.internalError(
+        'SES configuration set does not exist',
+      ) as T;
     }
   }
 }

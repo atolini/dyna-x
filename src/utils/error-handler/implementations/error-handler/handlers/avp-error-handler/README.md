@@ -11,10 +11,10 @@ It is part of a broader error-handling mechanism to ensure clear and consistent 
 
 ## Supported Errors
 
-| Error Class                  | Response Type  | Log Level |
-| ----------------------------- | -------------- | --------- |
-| `ResourceNotFoundException`   | `notFound`     | `error`   |
-| `AccessDeniedException`       | `forbidden`    | `error`   |
+| Error Class                 | Response Type | Log Level |
+| --------------------------- | ------------- | --------- |
+| `ResourceNotFoundException` | `notFound`    | `error`   |
+| `AccessDeniedException`     | `forbidden`   | `error`   |
 
 ---
 

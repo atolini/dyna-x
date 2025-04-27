@@ -11,11 +11,11 @@ It ensures proper error management when sending emails using SES and helps provi
 
 ## Supported Errors
 
-| Error Class                                 | Response Type   | Log Level |
-| ------------------------------------------- | --------------- | --------- |
-| `MessageRejected`                           | `badRequest`    | `error`   |
-| `MailFromDomainNotVerifiedException`        | `badRequest`    | `error`   |
-| `ConfigurationSetDoesNotExistException`     | `internalError` | `error`   |
+| Error Class                             | Response Type   | Log Level |
+| --------------------------------------- | --------------- | --------- |
+| `MessageRejected`                       | `badRequest`    | `error`   |
+| `MailFromDomainNotVerifiedException`    | `badRequest`    | `error`   |
+| `ConfigurationSetDoesNotExistException` | `internalError` | `error`   |
 
 ---
 

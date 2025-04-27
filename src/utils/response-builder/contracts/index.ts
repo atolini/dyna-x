@@ -68,4 +68,13 @@ export interface IResponseBuilder<R> {
    * @returns A formatted response of type `R`.
    */
   custom<T>(statusCode: number, success: boolean, payload: T): R;
+
+  /**
+   * Returns an error response with status 403 (Forbidden).
+   *
+   * @param message - The error message to be returned.
+   * @param details - (Optional) Additional details about the error.
+   * @returns A formatted response of type `R`.
+   */
+  forbidden(message: string, details?: unknown): R;
 }

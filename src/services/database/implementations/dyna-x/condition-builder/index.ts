@@ -1,4 +1,4 @@
-import { IConditionBuilder } from '../../../contracts/condition-builder/i-condition-builder';
+import { IConditionBuilder } from '../../../contracts/condition-builder';
 import { ConditionExpressionResult } from './condition-expression-result';
 
 export class ConditionBuilder

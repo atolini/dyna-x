@@ -1,4 +1,4 @@
-import { IUpdateBuilder } from '../../../contracts/update-builder/i-update-builder';
+import { IUpdateBuilder } from '../../../contracts/update-builder';
 import { UpdateExpressionResult } from './update-expression-result';
 
 export class UpdateBuilder implements IUpdateBuilder<UpdateExpressionResult> {

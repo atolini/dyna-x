@@ -44,6 +44,18 @@ export class AVPAuthorizationService
    *
    * @param request - The authorization request containing the principal, action, resource, and context.
    * @returns A promise that resolves to an authorization response.
+   *
+   * @example
+   * const service = new AVPAuthorizationService('policy-store-id');
+   * const request = {
+   *   entityId: { entityType: 'User', entityId: 'user-123' },
+   *   action: { actionType: 'Action', actionId: 'Read' },
+   *   resourceId: { entityType: 'Resource', entityId: 'resource-abc' },
+   * };
+   * service.isAuthorized(request)
+   *   .then(response => console.log(response.decision)) // Outputs: 'ALLOW' or 'DENY'
+   *   .catch(error => console.error(error));
+   *
    */
   async isAuthorized(
     request: AuthorizationRequest<
@@ -76,6 +88,27 @@ export class AVPAuthorizationService
    *
    * @param request - The batch authorization request containing multiple authorization requests.
    * @returns A promise that resolves to a batch authorization response.
+   *
+   * @example
+   * const service = new AVPAuthorizationService('your-policy-store-id');
+   * const request = {
+   *   requests: [
+   *     {
+   *       entityId: { entityType: 'User', entityId: 'user-1' },
+   *       action: { actionType: 'Action', actionId: 'Read' },
+   *       resourceId: { entityType: 'Resource', entityId: 'resource-1' },
+   *     },
+   *     {
+   *       entityId: { entityType: 'User', entityId: 'user-2' },
+   *       action: { actionType: 'Action', actionId: 'Write' },
+   *       resourceId: { entityType: 'Resource', entityId: 'resource-2' },
+   *     },
+   *   ],
+   * };
+   * service.batchIsAuthorized(request)
+   *   .then(response => console.log(response.results))
+   *   // Outputs: [{ recourseId: { entityType: 'Resource', entityId: 'resource-1' }, decision: 'ALLOW' }, ...]
+   *   .catch(error => console.error(error));
    */
   async batchIsAuthorized(
     request: BatchAuthorizationRequest<

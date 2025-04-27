@@ -1,5 +1,9 @@
 /**
- * Interface for building conditional expressions
+ * Interface for building conditional expressions for database operations.
+ * This interface allows for the construction of complex conditional expressions.
+ * It provides methods for adding equality, non-equality, greater-than, and less-than conditions,
+ * as well as logical operators like AND and OR.
+ *
  * @template T Type of the result returned by the build() method
  */
 export interface IConditionBuilder<T> {

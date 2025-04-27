@@ -2,7 +2,19 @@ import { IConditionBuilder } from '../condition-builder';
 import { IUpdateBuilder } from '../update-builder';
 
 /**
- * Generic repository interface for database operations
+ * A generic interface for performing database operations.
+ *
+ * This interface outlines methods for the basic operations you would expect in a repository pattern:
+ * creating, reading, updating, deleting, querying, and batch writing items. It is designed to be implemented
+ * by specific repositories such as those for DynamoDB, MongoDB, or other databases.
+ *
+ * The interface is flexible and can work with any type of item, key, condition builder, and update builder.
+ * Each method is asynchronous, returning a promise, which allows for non-blocking database operations.
+ *
+ * Key Features:
+ * - Perform batch writes to efficiently handle bulk operations.
+ * - Query the database with custom conditions and optional index names for more advanced querying.
+ * - Conditionally update items based on specified conditions.
  *
  * @template T Type of the item to be managed in the database
  * @template K Type of the key used to identify items

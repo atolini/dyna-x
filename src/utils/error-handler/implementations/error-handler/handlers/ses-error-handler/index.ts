@@ -59,13 +59,5 @@ export class SESEmailErrorHandler<T, R extends IResponseBuilder<T>>
 
       return resBuilder.internalError('SES configuration set does not exist') as T;
     }
-
-    logger.error({
-      description: `${message}: Unknown error`,
-      name: error.name,
-      message: error.message,
-    });
-
-    return resBuilder.internalError('An unknown SES error occurred') as T;
   }
 }

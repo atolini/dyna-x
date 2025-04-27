@@ -59,13 +59,5 @@ export class CloudWatchLogErrorHandler<T, R extends IResponseBuilder<T>>
 
       return resBuilder.badRequest('Log event data was already accepted') as T;
     }
-
-    logger.error({
-      description: `${message}: Unknown error`,
-      name: error.name,
-      message: error.message,
-    });
-
-    return resBuilder.internalError('An unknown CloudWatch Logs error occurred') as T;
   }
 }

@@ -4,7 +4,6 @@ import { IResponseBuilder } from '../contracts';
 export class ResponseBuilder
   implements IResponseBuilder<APIGatewayProxyResult>
 {
-  
   forbidden(message = 'Forbidden', details?: unknown): APIGatewayProxyResult {
     return {
       statusCode: 403,
@@ -13,14 +12,17 @@ export class ResponseBuilder
     };
   }
 
-  tooManyRequests(message = 'Too Many Requests', details?: unknown): APIGatewayProxyResult {
+  tooManyRequests(
+    message = 'Too Many Requests',
+    details?: unknown,
+  ): APIGatewayProxyResult {
     return {
       statusCode: 429,
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ success: false, message, details }),
     };
   }
-  
+
   ok<T>(data: T): APIGatewayProxyResult {
     return {
       statusCode: 200,

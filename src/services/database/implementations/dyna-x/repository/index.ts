@@ -29,19 +29,39 @@ import * as _ from 'lodash';
 import { ILogger } from '../../../../../utils/logger/contracts';
 import { MaxItemsExceededError } from '../errors/max-item-exceeded-error';
 import { IRepository } from '../../../contracts/repository';
-import { ConditionExpressionResult } from '../condition-builder/condition-expression-result';
-import { UpdateExpressionResult } from '../update-builder/update-expression-result';
+import { ConditionExpressionResult } from '../condition-builder';
+import { UpdateExpressionResult } from '../update-builder';
 
+/**
+ * Represents a key used to identify an item in a DynamoDB table.
+ * Typically consists of a mandatory primary key and an optional sort key.
+ *
+ * @property {any} primaryKey - The primary key value of the item.
+ * @property {any} [sortKey] - (Optional) The sort key value of the item.
+ *
+ * @example
+ * const key: Key = {
+ *   primaryKey: 'user#123',
+ *   sortKey: 'order#456',
+ * };
+ *
+ * @example
+ * const keyWithoutSort: Key = {
+ *   primaryKey: 'user#123',
+ * };
+ */
 export interface Key {
   primaryKey: any;
   sortKey?: any;
 }
 
 /**
- * Generic repository for interacting with DynamoDB tables using a defined schema.
- * Provides methods for retrieving, inserting, updating, and deleting items.
+ * Generic repository interface for interacting with DynamoDB tables using a defined schema.
+ * Defines methods for retrieving, inserting, updating, and deleting items,
+ * as well as supporting batch operations and conditional updates.
  *
- * @template T - The type of item stored in the DynamoDB table.
+ * @template T - The type representing the structure of the items stored in the DynamoDB table.
+ * @implements {IRepository<T, Key, ConditionExpressionResult, UpdateExpressionResult>}.
  */
 export class DynaXRepository<T>
   implements
@@ -77,6 +97,10 @@ export class DynaXRepository<T>
    *
    * @param {Record<string, any>} key - The key identifying the item.
    * @returns {Promise<T | null>} The retrieved item, or null if not found.
+   *
+   * @example
+   * const item = await repository.getItem({ id: '123' });
+   * console.log(item); // { id: '123', name: 'Test' }
    */
   async getItem(key: Record<string, any>): Promise<T | null> {
     const params: GetItemCommandInput = {
@@ -105,7 +129,10 @@ export class DynaXRepository<T>
    * Inserts or updates an item in the DynamoDB table.
    *
    * @param {T} item - The item to be inserted or updated.
-   * @returns {Promise<void>} The item updated.
+   * @returns {Promise<T>} The inserted or updated item.
+   *
+   * @example
+   * const savedItem = await repository.putItem({ id: '123', name: 'Test' });
    */
   async putItem(item: T): Promise<T> {
     const params: PutItemCommandInput = {
@@ -135,6 +162,9 @@ export class DynaXRepository<T>
    *
    * @param {Record<string, any>} key - The key identifying the item to delete.
    * @returns {Promise<void>} A promise that resolves when the item is deleted.
+   *
+   * @example
+   * await repository.deleteItem({ id: '123' });
    */
   async deleteItem(key: Record<string, any>): Promise<void> {
     const params: DeleteItemCommandInput = {
@@ -161,11 +191,19 @@ export class DynaXRepository<T>
 
   /**
    * Inserts or deletes multiple items in a single batch operation.
-   * DynamoDB limits batch writes to 25 items per request.
+   * If an item already exists, it will be updated.
+   * If an error occurs, the unprocessed items will be returned.
    *
    * @param {T[]} putItems - Items to be inserted or updated.
    * @param {Key[]} [deleteKeys=[]] - Keys of items to be deleted.
-   * @returns {Promise<Record<string, any>[]>} An array of unprocessed items, if any.
+   * @returns {Promise<Array<{ type: 'put' | 'delete'; item: T | Key }>>} An array of unprocessed items, if any.
+   *
+   * @example
+   * await repository.batchWriteItems([{ id: '1' }, { id: '2' }], [{ primaryKey: '3' }]);
+   *
+   * @example
+   * const unprocessedItems = await repository.batchWriteItems([{ id: '1' }, { id: '2' }]);
+   * console.log(unprocessedItems); // [{ type: 'put', item: { id: '1' } }, { type: 'put', item: { id: '2' } }]
    */
   async batchWriteItems(
     putItems: T[],
@@ -264,6 +302,10 @@ export class DynaXRepository<T>
    * @param {ConditionBuilder} condition - The condition to filter results.
    * @param {string} [indexName] - (Optional) The name of the index to query.
    * @returns {Promise<T[] | null>} A list of matching items or null if none found.
+   *
+   * @example
+   * const condition = new ConditionBuilder().where('id').equals('123');
+   * const items = await repository.query(condition);
    */
   async query(
     condition: ConditionBuilder,
@@ -308,6 +350,10 @@ export class DynaXRepository<T>
    * @param {Key} key - The key identifying the item to update.
    * @param {ConditionBuilder} [condition] - (Optional) A condition to check before updating.
    * @returns {Promise<T | null>} The updated item or null if the operation fails.
+   *
+   * @example
+   * const update = new UpdateBuilder().set('name', 'New Name');
+   * const updatedItem = await repository.update(update, { primaryKey: '123' });
    */
   async update(
     update: UpdateBuilder,

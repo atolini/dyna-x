@@ -5,6 +5,9 @@ import {
   ActionIdentifier,
   EntityIdentifier,
   ContextDefinition,
+  IsAuthorizedWithTokenCommand,
+  BatchIsAuthorizedWithTokenCommand,
+  VerifiedPermissionsClientConfig,
 } from '@aws-sdk/client-verifiedpermissions';
 
 import {
@@ -15,12 +18,44 @@ import {
   BatchAuthorizationResponse,
 } from '../../contracts';
 
+interface Token {
+  accessToken: string;
+  identityToken: string;
+}
+
 /**
- * Service implementation using Amazon Verified Permissions for authorization checks.
+ * @class AVPAuthorizationService
+ * @implements {IAuthorizationService<ActionIdentifier, EntityIdentifier, ContextDefinition, EntityIdentifier>}
+ * @template ActionIdentifier Type representing the action identifier.
+ * @template EntityIdentifier Type representing the entity identifier.
+ * @template ContextDefinition Type representing the context definition.
+ * @template EntityIdentifier Type representing the resource identifier.
  *
- * @template I Type representing the identity.
- * @template C Type representing the context.
- * @template R Type representing the resource.
+ * @classdesc
+ * Service to manage authorization using AWS Verified Permissions (AVP).
+ *
+ * Provides methods to check if a principal is authorized for a specific action on a resource.
+ *
+ * To use this service, you must have a schema and policy store already created in AWS Verified Permissions.
+ *
+ * If you want to use token-based authorization, you must provide the accessToken and identityToken in the constructor.
+ * Your Policy Store must also be configured to use token-based authorization.
+ *
+ * This service relies on the `@aws-sdk/client-verifiedpermissions` package.
+ *
+ * This class is stateless and safe to be used concurrently across multiple requests.
+ *
+ * @example
+ * const actionIdentifier: ActionIdentifier = { actionType: 'Action', actionId: 'Read' }; // Example action identifier
+ * const entityIdentifier: EntityIdentifier = { entityType: 'User', entityId: 'user-123' }; // Example entity identifier
+ * const contextDefinition: ContextDefinition = {
+ * "contextMap": {
+ *   "key1": {
+ *    "bollean": "true"
+ *   }
+ *  }
+ * }; // Example context definition
+ * const resourceIdentifier: EntityIdentifier = { entityType: 'Resource', entityId: 'resource-abc' }; // Example resource identifier
  */
 export class AVPAuthorizationService
   implements
@@ -33,10 +68,35 @@ export class AVPAuthorizationService
 {
   private client: VerifiedPermissionsClient;
   private policyStoreId: string;
+  private token: Token | null;
 
-  constructor(policyStoreId: string) {
+  /**
+   * Creates an instance of AVPAuthorizationService.
+   *
+   * @param {string} policyStoreId - The ID of the policy store to be used for authorization checks.
+   * @param {Token} [token] - Optional token credentials containing an access token and an identity token.
+   * If provided, the service will use token-based authorization for requests.
+   * @param {VerifiedPermissionsClientConfig} [clientConfig] - Optional configuration for the VerifiedPermissionsClient.
+   *
+   * @example
+   * // Example without token
+   * const service = new AVPAuthorizationService('your-policy-store-id');
+   *
+   * @example
+   * // Example with token
+   * const service = new AVPAuthorizationService('your-policy-store-id', {
+   *   accessToken: 'your-access-token',
+   *   identityToken: 'your-identity-token',
+   * });
+   */
+  constructor(
+    policyStoreId: string,
+    token?: Token,
+    clientConfig?: VerifiedPermissionsClientConfig,
+  ) {
     this.policyStoreId = policyStoreId;
     this.client = new VerifiedPermissionsClient({});
+    this.token = token || null;
   }
 
   /**
@@ -56,6 +116,15 @@ export class AVPAuthorizationService
    *   .then(response => console.log(response.decision)) // Outputs: 'ALLOW' or 'DENY'
    *   .catch(error => console.error(error));
    *
+   * @throws {ResourceNotFoundException} If the resource does not exist.
+   * @throws {AccessDeniedException} If the caller does not have permission to perform the action.
+   * @throws {ValidationException} If the request parameters are invalid.
+   * @throws {ThrottlingException} If the request is throttled.
+   * @throws {InternalServerException} If an internal server error occurs.
+   *
+   * This function uses the AWS SDK commands:
+   * - {@link https://docs.aws.amazon.com/AWSJavaScriptSDK/v3/latest/client/verifiedpermissions/command/IsAuthorizedCommand/ | IsAuthorizedCommand}
+   * - {@link https://docs.aws.amazon.com/AWSJavaScriptSDK/v3/latest/client/verifiedpermissions/command/IsAuthorizedWithTokenCommand/ | IsAuthorizedWithTokenCommand}
    */
   async isAuthorized(
     request: AuthorizationRequest<
@@ -67,18 +136,29 @@ export class AVPAuthorizationService
   ): Promise<AuthorizationResponse<EntityIdentifier>> {
     const { resourceId, entityId, context, action } = request;
 
-    const command = new IsAuthorizedCommand({
+    const params = {
       policyStoreId: this.policyStoreId,
       principal: entityId,
       action,
       resource: resourceId,
-      context: context,
-    });
+    };
+
+    if (context) {
+      params['context'] = context;
+    }
+
+    const command = this.token
+      ? new IsAuthorizedWithTokenCommand({
+          ...params,
+          accessToken: this.token.accessToken,
+          identityToken: this.token.identityToken,
+        })
+      : new IsAuthorizedCommand(params);
 
     const response = await this.client.send(command);
 
     return {
-      recourseId: request.resourceId,
+      resourceId: request.resourceId,
       decision: response.decision ?? 'DENY',
     };
   }
@@ -87,7 +167,7 @@ export class AVPAuthorizationService
    * Checks if a principal is authorized for multiple actions on multiple resources.
    *
    * @param request - The batch authorization request containing multiple authorization requests.
-   * @returns A promise that resolves to a batch authorization response.
+   * @returns A list with the authorization results as 'ALLOW' or 'DENY' for each request.
    *
    * @example
    * const service = new AVPAuthorizationService('your-policy-store-id');
@@ -106,9 +186,18 @@ export class AVPAuthorizationService
    *   ],
    * };
    * service.batchIsAuthorized(request)
-   *   .then(response => console.log(response.results))
-   *   // Outputs: [{ recourseId: { entityType: 'Resource', entityId: 'resource-1' }, decision: 'ALLOW' }, ...]
+   *   .then(response => console.log(response.results)) // Outputs: [{ resourceId: { entityType: 'Resource', entityId: 'resource-1' }, decision: 'ALLOW' }, ...]
    *   .catch(error => console.error(error));
+   *
+   * @throws {ResourceNotFoundException} If the resource does not exist.
+   * @throws {AccessDeniedException} If the caller does not have permission to perform the action.
+   * @throws {ValidationException} If the request parameters are invalid.
+   * @throws {ThrottlingException} If the request is throttled.
+   * @throws {InternalServerException} If an internal server error occurs.
+   *
+   * This function uses the AWS SDK commands:
+   * - {@link https://docs.aws.amazon.com/AWSJavaScriptSDK/v3/latest/client/verifiedpermissions/command/BatchIsAuthorizedCommand/ | BatchIsAuthorizedCommand}
+   * - {@link https://docs.aws.amazon.com/AWSJavaScriptSDK/v3/latest/client/verifiedpermissions/command/BatchIsAuthorizedWithTokenCommand/ | BatchIsAuthorizedWithTokenCommand}
    */
   async batchIsAuthorized(
     request: BatchAuthorizationRequest<
@@ -118,25 +207,34 @@ export class AVPAuthorizationService
       EntityIdentifier
     >,
   ): Promise<BatchAuthorizationResponse<EntityIdentifier>> {
-    const command = new BatchIsAuthorizedCommand({
-      policyStoreId: this.policyStoreId,
-      requests: request.requests.map((r) => {
-        const { resourceId, entityId, context, action } = r;
+    const requests = request.requests.map((r) => {
+      const { resourceId, entityId, context, action } = r;
 
-        return {
-          principal: entityId,
-          action,
-          resource: resourceId,
-          context,
-        };
-      }),
+      return {
+        principal: entityId,
+        action,
+        resource: resourceId,
+        context,
+      };
     });
+
+    const command = this.token
+      ? new BatchIsAuthorizedWithTokenCommand({
+          policyStoreId: this.policyStoreId,
+          accessToken: this.token.accessToken,
+          identityToken: this.token.identityToken,
+          requests,
+        })
+      : new BatchIsAuthorizedCommand({
+          policyStoreId: this.policyStoreId,
+          requests,
+        });
 
     const response = await this.client.send(command);
 
     const results: AuthorizationResponse<EntityIdentifier>[] =
       response.results?.map((result, index) => ({
-        recourseId: request.requests[index].resourceId,
+        resourceId: request.requests[index].resourceId,
         decision: result.decision ?? 'DENY',
       })) ?? [];
 

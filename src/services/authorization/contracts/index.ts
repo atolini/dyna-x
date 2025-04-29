@@ -31,7 +31,7 @@ export interface BatchAuthorizationRequest<A, I, C, R> {
  * @template R The type that identifies the resource.
  */
 export interface AuthorizationResponse<R> {
-  recourseId: R;
+  resourceId: R;
   decision: 'ALLOW' | 'DENY';
 }
 

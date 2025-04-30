@@ -16,23 +16,17 @@ import {
 /**
  * @class CognitoUserService
  * @implements {IUserService<AttributeType>}
- * @template AttributeType - The type representing user attributes in Cognito.
  *
  * @classdesc
  * Service to manage users in AWS Cognito.
  *
  * Provides methods to create, update, and delete users using the AWS SDK for JavaScript v3.
  *
- * This class is generic, allowing flexibility to handle different user attribute types.
  * It is intended for use in server-side environments where AWS credentials are available.
  *
  * The constructor requires the AWS region and the Cognito User Pool ID.
  *
- * This service relies on the `@aws-sdk/client-cognito-identity-provider` package.
- *
  * Note: This service focuses on administrative user operations and does not handle authentication flows (tokens, login, refresh, etc.).
- *
- * Methods may throw AWS SDK `ServiceException` errors if network issues occur or if invalid parameters are provided.
  *
  * This class is stateless and safe to be used concurrently across multiple requests.
  */
@@ -62,11 +56,17 @@ export class CognitoUserService implements IUserService<AttributeType> {
    *
    * It uses admin-level permissions to create a user with the provided attributes.
    *
+   * To call this function you must send CreateUserInput with the following parameters:
+   * - `login`: The username for the new user.
+   * - `userAttributes`: An array of user attributes to set for the new user.
+   * - `temporaryPassword`: A temporary password for the new user.
+   * - `suppressMessage`: (Optional) If true, suppresses the welcome message sent to the user.
+   *
    * @param {CreateUserInput<AttributeType>} input - Information needed to create the user.
    * @returns {Promise<void>} A promise that resolves when the user is successfully created.
    *
    * @example
-   * const userService = new CognitoUserService('us-east-1', 'user-pool-id');
+   * const userService = new CognitoUserService('user-pool-id', 'us-east-1');
    * const input = {
    *   login: 'example@mail.com',
    *   userAttributes: [
@@ -77,6 +77,16 @@ export class CognitoUserService implements IUserService<AttributeType> {
    *   suppressMessage: true,
    * };
    * await userService.createUser(input);
+   *
+   * @throws {InternalErrorException} If there is an internal error in the AWS Cognito service.
+   * @throws {InvalidParameterException} If the provided parameters are invalid.
+   * @throws {InvalidPasswordException} If the provided password does not meet the policy requirements.
+   * @throws {NotAuthorizedException} If the caller is not authorized to perform the operation.
+   * @throws {UsernameExistsException} If the username already exists in the User Pool.
+   * @throws {TooManyRequestsException} If the request is throttled due to too many requests.
+   *
+   * This function uses the AWS SDK command:
+   * - {@link https://docs.aws.amazon.com/AWSJavaScriptSDK/v3/latest/client/cognito-identity-provider/command/AdminCreateUserCommand/ | AdminCreateUserCommand}
    */
   async createUser(input: CreateUserInput<AttributeType>): Promise<void> {
     const command = new AdminCreateUserCommand({
@@ -95,7 +105,10 @@ export class CognitoUserService implements IUserService<AttributeType> {
    *
    * It uses admin-level permissions to update specified attributes for an existing user.
    *
-   * @param {UpdateUserAttributesInput<AttributeType>} input - Information about the user and the attributes to update.
+   * This function can set a user's email address or phone number as verified and permit immediate sign-in in user pools that require verification of these attributes.
+   * To do this, set the email_verified or phone_number_verified attribute to true.
+   *
+   * @param {UpdateUserAttributesInput<AttributeType>} input - Information about the user (user ID) and the attributes to update.
    * @returns {Promise<void>} A promise that resolves when the user's attributes are successfully updated.
    *
    * @example
@@ -108,6 +121,15 @@ export class CognitoUserService implements IUserService<AttributeType> {
    *   ],
    * };
    * await userService.updateUserAttributes(input);
+   *
+   * @throws {InvalidEmailRoleAccessPolicyException} If Cognito isn't allowed to use your email identity.
+   * @throws {InternalErrorException} If there is an internal error in the AWS Cognito service.
+   * @throws {InvalidParameterException} If the provided parameters are invalid.
+   * @throws {NotAuthorizedException} If the caller is not authorized to perform the operation.
+   * @throws {UserNotFoundException} If the specified user does not exist in the User Pool.
+   *
+   * This function uses the AWS SDK command:
+   * - {@link https://docs.aws.amazon.com/AWSJavaScriptSDK/v3/latest/client/cognito-identity-provider/command/AdminUpdateUserAttributesCommand/ | AdminUpdateUserAttributesCommand}
    */
   async updateUserAttributes(
     input: UpdateUserAttributesInput<AttributeType>,
@@ -126,7 +148,7 @@ export class CognitoUserService implements IUserService<AttributeType> {
    *
    * It uses admin-level permissions to permanently remove a user identified by the username.
    *
-   * @param {DeleteUserInput} input - Information about the user to delete, including the user ID.
+   * @param {DeleteUserInput} input - Information about the user to delete, including the Cognito username (User ID).
    * @returns {Promise<void>} A promise that resolves when the user is successfully deleted.
    *
    * @example
@@ -134,6 +156,14 @@ export class CognitoUserService implements IUserService<AttributeType> {
    * const input = { id: 'example-user-id' };
    * await userService.deleteUser(input);
    *
+   * @throws {InternalErrorException} If there is an internal error in the AWS Cognito service.
+   * @throws {InvalidParameterException} If the provided parameters are invalid.
+   * @throws {NotAuthorizedException} If the caller is not authorized to perform the operation.
+   * @throws {UserNotFoundException} If the specified user does not exist in the User Pool.
+   * @throws {TooManyRequestsException} If the request is throttled due to too many requests.
+   *
+   * This function uses the AWS SDK command:
+   * - {@link https://docs.aws.amazon.com/AWSJavaScriptSDK/v3/latest/client/cognito-identity-provider/command/AdminDeleteUserCommand/ | AdminDeleteUserCommand}
    */
   async deleteUser(input: DeleteUserInput): Promise<void> {
     const command = new AdminDeleteUserCommand({

@@ -21,16 +21,14 @@ import {
   UpdateItemCommandOutput,
 } from '@aws-sdk/client-dynamodb';
 import { marshall, unmarshall } from '@aws-sdk/util-dynamodb';
-import { merge } from 'lodash';
-import { ConditionBuilder } from '../condition-builder';
-import { DynaXSchema } from '../schema';
-import { UpdateBuilder } from '../update-builder';
 import * as _ from 'lodash';
+import { merge } from 'lodash';
 import { ILogger } from '../../../../../utils/logger/contracts';
-import { MaxItemsExceededError } from '../errors/max-item-exceeded-error';
 import { IRepository } from '../../../contracts/repository';
-import { ConditionExpressionResult } from '../condition-builder';
-import { UpdateExpressionResult } from '../update-builder';
+import { ConditionBuilder, ConditionExpressionResult } from '../condition-builder';
+import { MaxItemsExceededError } from '../errors/max-item-exceeded-error';
+import { DynaXSchema } from '../schema';
+import { UpdateBuilder, UpdateExpressionResult } from '../update-builder';
 
 /**
  * Represents a key used to identify an item in a DynamoDB table.
@@ -76,13 +74,13 @@ export class DynaXRepository<T>
    * Initializes the repository with a schema and a DynamoDB client.
    *
    * @param {DynaXSchema} schema - The schema defining the table structure.
-   * @param {ILogger<any>} logger - The logger instance.
+   * @param {ILogger<any>} logger - (Optional) The logger instance.
    * @param {string} [region] - (Optional) AWS region to configure the DynamoDB client.
    * @param {number} [maxBatchItems=1000] - (Optional) The maximum number of items allowed in one batch write.
    */
   constructor(
     schema: DynaXSchema,
-    logger: ILogger<any>,
+    logger?: ILogger<any>,
     region?: string,
     maxBatchItems: number = 1000,
   ) {
@@ -101,6 +99,14 @@ export class DynaXRepository<T>
    * @example
    * const item = await repository.getItem({ id: '123' });
    * console.log(item); // { id: '123', name: 'Test' }
+   * 
+   * @throws {InternalServerError} If there is an internal error in the AWS DynamoDB service.
+   * @throws {ProvisionedThroughputExceededException} If the request exceeds the provisioned throughput for the table.
+   * @throws {RequestLimitExceeded} If the request limit for the account is exceeded.
+   * @throws {ResourceNotFoundException} If the specified resource (table or index) does not exist.
+   * 
+   * This function uses the AWS SDK commands:
+   * - {@link https://docs.aws.amazon.com/AWSJavaScriptSDK/v3/latest/client/dynamodb/command/GetItemCommand/ | GetItemCommand}
    */
   async getItem(key: Record<string, any>): Promise<T | null> {
     const params: GetItemCommandInput = {
@@ -108,19 +114,21 @@ export class DynaXRepository<T>
       Key: marshall(key),
     };
 
-    this.logger.info({
-      message: `[DynamoDB] - GetItem`,
-      params,
-    });
+    if (this.logger)
+      this.logger.info({
+        message: `[DynamoDB] - GetItem`,
+        params,
+      });
 
     const command: GetItemCommand = new GetItemCommand(params);
 
     const response: GetItemCommandOutput = await this.client.send(command);
 
-    this.logger.info({
-      message: `[DynamoDB] - GetItem Result`,
-      response,
-    });
+    if (this.logger)
+      this.logger.info({
+        message: `[DynamoDB] - GetItem Result`,
+        response,
+      });
 
     return response.Item ? (unmarshall(response.Item) as unknown as T) : null;
   }
@@ -133,6 +141,17 @@ export class DynaXRepository<T>
    *
    * @example
    * const savedItem = await repository.putItem({ id: '123', name: 'Test' });
+   * 
+   * @throws {InternalServerError} If there is an internal error in the AWS DynamoDB service.
+   * @throws {ProvisionedThroughputExceededException} If the request exceeds the provisioned throughput for the table.
+   * @throws {ItemCollectionSizeLimitExceededException} If the item collection size limit is exceeded (for local secondary indexes).
+   * @throws {RequestLimitExceeded} If the request limit for the account is exceeded.
+   * @throws {ResourceNotFoundException} If the specified resource (table or index) does not exist.
+   * @throws {TransactionConflictException} If there is a conflict with a transaction.
+   * @throws {ConditionalCheckFailedException} If the condition specified in the operation is not met.
+   * 
+   * This function uses the AWS SDK commands:
+   * - {@link https://docs.aws.amazon.com/AWSJavaScriptSDK/v3/latest/client/dynamodb/command/PutItemCommand/ | PutItemCommand}
    */
   async putItem(item: T): Promise<T> {
     const params: PutItemCommandInput = {
@@ -140,19 +159,21 @@ export class DynaXRepository<T>
       Item: item as unknown as Record<string, any>,
     };
 
-    this.logger.info({
-      message: `[DynamoDB] - PutItem`,
-      params,
-    });
+    if (this.logger)
+      this.logger.info({
+        message: `[DynamoDB] - PutItem`,
+        params,
+      });
 
     const command: PutItemCommand = new PutItemCommand(params);
 
     const response: PutItemCommandOutput = await this.client.send(command);
 
-    this.logger.info({
-      message: `[DynamoDB] - PutItem Result`,
-      response,
-    });
+    if (this.logger)
+      this.logger.info({
+        message: `[DynamoDB] - PutItem Result`,
+        response,
+      });
 
     return unmarshall(response.Attributes!) as unknown as T;
   }
@@ -165,6 +186,15 @@ export class DynaXRepository<T>
    *
    * @example
    * await repository.deleteItem({ id: '123' });
+   * 
+   * @throws {InternalServerError} If there is an internal error in the AWS DynamoDB service.
+   * @throws {ProvisionedThroughputExceededException} If the request exceeds the provisioned throughput for the table.
+   * @throws {RequestLimitExceeded} If the request limit for the account is exceeded.
+   * @throws {ResourceNotFoundException} If the specified resource (table or index) does not exist.
+   * @throws {TransactionConflictException} If there is a conflict with a transaction.
+   *  
+   * This function uses the AWS SDK commands:
+   * - {@link https://docs.aws.amazon.com/AWSJavaScriptSDK/v3/latest/client/dynamodb/command/DeleteItemCommand/ | DeleteItemCommandt
    */
   async deleteItem(key: Record<string, any>): Promise<void> {
     const params: DeleteItemCommandInput = {
@@ -172,19 +202,21 @@ export class DynaXRepository<T>
       Key: key,
     };
 
-    this.logger.info({
-      message: `[DynamoDB] - DeleteItem`,
-      params,
-    });
+    if (this.logger)
+      this.logger.info({
+        message: `[DynamoDB] - DeleteItem`,
+        params,
+      });
 
     const command: DeleteItemCommand = new DeleteItemCommand(params);
 
     const response: DeleteItemCommandOutput = await this.client.send(command);
 
-    this.logger.info({
-      message: `[DynamoDB] - DeleteItem Result`,
-      response,
-    });
+    if (this.logger)
+      this.logger.info({
+        message: `[DynamoDB] - DeleteItem Result`,
+        response,
+      });
 
     return;
   }
@@ -204,6 +236,14 @@ export class DynaXRepository<T>
    * @example
    * const unprocessedItems = await repository.batchWriteItems([{ id: '1' }, { id: '2' }]);
    * console.log(unprocessedItems); // [{ type: 'put', item: { id: '1' } }, { type: 'put', item: { id: '2' } }]
+   * 
+   * @throws {InternalServerError} If there is an internal error in the AWS DynamoDB service.
+   * @throws {ProvisionedThroughputExceededException} If the request exceeds the provisioned throughput for the table.
+   * @throws {RequestLimitExceeded} If the request limit for the account is exceeded.
+   * @throws {ResourceNotFoundException} If the specified resource (table or index) does not exist.
+   * 
+   * This function uses the AWS SDK commands:
+   * - {@link https://docs.aws.amazon.com/AWSJavaScriptSDK/v3/latest/client/dynamodb/command/BatchWriteItemCommand/ | BatchWriteItemCommand}
    */
   async batchWriteItems(
     putItems: T[],
@@ -241,11 +281,12 @@ export class DynaXRepository<T>
           },
         };
 
-        this.logger.info({
-          message: `[DynamoDB] - BatchWrite`,
-          batch: `${i}/${batchs.length}`,
-          batchSize: batch.length,
-        });
+        if (this.logger)
+          this.logger.info({
+            message: `[DynamoDB] - BatchWrite`,
+            batch: `${i}/${batchs.length}`,
+            batchSize: batch.length,
+          });
 
         const command = new BatchWriteItemCommand(params);
         const response: BatchWriteItemCommandOutput =
@@ -272,26 +313,28 @@ export class DynaXRepository<T>
             },
           );
 
-          this.logger.info({
-            message: `[DynamoDB] - BatchWrite Result`,
-            batch: i,
-            unprocessedItems: humanReadableItems,
-          });
+          if (this.logger)
+            this.logger.info({
+              message: `[DynamoDB] - BatchWrite Result`,
+              batch: i,
+              unprocessedItems: humanReadableItems,
+            });
 
           unprocessedItems.push(...humanReadableItems);
         }
       }),
     );
 
-    this.logger.info({
-      message: `[DynamoDB] - BatchWriteItemCommand Result`,
-      metadata: {
-        items: requests.length,
-        processedItems: requests.length - unprocessedItems.length,
-        unprocessedItems: unprocessedItems.length,
-      },
-      unprocessedItems,
-    });
+    if (this.logger)
+      this.logger.info({
+        message: `[DynamoDB] - BatchWriteItemCommand Result`,
+        metadata: {
+          items: requests.length,
+          processedItems: requests.length - unprocessedItems.length,
+          unprocessedItems: unprocessedItems.length,
+        },
+        unprocessedItems,
+      });
 
     return unprocessedItems;
   }
@@ -301,15 +344,27 @@ export class DynaXRepository<T>
    *
    * @param {ConditionBuilder} condition - The condition to filter results.
    * @param {string} [indexName] - (Optional) The name of the index to query.
+   * @param {boolean} [consistentRead=false] - (Optional) Whether to use consistent read.
+   * @param {number} [limit=100] - (Optional) The maximum number of items to return.
    * @returns {Promise<T[] | null>} A list of matching items or null if none found.
    *
    * @example
    * const condition = new ConditionBuilder().where('id').equals('123');
    * const items = await repository.query(condition);
+   * 
+   * @throws {InternalServerError} If there is an internal error in the AWS DynamoDB service.
+   * @throws {ProvisionedThroughputExceededException} If the request exceeds the provisioned throughput for the table.
+   * @throws {RequestLimitExceeded} If the request limit for the account is exceeded. 
+   * @throws {ResourceNotFoundException} If the specified resource (table or index) does not exist.
+   * 
+   * This function uses the AWS SDK commands:
+   * - {@link https://docs.aws.amazon.com/AWSJavaScriptSDK/v3/latest/client/dynamodb/command/QueryCommand/ | QueryCommand}
    */
   async query(
     condition: ConditionBuilder,
     indexName?: string,
+    consistentRead: boolean = false,
+    limit: number = 100
   ): Promise<T[] | null> {
     const result = condition.build();
 
@@ -318,25 +373,29 @@ export class DynaXRepository<T>
       KeyConditionExpression: result.ConditionExpression,
       ExpressionAttributeNames: result.ExpressionAttributeNames,
       ExpressionAttributeValues: result.ExpressionAttributeValues,
+      ConsistentRead: consistentRead,
+      Limit: limit,
     };
 
     if (indexName) {
       params.IndexName = indexName;
     }
 
-    this.logger.info({
-      message: `[DynamoDB] - QueryItem`,
-      params,
-    });
+    if (this.logger)
+      this.logger.info({
+        message: `[DynamoDB] - QueryItem`,
+        params,
+      });
 
     const command = new QueryCommand(params);
 
     const response: QueryCommandOutput = await this.client.send(command);
 
-    this.logger.info({
-      message: `[DynamoDB] - QueryItem Result`,
-      response,
-    });
+    if (this.logger)
+      this.logger.info({
+        message: `[DynamoDB] - QueryItem Result`,
+        response,
+      });
 
     return response.Items
       ? (response.Items.map((i) => unmarshall(i)) as T[])
@@ -354,6 +413,17 @@ export class DynaXRepository<T>
    * @example
    * const update = new UpdateBuilder().set('name', 'New Name');
    * const updatedItem = await repository.update(update, { primaryKey: '123' });
+   * 
+   * @throws {InternalServerError} If there is an internal error in the AWS DynamoDB service.
+   * @throws {ItemCollectionSizeLimitExceededException} If the item collection size limit is exceeded (for local secondary indexes).
+   * @throws {ProvisionedThroughputExceededException} If the request exceeds the provisioned throughput for the table.
+   * @throws {RequestLimitExceeded} If the request limit for the account is exceeded.
+   * @throws {ResourceNotFoundException} If the specified resource (table or index) does not exist.
+   * @throws {TransactionConflictException} If there is a conflict with a transaction.
+   * @throws {ConditionalCheckFailedException} If the condition specified in the operation is not met.  
+   * 
+   * This function uses the AWS SDK commands:
+   * - {@link https://docs.aws.amazon.com/AWSJavaScriptSDK/v3/latest/client/dynamodb/command/UpdateItemCommand/ | UpdateItemCommand}
    */
   async update(
     update: UpdateBuilder,

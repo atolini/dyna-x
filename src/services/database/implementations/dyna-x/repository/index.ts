@@ -244,6 +244,7 @@ export class DynaXRepository<T>
    * @throws {ProvisionedThroughputExceededException} If the request exceeds the provisioned throughput for the table.
    * @throws {RequestLimitExceeded} If the request limit for the account is exceeded.
    * @throws {ResourceNotFoundException} If the specified resource (table or index) does not exist.
+   * @throws {MaxItemsExceededError} If the number of items exceeds the maximum batch size.
    *
    * This function uses the AWS SDK commands:
    * - {@link https://docs.aws.amazon.com/AWSJavaScriptSDK/v3/latest/client/dynamodb/command/BatchWriteItemCommand/ | BatchWriteItemCommand}

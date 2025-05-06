@@ -25,7 +25,10 @@ import * as _ from 'lodash';
 import { merge } from 'lodash';
 import { ILogger } from '../../../../../utils/logger/contracts';
 import { IRepository } from '../../../contracts/repository';
-import { ConditionBuilder, ConditionExpressionResult } from '../condition-builder';
+import {
+  ConditionBuilder,
+  ConditionExpressionResult,
+} from '../condition-builder';
 import { MaxItemsExceededError } from '../errors/max-item-exceeded-error';
 import { DynaXSchema } from '../schema';
 import { UpdateBuilder, UpdateExpressionResult } from '../update-builder';
@@ -99,12 +102,12 @@ export class DynaXRepository<T>
    * @example
    * const item = await repository.getItem({ id: '123' });
    * console.log(item); // { id: '123', name: 'Test' }
-   * 
+   *
    * @throws {InternalServerError} If there is an internal error in the AWS DynamoDB service.
    * @throws {ProvisionedThroughputExceededException} If the request exceeds the provisioned throughput for the table.
    * @throws {RequestLimitExceeded} If the request limit for the account is exceeded.
    * @throws {ResourceNotFoundException} If the specified resource (table or index) does not exist.
-   * 
+   *
    * This function uses the AWS SDK commands:
    * - {@link https://docs.aws.amazon.com/AWSJavaScriptSDK/v3/latest/client/dynamodb/command/GetItemCommand/ | GetItemCommand}
    */
@@ -141,7 +144,7 @@ export class DynaXRepository<T>
    *
    * @example
    * const savedItem = await repository.putItem({ id: '123', name: 'Test' });
-   * 
+   *
    * @throws {InternalServerError} If there is an internal error in the AWS DynamoDB service.
    * @throws {ProvisionedThroughputExceededException} If the request exceeds the provisioned throughput for the table.
    * @throws {ItemCollectionSizeLimitExceededException} If the item collection size limit is exceeded (for local secondary indexes).
@@ -149,7 +152,7 @@ export class DynaXRepository<T>
    * @throws {ResourceNotFoundException} If the specified resource (table or index) does not exist.
    * @throws {TransactionConflictException} If there is a conflict with a transaction.
    * @throws {ConditionalCheckFailedException} If the condition specified in the operation is not met.
-   * 
+   *
    * This function uses the AWS SDK commands:
    * - {@link https://docs.aws.amazon.com/AWSJavaScriptSDK/v3/latest/client/dynamodb/command/PutItemCommand/ | PutItemCommand}
    */
@@ -186,13 +189,13 @@ export class DynaXRepository<T>
    *
    * @example
    * await repository.deleteItem({ id: '123' });
-   * 
+   *
    * @throws {InternalServerError} If there is an internal error in the AWS DynamoDB service.
    * @throws {ProvisionedThroughputExceededException} If the request exceeds the provisioned throughput for the table.
    * @throws {RequestLimitExceeded} If the request limit for the account is exceeded.
    * @throws {ResourceNotFoundException} If the specified resource (table or index) does not exist.
    * @throws {TransactionConflictException} If there is a conflict with a transaction.
-   *  
+   *
    * This function uses the AWS SDK commands:
    * - {@link https://docs.aws.amazon.com/AWSJavaScriptSDK/v3/latest/client/dynamodb/command/DeleteItemCommand/ | DeleteItemCommandt
    */
@@ -236,12 +239,12 @@ export class DynaXRepository<T>
    * @example
    * const unprocessedItems = await repository.batchWriteItems([{ id: '1' }, { id: '2' }]);
    * console.log(unprocessedItems); // [{ type: 'put', item: { id: '1' } }, { type: 'put', item: { id: '2' } }]
-   * 
+   *
    * @throws {InternalServerError} If there is an internal error in the AWS DynamoDB service.
    * @throws {ProvisionedThroughputExceededException} If the request exceeds the provisioned throughput for the table.
    * @throws {RequestLimitExceeded} If the request limit for the account is exceeded.
    * @throws {ResourceNotFoundException} If the specified resource (table or index) does not exist.
-   * 
+   *
    * This function uses the AWS SDK commands:
    * - {@link https://docs.aws.amazon.com/AWSJavaScriptSDK/v3/latest/client/dynamodb/command/BatchWriteItemCommand/ | BatchWriteItemCommand}
    */
@@ -351,12 +354,12 @@ export class DynaXRepository<T>
    * @example
    * const condition = new ConditionBuilder().where('id').equals('123');
    * const items = await repository.query(condition);
-   * 
+   *
    * @throws {InternalServerError} If there is an internal error in the AWS DynamoDB service.
    * @throws {ProvisionedThroughputExceededException} If the request exceeds the provisioned throughput for the table.
-   * @throws {RequestLimitExceeded} If the request limit for the account is exceeded. 
+   * @throws {RequestLimitExceeded} If the request limit for the account is exceeded.
    * @throws {ResourceNotFoundException} If the specified resource (table or index) does not exist.
-   * 
+   *
    * This function uses the AWS SDK commands:
    * - {@link https://docs.aws.amazon.com/AWSJavaScriptSDK/v3/latest/client/dynamodb/command/QueryCommand/ | QueryCommand}
    */
@@ -364,7 +367,7 @@ export class DynaXRepository<T>
     condition: ConditionBuilder,
     indexName?: string,
     consistentRead: boolean = false,
-    limit: number = 100
+    limit: number = 100,
   ): Promise<T[] | null> {
     const result = condition.build();
 
@@ -413,15 +416,15 @@ export class DynaXRepository<T>
    * @example
    * const update = new UpdateBuilder().set('name', 'New Name');
    * const updatedItem = await repository.update(update, { primaryKey: '123' });
-   * 
+   *
    * @throws {InternalServerError} If there is an internal error in the AWS DynamoDB service.
    * @throws {ItemCollectionSizeLimitExceededException} If the item collection size limit is exceeded (for local secondary indexes).
    * @throws {ProvisionedThroughputExceededException} If the request exceeds the provisioned throughput for the table.
    * @throws {RequestLimitExceeded} If the request limit for the account is exceeded.
    * @throws {ResourceNotFoundException} If the specified resource (table or index) does not exist.
    * @throws {TransactionConflictException} If there is a conflict with a transaction.
-   * @throws {ConditionalCheckFailedException} If the condition specified in the operation is not met.  
-   * 
+   * @throws {ConditionalCheckFailedException} If the condition specified in the operation is not met.
+   *
    * This function uses the AWS SDK commands:
    * - {@link https://docs.aws.amazon.com/AWSJavaScriptSDK/v3/latest/client/dynamodb/command/UpdateItemCommand/ | UpdateItemCommand}
    */

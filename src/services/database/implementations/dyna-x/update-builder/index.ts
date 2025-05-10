@@ -21,6 +21,10 @@ export type UpdateExpressionResult = {
 };
 
 /**
+ * @class UpdateBuilder
+ * @implements {IUpdateBuilder<UpdateExpressionResult>}
+ * 
+ * @classdesc
  * A utility class for building DynamoDB update expressions dynamically.
  *
  * This class allows you to compose operations such as SET, REMOVE, and ADD

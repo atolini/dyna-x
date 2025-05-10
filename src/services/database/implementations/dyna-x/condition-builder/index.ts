@@ -1,3 +1,4 @@
+import { AttributeValue } from '@aws-sdk/client-dynamodb';
 import { IConditionBuilder } from '../../../contracts/condition-builder';
 
 /**
@@ -5,7 +6,7 @@ import { IConditionBuilder } from '../../../contracts/condition-builder';
  *
  * @template V The type of the values in ExpressionAttributeValues. Defaults to any.
  */
-export type ConditionExpressionResult<V = any> = {
+export type ConditionExpressionResult = {
   /**
    * The complete condition expression string, combining all conditions and logical operators.
    */
@@ -21,10 +22,11 @@ export type ConditionExpressionResult<V = any> = {
    * A mapping between placeholder names and their corresponding values,
    * properly formatted for DynamoDB.
    */
-  ExpressionAttributeValues: Record<string, V>;
+  ExpressionAttributeValues: Record<string, AttributeValue>;
 };
 
 /**
+ * @class ConditionBuilder
  * A utility class for building DynamoDB condition expressions dynamically.
  *
  * This class allows you to compose conditions such as equality, inequality, greater than, and less than,

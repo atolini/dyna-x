@@ -27,6 +27,9 @@ export type ConditionExpressionResult = {
 
 /**
  * @class ConditionBuilder
+ * @implements {IConditionBuilder<ConditionExpressionResult>}
+ * 
+ * @classdesc
  * A utility class for building DynamoDB condition expressions dynamically.
  *
  * This class allows you to compose conditions such as equality, inequality, greater than, and less than,
@@ -34,8 +37,7 @@ export type ConditionExpressionResult = {
  *
  * It outputs a ready-to-use structure compatible with DynamoDB queries.
  *
- *  * @example
- * // Example usage:
+ * @example
  * const builder = new ConditionBuilder();
  * const condition = builder
  *   .eq('status', 'ACTIVE')

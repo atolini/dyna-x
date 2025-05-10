@@ -95,7 +95,9 @@ export class AVPAuthorizationService
     clientConfig?: VerifiedPermissionsClientConfig,
   ) {
     this.policyStoreId = policyStoreId;
-    this.client = new VerifiedPermissionsClient({});
+    this.client = new VerifiedPermissionsClient(
+      clientConfig ? clientConfig : {},
+    );
     this.token = token || null;
   }
 

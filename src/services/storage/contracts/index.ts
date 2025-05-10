@@ -16,9 +16,9 @@ export interface IStorageService {
   /**
    * Retrieves a file from the storage.
    * @param key - The identifier (path) of the file in storage.
-   * @returns The file content as a Buffer.
+   * @returns The file content.
    */
-  getFile(key: string): Promise<Buffer>;
+  getFile(key: string): Promise<string>;
 
   /**
    * Deletes a file from the storage.

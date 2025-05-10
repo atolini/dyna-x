@@ -31,7 +31,6 @@ import { v4 as uuidv4 } from 'uuid';
 export class DynamoDBTransactionWrite
   implements IWriteTransaction<DynaXSchema, Record<string, unknown>>
 {
-  private schema: DynaXSchema;
   private client: DynamoDBClient;
   private logger: ILogger<any>;
   private maxBatchItems: number;

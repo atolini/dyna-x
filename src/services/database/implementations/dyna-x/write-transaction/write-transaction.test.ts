@@ -1,5 +1,8 @@
 import { mockClient } from 'aws-sdk-client-mock';
-import { DynamoDBClient, TransactWriteItemsCommand } from '@aws-sdk/client-dynamodb';
+import {
+  DynamoDBClient,
+  TransactWriteItemsCommand,
+} from '@aws-sdk/client-dynamodb';
 import { DynamoDBTransactionWrite } from './';
 import { MaxItemsExceededError } from '../errors/max-item-exceeded-error';
 import { WriteUnit } from '../../../contracts/write-transaction';
@@ -36,7 +39,9 @@ describe('DynamoDBTransactionWrite', () => {
   it('should throw MaxItemsExceededError if batch is too large', async () => {
     const units = Array(101).fill({ container: mockSchema, item: defaultItem });
 
-    await expect(transactionWrite.write(units)).rejects.toThrow(MaxItemsExceededError);
+    await expect(transactionWrite.write(units)).rejects.toThrow(
+      MaxItemsExceededError,
+    );
   });
 
   it('should validate all keys using schema.validateKey', async () => {
@@ -59,12 +64,16 @@ describe('DynamoDBTransactionWrite', () => {
   });
 
   it('should throw if DynamoDB throws an exception', async () => {
-    ddbMock.on(TransactWriteItemsCommand).rejects(new Error('Something went wrong'));
+    ddbMock
+      .on(TransactWriteItemsCommand)
+      .rejects(new Error('Something went wrong'));
 
     const units: WriteUnit<any, any>[] = [
       { container: mockSchema, item: defaultItem },
     ];
 
-    await expect(transactionWrite.write(units)).rejects.toThrow('Something went wrong');
+    await expect(transactionWrite.write(units)).rejects.toThrow(
+      'Something went wrong',
+    );
   });
 });

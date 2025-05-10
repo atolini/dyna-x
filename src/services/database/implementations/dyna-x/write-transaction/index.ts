@@ -88,7 +88,7 @@ export class DynamoDBTransactionWrite
   ): Promise<void> {
     this.validateBatchSize(units);
     this.validateKeys(units);
-    
+
     const transacts = units.map((unit) => ({
       Put: {
         TableName: unit.container.getTableName(), // container is assumed to be a table name
@@ -98,7 +98,7 @@ export class DynamoDBTransactionWrite
 
     const params: TransactWriteItemsInput = {
       TransactItems: transacts,
-      ClientRequestToken: uuidv4() // Unique token for idempotency
+      ClientRequestToken: uuidv4(), // Unique token for idempotency
     };
 
     // Log the transaction details

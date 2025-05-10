@@ -23,7 +23,7 @@ export type UpdateExpressionResult = {
 /**
  * @class UpdateBuilder
  * @implements {IUpdateBuilder<UpdateExpressionResult>}
- * 
+ *
  * @classdesc
  * A utility class for building DynamoDB update expressions dynamically.
  *

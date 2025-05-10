@@ -23,7 +23,7 @@ interface KeyConfig {
 
 /**
  * @class DynaXSchema
- * 
+ *
  * @classdesc
  * Represents the schema definition for a DynamoDB table, including table name configuration.
  * This class serves as the base for defining DynamoDB table structures and ensures proper key validation.

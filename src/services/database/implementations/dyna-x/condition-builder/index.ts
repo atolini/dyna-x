@@ -28,7 +28,7 @@ export type ConditionExpressionResult = {
 /**
  * @class ConditionBuilder
  * @implements {IConditionBuilder<ConditionExpressionResult>}
- * 
+ *
  * @classdesc
  * A utility class for building DynamoDB condition expressions dynamically.
  *

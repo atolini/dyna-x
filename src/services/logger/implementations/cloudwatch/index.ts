@@ -61,14 +61,14 @@ export class CloudWatchLogService<T> implements ILogService<T, LogContainer> {
    * @param logs - Array of log entries to be sent.
    * @param logContainerId - Identifier used to determine the log group and log stream names.
    * @returns {Promise<void>} A promise that resolves once the logs are sent.
-   * 
+   *
    * @throws {DataAlreadyAcceptedException} If the logs are already accepted.
    * @throws {InvalidParameterException} If the parameters are invalid.
    * @throws {InvalidSequenceTokenException} If the sequence token is invalid.
    * @throws {ResourceNotFoundException} If the specified log group or log stream does not exist.
    * @throws {ServiceUnavailableException} If the service is unavailable.
    * @throws {UnrecognizedClientException} If the client is unrecognized.
-   * 
+   *
    * This function uses the AWS SDK commands:
    * - `DescribeLogStreamsCommand` to retrieve the log stream details and sequence token.
    * - {@link https://docs.aws.amazon.com/AWSJavaScriptSDK/v3/latest/client/cloudwatch-logs/command/PutLogEventsCommand/ | PutLogEventsCommand} to send the logs.

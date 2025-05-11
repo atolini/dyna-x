@@ -16,9 +16,7 @@ import {
  * @template R - Response builder type
  *
  * @classdesc
- * Handles errors related to Amazon Verified Permissions (AVP) authorization operations.
- *
- * Implements the `IErrorActions` interface to provide mechanisms for handling specific error types.
+ * Handles errors related to Amazon Verified Permissions (AVP) authorization operations and builds appropriate responses.
  *
  * The following exceptions may be handled by this class:
  *

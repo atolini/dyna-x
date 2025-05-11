@@ -57,12 +57,13 @@ export interface Key {
 }
 
 /**
+ * @class DynaXRepository
+ * @implements {IRepository<T, Key, ConditionExpressionResult, UpdateExpressionResult>}
+ * @template T - The type representing the structure of the items stored in the DynamoDB table.
+ *
  * Generic repository interface for interacting with DynamoDB tables using a defined schema.
  * Defines methods for retrieving, inserting, updating, and deleting items,
  * as well as supporting batch operations and conditional updates.
- *
- * @template T - The type representing the structure of the items stored in the DynamoDB table.
- * @implements {IRepository<T, Key, ConditionExpressionResult, UpdateExpressionResult>}.
  */
 export class DynaXRepository<T>
   implements

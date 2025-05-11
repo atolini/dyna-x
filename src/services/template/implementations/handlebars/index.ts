@@ -4,7 +4,7 @@ import { ITemplateService } from '../../contracts';
 /**
  * @class TemplateService
  * @implements {ITemplateService}
- * 
+ *
  * @classdesc
  * TemplateService provides a simple interface for compiling Handlebars templates.
  *

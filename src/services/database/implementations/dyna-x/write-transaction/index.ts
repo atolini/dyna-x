@@ -14,7 +14,7 @@ import { MaxItemsExceededError } from '../errors/max-item-exceeded-error';
 import { v4 as uuidv4 } from 'uuid';
 
 /**
- * @class DynamoDBTransactionWrite
+ * @class DynaXTransactionWrite
  * @implements {IWriteTransaction<DynaXSchema, Record<string, unknown>>}
  *
  * @classdesc
@@ -28,7 +28,7 @@ import { v4 as uuidv4 } from 'uuid';
  * This implementation is particularly useful for writing Domain-Driven Design (DDD) aggregates to multiple tables (e.g., Orders, Products, etc.)
  * in a consistent and reliable manner.
  */
-export class DynamoDBTransactionWrite
+export class DynaXTransactionWrite
   implements IWriteTransaction<DynaXSchema, Record<string, unknown>>
 {
   private client: DynamoDBClient;

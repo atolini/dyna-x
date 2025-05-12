@@ -59,7 +59,7 @@ export class DynaXTransactionWrite
    *
    * Validations:
    * - The number of items must not exceed 100, or a `MaxItemsExceededError` will be thrown.
-   * - Each item's key must be validated by the associated schema, or a `KeyValidationError` may be thrown.
+   * - Each item's key must be validated by the associated schema, or a `InvalidKeyError` may be thrown.
    *
    * @param {WriteUnit<DynaXSchema, Record<string, unknown>>[]} units - An array of write units, each containing a schema-aware container and the item to persist.
    * @returns {Promise<void>} A promise that resolves when the transaction is successfully completed.
@@ -72,7 +72,7 @@ export class DynaXTransactionWrite
    * await transactionWriter.write(units);
    *
    * @throws {MaxItemsExceededError} If the number of items exceeds the maximum allowed batch size.
-   * @throws {KeyValidationError} If one or more items have invalid keys according to the schema.
+   * @throws {InvalidKeyError} If one or more items have invalid keys according to the schema.
    * @throws {IdempotentParameterMismatchException} If a request is retried with the same client token but different parameters within the 10-minute idempotency window.
    * @throws {ProvisionedThroughputExceededException} If the request rate is too high.
    * @throws {RequestLimitExceeded} If throughput limits are exceeded.
@@ -125,7 +125,7 @@ export class DynaXTransactionWrite
    * defined in the schema. If any key is invalid, an error is thrown.
    *
    * @param units - Array of WriteUnit objects to be validated.
-   * @throws {KeyValidationError} If any item has an invalid key.
+   * @throws {InvalidKeyError} If any item has an invalid key.
    */
   private validateKeys(
     units: WriteUnit<DynaXSchema, Record<string, unknown>>[],

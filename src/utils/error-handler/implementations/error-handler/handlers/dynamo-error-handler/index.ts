@@ -170,7 +170,7 @@ export class DynamoErrorHandler<T, R extends IResponseBuilder<T>>
       if (error instanceof entry.type) {
         logger.error({
           name: error.name,
-          message: error.message
+          message: error.message,
         });
 
         return entry.response() as T;

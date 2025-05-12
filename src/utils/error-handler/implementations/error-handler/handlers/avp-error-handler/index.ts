@@ -45,37 +45,23 @@ export class AVPAuthorizationErrorHandler<T, R extends IResponseBuilder<T>>
     const errorMap = [
       {
         type: ResourceNotFoundException,
-        log: {
-          description: `${message}: Resource not found`,
-          details:
-            'The specified resource could not be found in the policy store.',
-        },
+        log: {},
         response: () => resBuilder.notFound('The resource was not found'),
       },
       {
         type: AccessDeniedException,
-        log: {
-          description: `${message}: Access denied`,
-          details:
-            'The caller does not have permission to perform the requested action on the resource.',
-        },
+        log: {},
         response: () =>
           resBuilder.forbidden('Access denied for the requested action'),
       },
       {
         type: ValidationException,
-        log: {
-          description: `${message}: Validation error`,
-          details: 'The request parameters are invalid.',
-        },
+        log: {},
         response: () => resBuilder.badRequest('Invalid request parameters'),
       },
       {
         type: ThrottlingException,
-        log: {
-          description: `${message}: Throttling error`,
-          details: 'The request was throttled due to exceeding usage limits.',
-        },
+        log: {},
         response: () =>
           resBuilder.tooManyRequests(
             'Request was throttled due to exceeding usage limits',
@@ -83,10 +69,7 @@ export class AVPAuthorizationErrorHandler<T, R extends IResponseBuilder<T>>
       },
       {
         type: InternalServerException,
-        log: {
-          description: `${message}: Internal server error`,
-          details: 'An internal server error occurred.',
-        },
+        log: {},
         response: () =>
           resBuilder.internalError('Internal server error occurred'),
       },
@@ -95,10 +78,8 @@ export class AVPAuthorizationErrorHandler<T, R extends IResponseBuilder<T>>
     for (const entry of errorMap) {
       if (error instanceof entry.type) {
         logger.error({
-          description: entry.log.description,
           name: error.name,
           message: error.message,
-          details: entry.log.details,
         });
 
         return entry.response() as T;

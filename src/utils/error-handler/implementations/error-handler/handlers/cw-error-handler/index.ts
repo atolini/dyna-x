@@ -29,10 +29,8 @@ export class CloudWatchLogErrorHandler<T, R extends IResponseBuilder<T>>
 
     if (error instanceof ResourceNotFoundException) {
       logger.error({
-        description: `${message}: Resource not found`,
         name: error.name,
         message: error.message,
-        details: `The specified log group or log stream does not exist.`,
       });
 
       return resBuilder.notFound('Log group or log stream not found') as T;
@@ -40,10 +38,8 @@ export class CloudWatchLogErrorHandler<T, R extends IResponseBuilder<T>>
 
     if (error instanceof InvalidSequenceTokenException) {
       logger.error({
-        description: `${message}: Invalid sequence token`,
         name: error.name,
         message: error.message,
-        details: `The sequence token provided is invalid. Possibly the log stream has received newer events.`,
       });
 
       return resBuilder.badRequest(
@@ -53,10 +49,8 @@ export class CloudWatchLogErrorHandler<T, R extends IResponseBuilder<T>>
 
     if (error instanceof DataAlreadyAcceptedException) {
       logger.error({
-        description: `${message}: Data already accepted`,
         name: error.name,
         message: error.message,
-        details: `The event data was already accepted. This can happen when retrying without updating the sequence token.`,
       });
 
       return resBuilder.badRequest('Log event data was already accepted') as T;

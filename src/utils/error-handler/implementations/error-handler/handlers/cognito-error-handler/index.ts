@@ -20,7 +20,7 @@ import {
  * @template R - Response builder type
  *
  * @classdesc
- * Handles related to Cognito (AWS) errors and builds appropriate responses.
+ * Handles exceptions thrown within the {@link CognitoUserService} class.
  *
  * The following exceptions may be handled by this class:
  *

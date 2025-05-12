@@ -23,7 +23,7 @@ import { InvalidKeyError } from '../../../../../../services/database/implementat
  * @template R - Response builder type
  *
  * @classdesc
- * Handles errors that occur within the {@link DynaXTransactionWrite} and {@link DynaXRepository} classes.
+ * Handles exceptions thrown within the {@link DynaXTransactionWrite} and {@link DynaXRepository} classes.
  *
  * This class provides centralized error handling for various exceptions that may arise
  * during DynamoDB transactional and repository operations.

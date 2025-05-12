@@ -16,7 +16,7 @@ import {
  * @template R - Response builder type
  *
  * @classdesc
- * Handles errors related to Amazon Verified Permissions (AVP) authorization operations and builds appropriate responses.
+ * Handles exceptions thrown within the {@link AVPAuthorizationService} class.
  *
  * The following exceptions may be handled by this class:
  *

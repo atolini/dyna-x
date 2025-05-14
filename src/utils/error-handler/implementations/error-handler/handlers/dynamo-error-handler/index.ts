@@ -68,7 +68,6 @@ export class DynamoErrorHandler<T, R extends IResponseBuilder<T>>
   }
 
   handle(error: Error, logger: ILogger<any>, resBuilder: R): T {
-    const message = 'DynamoDB operation failed';
     const errorMap = [
       {
         type: InternalServerError,

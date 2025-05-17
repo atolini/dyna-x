@@ -5,61 +5,80 @@ import {
   MessageRejected,
   MailFromDomainNotVerifiedException,
   ConfigurationSetDoesNotExistException,
+  AccountSendingPausedException,
+  ConfigurationSetSendingPausedException,
 } from '@aws-sdk/client-ses';
 
 /**
- * Handles AWS SES related errors and builds appropriate responses.
- *
+ * @class SESEmailErrorHandler
+ * @implements {IErrorActions<T, R>}
  * @template T - Response type
  * @template R - Response builder type
+ *
+ * @classdesc
+ * Handles excetions thrown within the {@link SESEmailService} class.
+ *
+ * - **AccountSendingPausedException**: If the Amazon SES account is paused from sending emails.
+ * - **ConfigurationSetDoesNotExistException**: If the specified configuration set does not exist.
+ * - **ConfigurationSetSendingPausedException**: If the specified configuration set is paused from sending emails.
+ * - **MailFromDomainNotVerifiedException**: If the sender's email address is not verified with Amazon SES.
+ * - **MessageRejected**: If the email message is rejected by Amazon SES.
  */
 export class SESEmailErrorHandler<T, R extends IResponseBuilder<T>>
   implements IErrorActions<T, R>
 {
   canHandle(error: Error): boolean {
     return (
-      error instanceof MessageRejected ||
+      error instanceof AccountSendingPausedException ||
+      error instanceof ConfigurationSetDoesNotExistException ||
+      error instanceof ConfigurationSetSendingPausedException ||
       error instanceof MailFromDomainNotVerifiedException ||
-      error instanceof ConfigurationSetDoesNotExistException
+      error instanceof MessageRejected
     );
   }
 
   handle(error: Error, logger: ILogger<any>, resBuilder: R): T {
-    const message = 'SES Email operation failed';
+    const errorMap = [
+      {
+        /** Infra error */
+        type: AccountSendingPausedException,
+        log: {},
+        response: () => resBuilder.internalError(),
+      },
+      {
+        /** Infra error */
+        type: ConfigurationSetDoesNotExistException,
+        log: {},
+        response: () => resBuilder.internalError(),
+      },
+      {
+        /** Infra error */
+        type: ConfigurationSetSendingPausedException,
+        log: {},
+        response: () => resBuilder.internalError(),
+      },
+      {
+        /** Infra error */
+        type: MailFromDomainNotVerifiedException,
+        log: {},
+        response: () => resBuilder.internalError(),
+      },
+      {
+        /** Infra error */
+        type: MessageRejected,
+        log: {},
+        response: () => resBuilder.internalError(),
+      },
+    ];
 
-    if (error instanceof MessageRejected) {
-      logger.error({
-        description: `${message}: Message rejected`,
-        name: error.name,
-        message: error.message,
-        details: `The email message was rejected. It could be due to content or address policies.`,
-      });
-
-      return resBuilder.badRequest('Email message was rejected by SES') as T;
-    }
-
-    if (error instanceof MailFromDomainNotVerifiedException) {
-      logger.error({
-        description: `${message}: Mail From domain not verified`,
-        name: error.name,
-        message: error.message,
-        details: `The 'From' domain used in the email is not verified in SES.`,
-      });
-
-      return resBuilder.badRequest('Sender domain is not verified in SES') as T;
-    }
-
-    if (error instanceof ConfigurationSetDoesNotExistException) {
-      logger.error({
-        description: `${message}: Configuration set does not exist`,
-        name: error.name,
-        message: error.message,
-        details: `The configuration set specified in the request does not exist.`,
-      });
-
-      return resBuilder.internalError(
-        'SES configuration set does not exist',
-      ) as T;
+    for (const entry of errorMap) {
+      if (error instanceof entry.type) {
+        logger.error({
+          name: error.name,
+          message: error.message,
+        });
+        return entry.response();
+      }
     }
   }
 }

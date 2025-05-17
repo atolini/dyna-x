@@ -17,16 +17,19 @@ import { IDomainEventDispatcher } from '../../contracts';
  * @property {DomainEvent<object>} event - The domain event instance to be dispatched. It contains the core event data and metadata (e.g., type, timestamp).
  * @property {string} requestId - A unique identifier associated with the request that triggered this event.
  * This ID can be used for distributed tracing across services.
+ * @property {string} userId- Optional user ID associated with the event. This can be useful for tracking which user initiated the event.
  *
  * @example
  * const event: Event = {
  *   event: new UserCreatedEvent({ userId: '123' }),
- *   requestId: 'req-456'
+ *   requestId: 'req-456', 
+ *   userId: 'user-789'
  * };
  */
 interface Event {
   event: DomainEvent<object>;
   requestId: string;
+  userId?: string;
 }
 
 /**
@@ -120,13 +123,14 @@ export class EventBridgeDomainEventDispatcher
     const eventDetail = e.getEvent();
     const eventDate = e.getCreatedAt();
     const requestId = event.requestId;
+    const userId = event.userId ? event.userId : undefined;
 
     return {
       EventBusName: this.eventBusName,
       Source: this.service,
       DetailType: eventType,
       Time: eventDate,
-      Detail: JSON.stringify({ ...eventDetail, requestId }),
+      Detail: JSON.stringify({ ...eventDetail, requestId, userId }),
     };
   }
 }

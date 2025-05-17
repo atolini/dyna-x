@@ -1,3 +1,5 @@
+import { IDomainEvent } from '../contracts';
+
 /**
  * @class DomainEvent
  *
@@ -32,7 +34,7 @@
  * console.log(event.getCreatedAt()); // Outputs event creation timestamp
  * console.log(event.getEvent());     // Returns typed event instance
  */
-export abstract class DomainEvent<T> {
+export abstract class DomainEvent<T> implements IDomainEvent<T> {
   private readonly createdAt: Date;
 
   constructor() {

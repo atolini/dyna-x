@@ -1,5 +1,5 @@
 import { Logger } from '.';
-import { ILogger } from '../../contracts';
+import { ILogger } from '../contracts';
 
 describe('Logger', () => {
   const context = { service: 'TestService', requestId: 'req-123' };

@@ -1,7 +1,7 @@
-import { ILogger } from '../../../logger/contracts';
-import { IResponseBuilder } from '../../../response-builder/contracts';
+import { ILogger } from '../../logger/contracts';
+import { IResponseBuilder } from '../../response-builder/contracts';
 import { DynamoErrorHandler } from './handlers/dynamo-error-handler';
-import { IErrorActions } from '../../contracts/i-error-actions';
+import { IErrorActions } from '../contracts/i-error-actions';
 import { S3ErrorHandler } from './handlers/s3-error-handler';
 import { CognitoErrorHandler } from './handlers/cognito-error-handler';
 

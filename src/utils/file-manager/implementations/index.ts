@@ -1,6 +1,6 @@
 import * as fs from 'fs';
 import * as path from 'path';
-import { IFileManager } from '../../contracts';
+import { IFileManager } from '../contracts';
 
 /**
  * Manages file operations within a specified directory.

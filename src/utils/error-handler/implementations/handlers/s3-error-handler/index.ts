@@ -1,6 +1,6 @@
-import { ILogger } from '../../../../../logger/contracts';
-import { IResponseBuilder } from '../../../../../response-builder/contracts';
-import { IErrorActions } from '../../../../contracts/i-error-actions';
+import { ILogger } from '../../../../logger/contracts';
+import { IResponseBuilder } from '../../../../response-builder/contracts';
+import { IErrorActions } from '../../../contracts/i-error-actions';
 import {
   EncryptionTypeMismatch,
   InvalidObjectState,

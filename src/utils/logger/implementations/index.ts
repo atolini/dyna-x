@@ -1,4 +1,4 @@
-import { ILogger } from '../../contracts';
+import { ILogger } from '../contracts';
 
 /**
  * A simple, structured logger implementation that outputs JSON logs to the console.

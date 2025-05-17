@@ -10,11 +10,11 @@ import {
   TransactionCanceledException,
   TransactionInProgressException,
 } from '@aws-sdk/client-dynamodb';
-import { IErrorActions } from '../../../../contracts/i-error-actions';
-import { IResponseBuilder } from '../../../../../response-builder/contracts';
-import { ILogger } from '../../../../../logger/contracts';
-import { MaxItemsExceededError } from '../../../../../../services/database/implementations/dyna-x/errors/max-item-exceeded-error';
-import { InvalidKeyError } from '../../../../../../services/database/implementations/dyna-x/schema';
+import { IErrorActions } from '../../../contracts/i-error-actions';
+import { IResponseBuilder } from '../../../../response-builder/contracts';
+import { ILogger } from '../../../../logger/contracts';
+import { MaxItemsExceededError } from '../../../../../services/database/implementations/dyna-x/errors/max-item-exceeded-error';
+import { InvalidKeyError } from '../../../../../services/database/implementations/dyna-x/schema';
 
 /**
  * @class DynamoErrorHandler

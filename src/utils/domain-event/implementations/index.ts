@@ -1,5 +1,3 @@
-import { IDomainEvent } from '../contracts';
-
 /**
  * @class DomainEvent
  *
@@ -9,9 +7,8 @@ import { IDomainEvent } from '../contracts';
  * In the context of Domain-Driven Design (DDD), domain events represent something
  * that has happened in the domain that you want other parts of the system to be aware of.
  * This abstract class provides a consistent structure for domain events by including
- * a timestamp of when the event was created and a method to retrieve the typed event.
- *
- * Extend this class to define concrete events that capture meaningful business occurrences.
+ * a timestamp of when the event was created, a method to retrieve the typed event object,
+ * and a method to identify the type of event.
  *
  * @example
  * interface UserCreatedPayload {
@@ -32,9 +29,10 @@ import { IDomainEvent } from '../contracts';
  *
  * const event = new UserCreatedEvent({ userId: '123', email: 'user@example.com' });
  * console.log(event.getCreatedAt()); // Outputs event creation timestamp
- * console.log(event.getEvent());     // Returns typed event instance
+ * console.log(event.getType());     // Outputs 'UserCreatedEvent'
+ * console.log(event.getEvent());     // Outputs { userId: '123', email: 'user@example.com' }
  */
-export abstract class DomainEvent<T> implements IDomainEvent<T> {
+export abstract class DomainEvent<T> {
   private readonly createdAt: Date;
 
   constructor() {
@@ -49,10 +47,23 @@ export abstract class DomainEvent<T> implements IDomainEvent<T> {
   }
 
   /**
-   * Returns the current event instance typed as T.
-   * Useful when you want to use the event in a generic event handler or dispatcher.
+   * Returns a plain object representation of the current event,
+   * containing all its own enumerable properties.
+   * Useful for sending or logging event data in a transport-safe format.
    */
   public getEvent(): T {
-    return this as unknown as T;
+    const entries = Object.entries(this) as [keyof T, any][];
+    return entries.reduce((acc, [key, value]) => {
+      acc[key] = value;
+      return acc;
+    }, {} as T);
+  }
+
+  /**
+   * Returns the type of the event, which is the name of the class.
+   * This can be useful for event routing or logging.
+   */
+  public getType(): string {
+    return this.constructor.name;
   }
 }

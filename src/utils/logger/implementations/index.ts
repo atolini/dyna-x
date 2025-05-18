@@ -1,24 +1,63 @@
 import { ILogger } from '../contracts';
 
 /**
- * A simple, structured logger implementation that outputs JSON logs to the console.
+ * @interface LoggerContext
  *
- * Designed to work seamlessly with AWS CloudWatch Logs and metric filters.
- * Automatically includes a flat base context for all log entries and supports
- * logging either strings or flat objects.
+ * @description
+ * Contextual metadata to be included in every log entry.
+ * Helps trace logs across distributed systems by providing consistent identifiers.
  *
- * @template T - The shape of the base context that will be included in all log messages.
+ * @property {string} requestId - Unique identifier for the current request or operation.
+ * @property {string} service - Name of the service or component generating the log.
+ * @property {string} [userId] - Optional identifier of the user associated with the request.
+ *
+ * @example
+ * const context: LoggerContext = {
+ *   requestId: 'req-456',
+ *   service: 'OrderService',
+ *   userId: 'user-123'
+ * };
  */
-export class Logger<T extends Record<string, string>> implements ILogger<T> {
+interface LoggerContext {
+  requestId: string;
+  service: string;
+  userId?: string;
+}
+
+/**
+ * @class Logger
+ * @implements {ILogger<LoggerContext>}
+ *
+ * @classdesc
+ * Structured logger for JSON-based logging, optimized for AWS CloudWatch.
+ *
+ * Automatically includes contextual metadata (e.g., requestId, service name, userId)
+ * in each log entry to enable traceability across distributed systems.
+ *
+ * Supports `info`, `warn`, and `error` levels. Accepts string messages or flat objects
+ * and emits logs as single-line JSON strings for easy parsing and searchability.
+ *
+ * @example
+ * const logger = new Logger({
+ *   requestId: 'abc-123',
+ *   service: 'UserService',
+ *   userId: 'user-789'
+ * });
+ *
+ * logger.info('User created successfully');
+ * logger.warn({ action: 'validateInput', warning: 'Missing optional field' });
+ * logger.error({ errorCode: 'USER_CREATION_FAILED', reason: 'Email already in use' });
+ */
+export class Logger implements ILogger<LoggerContext> {
   private readonly baseContext: Record<string, string>;
 
   /**
    * Creates a new instance of the Logger with a fixed context.
    * The context is merged into every log entry as top-level keys.
    *
-   * @param contextItem - A flat object containing static context information (e.g., service name, request ID).
+   * @param contextItem - A flat object containing static context information (e.g., service name, request ID, user ID).
    */
-  constructor(contextItem: T) {
+  constructor(contextItem: LoggerContext) {
     this.baseContext = { ...contextItem };
   }
 

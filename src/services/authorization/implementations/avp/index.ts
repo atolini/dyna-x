@@ -17,6 +17,8 @@ import {
   BatchAuthorizationRequest,
   BatchAuthorizationResponse,
 } from '../../contracts';
+import { ILogger } from '../../../../utils/logger/contracts';
+import { AVPAuthorizationEventLogger } from './helpers/avp-authorization-event-logger';
 
 interface Token {
   accessToken: string;
@@ -69,6 +71,7 @@ export class AVPAuthorizationService
   private client: VerifiedPermissionsClient;
   private policyStoreId: string;
   private token: Token | null;
+  private eventsLogger: AVPAuthorizationEventLogger;
 
   /**
    * Creates an instance of AVPAuthorizationService.
@@ -91,6 +94,7 @@ export class AVPAuthorizationService
    */
   constructor(
     policyStoreId: string,
+    logger: ILogger<unknown>,
     token?: Token,
     clientConfig?: VerifiedPermissionsClientConfig,
   ) {
@@ -99,6 +103,10 @@ export class AVPAuthorizationService
       clientConfig ? clientConfig : {},
     );
     this.token = token || null;
+    this.eventsLogger = new AVPAuthorizationEventLogger(
+      logger,
+      this.policyStoreId,
+    );
   }
 
   /**
@@ -159,10 +167,14 @@ export class AVPAuthorizationService
 
     const response = await this.client.send(command);
 
-    return {
+    const result = {
       resourceId: request.resourceId,
       decision: response.decision ?? 'DENY',
     };
+
+    this.eventsLogger.authorizationChecked(request, result);
+
+    return result;
   }
 
   /**
@@ -240,6 +252,10 @@ export class AVPAuthorizationService
         decision: result.decision ?? 'DENY',
       })) ?? [];
 
-    return { results };
+    const result = { results };
+
+    this.eventsLogger.batchAuthorizationChecked(request, result);
+
+    return result;
   }
 }

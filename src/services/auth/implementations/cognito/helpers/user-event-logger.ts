@@ -4,7 +4,7 @@ import { ILogger } from '../../../../../utils/logger/contracts';
 /**
  * @class UserEventLogger
  * @classdesc
- * Helper class responsible for logging user-related events performed by the CognitoUserService.
+ * Helper class responsible for logging user-related events performed by the {@link CognitoUserService}.
  *
  * Logs creation, update, and deletion of users in a structured format using the provided logger instance.
  *

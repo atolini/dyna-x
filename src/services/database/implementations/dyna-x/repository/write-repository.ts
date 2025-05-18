@@ -22,6 +22,8 @@ import { UpdateBuilder, UpdateExpressionResult } from '../update-builder';
 import { BatchWriteHelper } from './helpers/batch-write-helper';
 import { Key } from './interfaces/key';
 import { UnprocessedItems } from './interfaces/unprocessed-items';
+import { ILogger } from '../../../../../utils/logger/contracts';
+import { DynaXWriteEventLogger } from './helpers/dyna-x-write-event-logger';
 
 /**
  * @class DynaXRepository
@@ -40,6 +42,7 @@ export class DynaXWriteRepository<T>
   private schema: DynaXSchema;
   private client: DynamoDBClient;
   private maxBatchItems: number;
+  private eventsLogger: DynaXWriteEventLogger;
 
   /**
    * Initializes the repository with a schema and a DynamoDB client.
@@ -50,12 +53,14 @@ export class DynaXWriteRepository<T>
    */
   constructor(
     schema: DynaXSchema,
+    logger: ILogger<unknown>,
     region?: string,
     maxBatchItems: number = 1000,
   ) {
     this.schema = schema;
     this.client = new DynamoDBClient(region ? { region: region } : {});
     this.maxBatchItems = maxBatchItems;
+    this.eventsLogger = new DynaXWriteEventLogger(logger, this.schema.getTableName());
   }
 
   /**
@@ -90,7 +95,11 @@ export class DynaXWriteRepository<T>
 
     const response: PutItemCommandOutput = await this.client.send(command);
 
-    return unmarshall(response.Attributes!) as unknown as T;
+    const itemCreated = unmarshall(response.Attributes!) as unknown as T
+
+    this.eventsLogger.itemCreated(itemCreated);
+
+    return itemCreated;
   }
 
   /**
@@ -111,19 +120,21 @@ export class DynaXWriteRepository<T>
    * This function uses the AWS SDK commands:
    * - {@link https://docs.aws.amazon.com/AWSJavaScriptSDK/v3/latest/client/dynamodb/command/DeleteItemCommand/ | DeleteItemCommandt
    */
-  async deleteItem(key: Record<string, any>): Promise<void> {
-    const keyValidated = this.schema.validateKey(
-      key as Record<string, unknown>,
+  async deleteItem(key: Key): Promise<void> {
+    this.schema.validateKey(
+      key as unknown as Record<string, unknown>
     );
 
     const params: DeleteItemCommandInput = {
       TableName: this.schema.getTableName(),
-      Key: marshall(keyValidated),
+      Key: marshall(key),
     };
 
     const command: DeleteItemCommand = new DeleteItemCommand(params);
 
     await this.client.send(command);
+
+    this.eventsLogger.itemDeleted(key);
   }
 
   /**
@@ -166,7 +177,12 @@ export class DynaXWriteRepository<T>
     }
 
     const batches = helper.chunkRequests(requests);
-    return await helper.executeBatches(batches);
+
+    const unprocessedItems = await helper.executeBatches(batches);
+
+    this.eventsLogger.batchWritePerformed(putItems, deleteKeys, unprocessedItems);
+
+    return unprocessedItems;
   }
 
   /**
@@ -239,6 +255,8 @@ export class DynaXWriteRepository<T>
     const command: UpdateItemCommand = new UpdateItemCommand(params);
 
     const response: UpdateItemCommandOutput = await this.client.send(command);
+
+    this.eventsLogger.itemUpdated(key, update.build(), condition.build());
 
     return response.Attributes ? (unmarshall(response.Attributes) as T) : null;
   }

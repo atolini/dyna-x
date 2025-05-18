@@ -7,13 +7,13 @@ import {
   AttributeType,
 } from '@aws-sdk/client-cognito-identity-provider';
 
-import { CognitoUserService } from './';
+import { CognitoUserService } from '..';
 import {
   IUserService,
   CreateUserInput,
   UpdateUserAttributesInput,
   DeleteUserInput,
-} from '../../contracts';
+} from '../../../contracts';
 
 describe('CognitoUserService', () => {
   const cognitoMock = mockClient(CognitoIdentityProviderClient);

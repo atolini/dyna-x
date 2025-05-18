@@ -62,7 +62,7 @@ export class CognitoUserService implements IUserService<AttributeType> {
    * @example
    * const userService = new CognitoUserService('us-east-1_example', 'us-east-1');
    */
-  constructor(userPoolId: string, logger: ILogger<any>, region?: string) {
+  constructor(userPoolId: string, logger: ILogger<unknown>, region?: string) {
     this.client = new CognitoIdentityProviderClient(region ? { region } : {});
     this.userPoolId = userPoolId;
     this.eventsLogger = new UserEventLogger(logger, userPoolId);

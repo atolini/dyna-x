@@ -10,34 +10,34 @@ export interface IConditionBuilder<T> {
   /**
    * Adds an equality condition (field = value)
    * @param {string} field Field name to compare
-   * @param {any} value Value to compare against
+   * @param {unknown} value Value to compare against
    * @returns {IConditionBuilder<T>} The ConditionBuilder instance for chaining
    */
-  eq(field: string, value: any): IConditionBuilder<T>;
+  eq(field: string, value: unknown): IConditionBuilder<T>;
 
   /**
    * Adds a non-equality condition (field != value)
    * @param {string} field Field name to compare
-   * @param {any} value Value to compare against
+   * @param {unknown} value Value to compare against
    * @returns {IConditionBuilder<T>} The ConditionBuilder instance for chaining
    */
-  ne(field: string, value: any): IConditionBuilder<T>;
+  ne(field: string, value: unknown): IConditionBuilder<T>;
 
   /**
    * Adds a greater-than condition (field > value)
    * @param {string} field Field name to compare
-   * @param {any} value Value to compare against
+   * @param {unknown} value Value to compare against
    * @returns {IConditionBuilder<T>} The ConditionBuilder instance for chaining
    */
-  gt(field: string, value: any): IConditionBuilder<T>;
+  gt(field: string, value: unknown): IConditionBuilder<T>;
 
   /**
    * Adds a less-than condition (field < value)
    * @param {string} field Field name to compare
-   * @param {any} value Value to compare against
+   * @param {unknown} value Value to compare against
    * @returns {IConditionBuilder<T>} The ConditionBuilder instance for chaining
    */
-  lt(field: string, value: any): IConditionBuilder<T>;
+  lt(field: string, value: unknown): IConditionBuilder<T>;
 
   /**
    * Adds a logical AND operator between conditions

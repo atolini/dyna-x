@@ -15,6 +15,8 @@ import {
 } from '../condition-builder';
 import { DynaXSchema } from '../schema';
 import { Key } from './interfaces/key';
+import { ILogger } from '../../../../../utils/logger/contracts';
+import { DynaXReadEventLogger } from './helpers/dyna-x-read-event-logger';
 
 /**
  * @class DynaXRepository
@@ -30,6 +32,8 @@ export class DynaXReadRepository<T>
 {
   private schema: DynaXSchema;
   private client: DynamoDBClient;
+    private eventsLogger: DynaXReadEventLogger<T>;
+  
 
   /**
    * Initializes the repository with a schema and a DynamoDB client.
@@ -37,9 +41,10 @@ export class DynaXReadRepository<T>
    * @param {DynaXSchema} schema - The schema defining the table structure.
    * @param {string} [region] - (Optional) AWS region to configure the DynamoDB client.
    */
-  constructor(schema: DynaXSchema, region?: string) {
+  constructor(schema: DynaXSchema, logger: ILogger<unknown>, region?: string) {
     this.schema = schema;
     this.client = new DynamoDBClient(region ? { region: region } : {});
+    this.eventsLogger = new DynaXReadEventLogger(logger, this.schema.getTableName());
   }
 
   /**
@@ -61,20 +66,24 @@ export class DynaXReadRepository<T>
    * - {@link https://docs.aws.amazon.com/AWSJavaScriptSDK/v3/latest/client/dynamodb/command/GetItemCommand/ | GetItemCommand}
    */
   async getItem(key: Record<string, any>): Promise<T | null> {
-    const keyValidated = this.schema.validateKey(
+    this.schema.validateKey(
       key as Record<string, unknown>,
     );
 
     const params: GetItemCommandInput = {
       TableName: this.schema.getTableName(),
-      Key: marshall(keyValidated),
+      Key: marshall(key),
     };
 
     const command: GetItemCommand = new GetItemCommand(params);
 
     const response: GetItemCommandOutput = await this.client.send(command);
 
-    return response.Item ? (unmarshall(response.Item) as unknown as T) : null;
+    const item = response.Item ? (unmarshall(response.Item) as unknown as T) : null
+
+    this.eventsLogger.itemFetched(key, item);
+
+    return item;
   }
 
   /**
@@ -132,11 +141,15 @@ export class DynaXReadRepository<T>
       ? (response.Items.map((i) => unmarshall(i)) as T[])
       : [];
 
+    const lastEvaluatedKey = response.LastEvaluatedKey
+        ? (unmarshall(response.LastEvaluatedKey) as unknown as Key)
+        : undefined;
+
+    this.eventsLogger.queryExecuted(condition.build(), items, lastEvaluatedKey);
+
     return {
       items,
-      lastEvaluatedKey: response.LastEvaluatedKey
-        ? (unmarshall(response.LastEvaluatedKey) as unknown as Key)
-        : undefined,
+      lastEvaluatedKey
     };
   }
 }

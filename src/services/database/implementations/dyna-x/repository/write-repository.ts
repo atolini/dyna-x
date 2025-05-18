@@ -1,38 +1,35 @@
 import {
-    AttributeValue,
-    BatchWriteItemCommand,
-    BatchWriteItemCommandInput,
-    BatchWriteItemCommandOutput,
-    DeleteItemCommand,
-    DeleteItemCommandInput,
-    DeleteItemCommandOutput,
-    DynamoDBClient,
-    PutItemCommand,
-    PutItemCommandInput,
-    PutItemCommandOutput,
-    UpdateItemCommand,
-    UpdateItemCommandInput,
-    UpdateItemCommandOutput
+  DeleteItemCommand,
+  DeleteItemCommandInput,
+  DynamoDBClient,
+  PutItemCommand,
+  PutItemCommandInput,
+  PutItemCommandOutput,
+  UpdateItemCommand,
+  UpdateItemCommandInput,
+  UpdateItemCommandOutput
 } from '@aws-sdk/client-dynamodb';
 import { marshall, unmarshall } from '@aws-sdk/util-dynamodb';
-import * as _ from 'lodash';
 import { merge } from 'lodash';
-import { ILogger } from '../../../../../utils/logger/contracts';
 import { IWriteRepository } from '../../../contracts/repository';
 import {
-    ConditionBuilder,
-    ConditionExpressionResult,
+  ConditionBuilder,
+  ConditionExpressionResult,
 } from '../condition-builder';
 import { MaxItemsExceededError } from '../errors/max-item-exceeded-error';
 import { DynaXSchema } from '../schema';
 import { UpdateBuilder, UpdateExpressionResult } from '../update-builder';
+import { DynaXBatchHelper } from './dyna-x-batch-helper';
 import { Key } from './key';
+
+export type UnprocessedItems<T> = Array<{ type: 'put' | 'delete'; item: T | Key }>; 
 
 /**
  * @class DynaXRepository
- * @implements {IRepository<T, Key, ConditionExpressionResult, UpdateExpressionResult>}
+ * @implements {IWriteRepository<T, Key, ConditionExpressionResult, UpdateExpressionResult>}
  * @template T - The type representing the structure of the items stored in the DynamoDB table.
  *
+ * @classdesc
  * Generic repository interface for interacting with DynamoDB tables using a defined schema.
  * Defines methods for retrieving, inserting, updating, and deleting items,
  * as well as supporting batch operations and conditional updates.
@@ -43,26 +40,22 @@ export class DynaXWriteRepository<T>
 {
   private schema: DynaXSchema;
   private client: DynamoDBClient;
-  private logger: ILogger<any>;
   private maxBatchItems: number;
 
   /**
    * Initializes the repository with a schema and a DynamoDB client.
    *
    * @param {DynaXSchema} schema - The schema defining the table structure.
-   * @param {ILogger<any>} logger - (Optional) The logger instance.
    * @param {string} [region] - (Optional) AWS region to configure the DynamoDB client.
    * @param {number} [maxBatchItems=1000] - (Optional) The maximum number of items allowed in one batch write.
    */
   constructor(
     schema: DynaXSchema,
-    logger?: ILogger<any>,
     region?: string,
     maxBatchItems: number = 1000,
   ) {
     this.schema = schema;
     this.client = new DynamoDBClient(region ? { region: region } : {});
-    this.logger = logger;
     this.maxBatchItems = maxBatchItems;
   }
 
@@ -94,21 +87,9 @@ export class DynaXWriteRepository<T>
       Item: item as unknown as Record<string, any>,
     };
 
-    if (this.logger)
-      this.logger.info({
-        message: `[DynamoDB] - PutItem`,
-        params,
-      });
-
     const command: PutItemCommand = new PutItemCommand(params);
 
     const response: PutItemCommandOutput = await this.client.send(command);
-
-    if (this.logger)
-      this.logger.info({
-        message: `[DynamoDB] - PutItem Result`,
-        response,
-      });
 
     return unmarshall(response.Attributes!) as unknown as T;
   }
@@ -141,23 +122,9 @@ export class DynaXWriteRepository<T>
       Key: marshall(keyValidated),
     };
 
-    if (this.logger)
-      this.logger.info({
-        message: `[DynamoDB] - DeleteItem`,
-        params,
-      });
-
     const command: DeleteItemCommand = new DeleteItemCommand(params);
 
-    const response: DeleteItemCommandOutput = await this.client.send(command);
-
-    if (this.logger)
-      this.logger.info({
-        message: `[DynamoDB] - DeleteItem Result`,
-        response,
-      });
-
-    return;
+    await this.client.send(command);
   }
 
   /**
@@ -167,7 +134,7 @@ export class DynaXWriteRepository<T>
    *
    * @param {T[]} putItems - Items to be inserted or updated.
    * @param {Key[]} [deleteKeys=[]] - Keys of items to be deleted.
-   * @returns {Promise<Array<{ type: 'put' | 'delete'; item: T | Key }>>} An array of unprocessed items, if any.
+   * @returns {Promise<UnprocessedItems>} An array of unprocessed items, if any.
    *
    * @example
    * await repository.batchWriteItems([{ id: '1' }, { id: '2' }], [{ primaryKey: '3' }]);
@@ -188,95 +155,16 @@ export class DynaXWriteRepository<T>
   async batchWriteItems(
     putItems: T[],
     deleteKeys: Key[] = [],
-  ): Promise<Array<{ type: 'put' | 'delete'; item: T | Key }>> {
-    const tableName = this.schema.getTableName();
-
-    const putRequests = putItems.map((item) => ({
-      PutRequest: {
-        Item: marshall(item) as unknown as Record<string, AttributeValue>,
-      },
-    }));
-
-    const deleteRequests = deleteKeys.map((key) => ({
-      DeleteRequest: {
-        Key: marshall(key) as unknown as Record<string, AttributeValue>,
-      },
-    }));
-
-    const requests = [...putRequests, ...deleteRequests];
+  ): Promise<UnprocessedItems<T>> {
+    const helper = new DynaXBatchHelper<T>(this.client, this.schema.getTableName()); 
+    const requests = helper.buildBatchRequests(putItems, deleteKeys);
 
     if (requests.length > this.maxBatchItems) {
       throw new MaxItemsExceededError(this.maxBatchItems);
     }
 
-    let unprocessedItems: Array<{ type: 'put' | 'delete'; item: T | Key }> = [];
-
-    const batchs = _.chunk(requests, 25);
-
-    await Promise.all(
-      batchs.map(async (batch, i, batchs) => {
-        const params: BatchWriteItemCommandInput = {
-          RequestItems: {
-            [tableName]: batch,
-          },
-        };
-
-        if (this.logger)
-          this.logger.info({
-            message: `[DynamoDB] - BatchWrite`,
-            batch: `${i}/${batchs.length}`,
-            batchSize: batch.length,
-          });
-
-        const command = new BatchWriteItemCommand(params);
-        const response: BatchWriteItemCommandOutput =
-          await this.client.send(command);
-
-        if (response.UnprocessedItems?.[tableName]) {
-          const humanReadableItems = response.UnprocessedItems[tableName].map(
-            (unprocessed) => {
-              if (unprocessed.PutRequest) {
-                return {
-                  type: 'put' as const,
-                  item: unmarshall(
-                    unprocessed.PutRequest.Item!,
-                  ) as unknown as T,
-                };
-              } else {
-                return {
-                  type: 'delete' as const,
-                  item: unmarshall(
-                    unprocessed.DeleteRequest!.Key!,
-                  ) as unknown as Key,
-                };
-              }
-            },
-          );
-
-          if (this.logger)
-            this.logger.info({
-              message: `[DynamoDB] - BatchWrite Result`,
-              batch: i,
-              unprocessedItems: humanReadableItems,
-            });
-
-          unprocessedItems.push(...humanReadableItems);
-        }
-      }),
-    );
-
-    if (this.logger)
-      this.logger.info({
-        message: `[DynamoDB] - BatchWriteItemCommand Result`,
-        metadata: {
-          items: requests.length,
-          processedItems: requests.length - unprocessedItems.length,
-          unprocessedItems: unprocessedItems.length,
-        },
-        unprocessedItems,
-      });
-
-    return unprocessedItems;
+    const batches = helper.chunkRequests(requests);
+    return await helper.executeBatches(batches);
   }
 
   /**
@@ -319,7 +207,7 @@ export class DynaXWriteRepository<T>
 
     const params: UpdateItemCommandInput = {
       TableName: this.schema.getTableName(),
-      Key: marshall(key),
+      Key: marshall(keyValidated),
       UpdateExpression,
       ExpressionAttributeNames: updateAttrNames,
       ExpressionAttributeValues: updateAttrValues,
@@ -346,19 +234,9 @@ export class DynaXWriteRepository<T>
       );
     }
 
-    this.logger.info({
-      message: `[DynamoDB] - UpdateItem`,
-      params,
-    });
-
     const command: UpdateItemCommand = new UpdateItemCommand(params);
 
     const response: UpdateItemCommandOutput = await this.client.send(command);
-
-    this.logger.info({
-      message: `[DynamoDB] - UpdateItem Result`,
-      response,
-    });
 
     return response.Attributes ? (unmarshall(response.Attributes) as T) : null;
   }

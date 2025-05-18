@@ -72,9 +72,7 @@ export class BatchWriteHelper<T> {
   /**
    * Converts unprocessed WriteRequests into human-readable items.
    */
-  extractUnprocessedItems(
-    unprocessed: WriteRequest[],
-  ): UnprocessedItems<T> {
+  extractUnprocessedItems(unprocessed: WriteRequest[]): UnprocessedItems<T> {
     return unprocessed.map((request) => {
       if (request.PutRequest) {
         return {

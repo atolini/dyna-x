@@ -7,7 +7,7 @@ import {
   PutItemCommandOutput,
   UpdateItemCommand,
   UpdateItemCommandInput,
-  UpdateItemCommandOutput
+  UpdateItemCommandOutput,
 } from '@aws-sdk/client-dynamodb';
 import { marshall, unmarshall } from '@aws-sdk/util-dynamodb';
 import { merge } from 'lodash';
@@ -155,7 +155,10 @@ export class DynaXWriteRepository<T>
     putItems: T[],
     deleteKeys: Key[] = [],
   ): Promise<UnprocessedItems<T>> {
-    const helper = new BatchWriteHelper<T>(this.client, this.schema.getTableName()); 
+    const helper = new BatchWriteHelper<T>(
+      this.client,
+      this.schema.getTableName(),
+    );
     const requests = helper.buildBatchRequests(putItems, deleteKeys);
 
     if (requests.length > this.maxBatchItems) {

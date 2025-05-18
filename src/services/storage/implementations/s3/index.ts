@@ -7,6 +7,8 @@ import {
 } from '@aws-sdk/client-s3';
 import { Readable } from 'stream';
 import { IStorageService } from '../../contracts';
+import { ILogger } from '../../../../utils/logger/contracts';
+import { S3StorageEventLogger } from './helpers/s3-storage-event-logger';
 
 /**
  * @class S3StorageService
@@ -26,6 +28,7 @@ import { IStorageService } from '../../contracts';
 export class S3StorageService implements IStorageService {
   private s3: S3Client;
   private bucketName: string;
+  private readonly eventsLogger: S3StorageEventLogger;
 
   /**
    * Constructs a new instance of S3StorageService.
@@ -33,9 +36,10 @@ export class S3StorageService implements IStorageService {
    * @param {string} bucketName - The name of the S3 bucket to operate on.
    * @param {string} [region] - AWS region for the S3 client (optional).
    */
-  constructor(bucketName: string, region?: string) {
+  constructor(bucketName: string, logger: ILogger<unknown>, region?: string) {
     this.s3 = new S3Client(region ? { region } : {});
     this.bucketName = bucketName;
+    this.eventsLogger = new S3StorageEventLogger(logger, this.bucketName);
   }
 
   /**
@@ -65,6 +69,8 @@ export class S3StorageService implements IStorageService {
     });
 
     await this.s3.send(command);
+
+    this.eventsLogger.fileUploaded(key, contentType);
   }
 
   /**
@@ -97,6 +103,8 @@ export class S3StorageService implements IStorageService {
       chunks.push(chunk);
     }
 
+    this.eventsLogger.fileRetrieved(key);
+
     return Buffer.concat(chunks).toString('utf-8');
   }
 
@@ -116,6 +124,8 @@ export class S3StorageService implements IStorageService {
     });
 
     await this.s3.send(command);
+
+    this.eventsLogger.fileDeleted(key);
   }
 
   /**
@@ -143,6 +153,8 @@ export class S3StorageService implements IStorageService {
       keys.push(...(response.Contents?.map((item) => item.Key || '') || []));
       continuationToken = response.NextContinuationToken;
     } while (continuationToken);
+
+    this.eventsLogger.filesListed(keys);
 
     return keys;
   }

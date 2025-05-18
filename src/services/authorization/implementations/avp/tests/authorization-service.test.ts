@@ -11,8 +11,8 @@ import {
   AuthorizationRequest,
   BatchAuthorizationRequest,
   IAuthorizationService,
-} from '../../contracts';
-import { AVPAuthorizationService } from './';
+} from '../../../contracts';
+import { AVPAuthorizationService } from '..';
 
 const vpClientMock = mockClient(VerifiedPermissionsClient);
 

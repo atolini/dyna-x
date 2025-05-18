@@ -22,7 +22,7 @@ import { IDomainEventDispatcher } from '../../contracts';
  * @example
  * const event: Event = {
  *   event: new UserCreatedEvent({ userId: '123' }),
- *   requestId: 'req-456', 
+ *   requestId: 'req-456',
  *   userId: 'user-789'
  * };
  */

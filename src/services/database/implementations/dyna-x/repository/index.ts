@@ -113,9 +113,11 @@ export class DynaXRepository<T>
    * - {@link https://docs.aws.amazon.com/AWSJavaScriptSDK/v3/latest/client/dynamodb/command/GetItemCommand/ | GetItemCommand}
    */
   async getItem(key: Record<string, any>): Promise<T | null> {
+    const keyValidated = this.schema.validateKey(key as Record<string, unknown>);
+
     const params: GetItemCommandInput = {
       TableName: this.schema.getTableName(),
-      Key: marshall(key),
+      Key: marshall(keyValidated),
     };
 
     if (this.logger)
@@ -158,6 +160,8 @@ export class DynaXRepository<T>
    * - {@link https://docs.aws.amazon.com/AWSJavaScriptSDK/v3/latest/client/dynamodb/command/PutItemCommand/ | PutItemCommand}
    */
   async putItem(item: T): Promise<T> {
+    this.schema.validateKey(item as Record<string, unknown>);
+
     const params: PutItemCommandInput = {
       TableName: this.schema.getTableName(),
       Item: item as unknown as Record<string, any>,
@@ -201,9 +205,11 @@ export class DynaXRepository<T>
    * - {@link https://docs.aws.amazon.com/AWSJavaScriptSDK/v3/latest/client/dynamodb/command/DeleteItemCommand/ | DeleteItemCommandt
    */
   async deleteItem(key: Record<string, any>): Promise<void> {
+    const keyValidated = this.schema.validateKey(key as Record<string, unknown>);
+    
     const params: DeleteItemCommandInput = {
       TableName: this.schema.getTableName(),
-      Key: key,
+      Key: marshall(keyValidated),
     };
 
     if (this.logger)
@@ -435,6 +441,8 @@ export class DynaXRepository<T>
     key: Key,
     condition?: ConditionBuilder,
   ): Promise<T | null> {
+    const keyValidated = this.schema.validateKey(key as unknown as Record<string, unknown>);
+
     const {
       UpdateExpression,
       ExpressionAttributeNames: updateAttrNames,

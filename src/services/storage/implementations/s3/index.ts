@@ -129,7 +129,7 @@ export class S3StorageService implements IStorageService {
    * - {@link https://docs.aws.amazon.com/AWSJavaScriptSDK/v3/latest/client/s3/command/ListObjectsV2Command/ | ListObjectsV2Command}
    */
   async listFiles(): Promise<string[]> {
-    let keys: string[] = [];
+    const keys: string[] = [];
     let continuationToken: string | undefined;
 
     do {

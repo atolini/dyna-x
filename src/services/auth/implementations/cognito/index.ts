@@ -12,6 +12,8 @@ import {
   UpdateUserAttributesInput,
   DeleteUserInput,
 } from '../../contracts';
+import { UserEventLogger } from './helpers/user-event-logger';
+import { ILogger } from '../../../../utils/logger/contracts';
 
 /**
  * @class CognitoUserService
@@ -29,10 +31,24 @@ import {
  * Note: This service focuses on administrative user operations and does not handle authentication flows (tokens, login, refresh, etc.).
  *
  * This class is stateless and safe to be used concurrently across multiple requests.
+ *
+ * @example
+ * const logger: ILogger<Context> = new Logger<Context>({...});
+ * const userService = new CognitoUserService('us-east-1_example', logger, 'us-east-1');
+ * await userService.createUser({
+ *   login: 'example@mail.com',
+ *   userAttributes: [
+ *     { Name: 'email', Value: 'example@mail.com' },
+ *     { Name: 'phone_number', Value: '+15555555555' },
+ *   ],
+ *   temporaryPassword: 'TemporaryPassword123!',
+ *   suppressMessage: true
+ * });
  */
 export class CognitoUserService implements IUserService<AttributeType> {
   private client: CognitoIdentityProviderClient;
   private userPoolId: string;
+  private eventsLogger: UserEventLogger;
 
   /**
    * Creates an instance of CognitoUserService.
@@ -46,9 +62,10 @@ export class CognitoUserService implements IUserService<AttributeType> {
    * @example
    * const userService = new CognitoUserService('us-east-1_example', 'us-east-1');
    */
-  constructor(userPoolId: string, region?: string) {
+  constructor(userPoolId: string, logger: ILogger<any>, region?: string) {
     this.client = new CognitoIdentityProviderClient(region ? { region } : {});
     this.userPoolId = userPoolId;
+    this.eventsLogger = new UserEventLogger(logger, userPoolId);
   }
 
   /**
@@ -89,15 +106,20 @@ export class CognitoUserService implements IUserService<AttributeType> {
    * - {@link https://docs.aws.amazon.com/AWSJavaScriptSDK/v3/latest/client/cognito-identity-provider/command/AdminCreateUserCommand/ | AdminCreateUserCommand}
    */
   async createUser(input: CreateUserInput<AttributeType>): Promise<void> {
+    const userName = input.login;
+    const userAttributes = input.userAttributes;
+
     const command = new AdminCreateUserCommand({
       UserPoolId: this.userPoolId,
-      Username: input.login,
+      Username: userName,
       TemporaryPassword: input.temporaryPassword,
-      UserAttributes: input.userAttributes,
+      UserAttributes: userAttributes,
       MessageAction: input.suppressMessage ? 'SUPPRESS' : undefined,
     });
 
     await this.client.send(command);
+
+    this.eventsLogger.userCreated(userName, userAttributes);
   }
 
   /**
@@ -134,13 +156,18 @@ export class CognitoUserService implements IUserService<AttributeType> {
   async updateUserAttributes(
     input: UpdateUserAttributesInput<AttributeType>,
   ): Promise<void> {
+    const userName = input.id;
+    const userAttributes = input.userAttributes;
+
     const command = new AdminUpdateUserAttributesCommand({
       UserPoolId: this.userPoolId,
-      Username: input.id,
-      UserAttributes: input.userAttributes,
+      Username: userName,
+      UserAttributes: userAttributes,
     });
 
     await this.client.send(command);
+
+    this.eventsLogger.userUpdated(userName, userAttributes);
   }
 
   /**
@@ -166,11 +193,15 @@ export class CognitoUserService implements IUserService<AttributeType> {
    * - {@link https://docs.aws.amazon.com/AWSJavaScriptSDK/v3/latest/client/cognito-identity-provider/command/AdminDeleteUserCommand/ | AdminDeleteUserCommand}
    */
   async deleteUser(input: DeleteUserInput): Promise<void> {
+    const userName = input.id;
+
     const command = new AdminDeleteUserCommand({
       UserPoolId: this.userPoolId,
-      Username: input.id,
+      Username: userName,
     });
 
     await this.client.send(command);
+
+    this.eventsLogger.userDeleted(userName);
   }
 }

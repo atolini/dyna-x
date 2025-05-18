@@ -84,6 +84,7 @@ export class DynaXReadRepository<T>
    * @param {string} [indexName] - (Optional) The name of the index to query.
    * @param {boolean} [consistentRead=false] - (Optional) Whether to use consistent read.
    * @param {number} [limit=100] - (Optional) The maximum number of items to return.
+   * @param {Key} [exclusiveStartKey] - (Optional) The key to start paginated query from.
    * @returns {Promise<T[] | null>} A list of matching items or null if none found.
    *
    * @example
@@ -103,7 +104,8 @@ export class DynaXReadRepository<T>
     indexName?: string,
     consistentRead: boolean = false,
     limit: number = 100,
-  ): Promise<T[] | null> {
+    exclusiveStartKey: Key = undefined,
+  ): Promise<{ items: T[]; lastEvaluatedKey?: Key }> {
     const result = condition.build();
 
     const params: QueryCommandInput = {
@@ -113,6 +115,9 @@ export class DynaXReadRepository<T>
       ExpressionAttributeValues: result.ExpressionAttributeValues,
       ConsistentRead: consistentRead,
       Limit: limit,
+      ExclusiveStartKey: exclusiveStartKey
+        ? marshall(exclusiveStartKey)
+        : undefined,
     };
 
     if (indexName) {
@@ -123,8 +128,15 @@ export class DynaXReadRepository<T>
 
     const response: QueryCommandOutput = await this.client.send(command);
 
-    return response.Items
+    const items = response.Items
       ? (response.Items.map((i) => unmarshall(i)) as T[])
-      : null;
+      : [];
+
+    return {
+      items,
+      lastEvaluatedKey: response.LastEvaluatedKey
+        ? (unmarshall(response.LastEvaluatedKey) as unknown as Key)
+        : undefined,
+    };
   }
 }

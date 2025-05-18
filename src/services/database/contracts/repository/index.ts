@@ -34,7 +34,7 @@ export interface IReadRepository<T, K, C> {
   query(
     condition: IConditionBuilder<C>,
     indexName?: string,
-  ): Promise<T[] | null>;
+  ): Promise<{ items: T[]; lastEvaluatedKey?: K } | null>;
 }
 
 /**

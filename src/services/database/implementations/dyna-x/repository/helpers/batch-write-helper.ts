@@ -7,10 +7,10 @@ import {
 } from '@aws-sdk/client-dynamodb';
 import { marshall, unmarshall } from '@aws-sdk/util-dynamodb';
 import * as _ from 'lodash';
-import { UnprocessedItems } from './write-repository';
-import { Key } from './key';
+import { UnprocessedItems } from '../interfaces/unprocessed-items';
+import { Key } from '../interfaces/key';
 
-export class DynaXBatchHelper<T> {
+export class BatchWriteHelper<T> {
   private client: DynamoDBClient;
   private tableName: string;
 

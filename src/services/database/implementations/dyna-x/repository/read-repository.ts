@@ -15,7 +15,7 @@ import {
   ConditionExpressionResult,
 } from '../condition-builder';
 import { DynaXSchema } from '../schema';
-import { Key } from './key';
+import { Key } from './interfaces/key';
 
 /**
  * @class DynaXRepository

@@ -19,10 +19,9 @@ import {
 import { MaxItemsExceededError } from '../errors/max-item-exceeded-error';
 import { DynaXSchema } from '../schema';
 import { UpdateBuilder, UpdateExpressionResult } from '../update-builder';
-import { DynaXBatchHelper } from './dyna-x-batch-helper';
-import { Key } from './key';
-
-export type UnprocessedItems<T> = Array<{ type: 'put' | 'delete'; item: T | Key }>; 
+import { BatchWriteHelper } from './helpers/batch-write-helper';
+import { Key } from './interfaces/key';
+import { UnprocessedItems } from './interfaces/unprocessed-items';
 
 /**
  * @class DynaXRepository
@@ -156,7 +155,7 @@ export class DynaXWriteRepository<T>
     putItems: T[],
     deleteKeys: Key[] = [],
   ): Promise<UnprocessedItems<T>> {
-    const helper = new DynaXBatchHelper<T>(this.client, this.schema.getTableName()); 
+    const helper = new BatchWriteHelper<T>(this.client, this.schema.getTableName()); 
     const requests = helper.buildBatchRequests(putItems, deleteKeys);
 
     if (requests.length > this.maxBatchItems) {

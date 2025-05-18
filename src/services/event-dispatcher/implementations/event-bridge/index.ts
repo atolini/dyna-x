@@ -5,6 +5,8 @@ import {
 } from '@aws-sdk/client-eventbridge';
 import { DomainEvent } from '../../../../utils/domain-event/implementations';
 import { IDomainEventDispatcher } from '../../contracts';
+import { ILogger } from '../../../../utils/logger/contracts';
+import { EventBridgeEventLogger } from './helpers/event-bridge-event-logger';
 
 /**
  * @interface Event
@@ -26,7 +28,7 @@ import { IDomainEventDispatcher } from '../../contracts';
  *   userId: 'user-789'
  * };
  */
-interface Event {
+export interface Event {
   event: DomainEvent<object>;
   requestId: string;
   userId?: string;
@@ -59,11 +61,13 @@ export class EventBridgeDomainEventDispatcher
   private readonly eventBusName: string;
   private readonly client: EventBridgeClient;
   private readonly service: string;
+  private readonly eventsLogger: EventBridgeEventLogger;
 
-  constructor(eventBusName: string, service: string, region?: string) {
+  constructor(eventBusName: string, service: string, logger: ILogger<unknown>, region?: string) {
     this.eventBusName = eventBusName;
     this.service = service;
     this.client = new EventBridgeClient({ region });
+    this.eventsLogger = new EventBridgeEventLogger(logger, this.eventBusName); 
   }
 
   /**
@@ -80,6 +84,7 @@ export class EventBridgeDomainEventDispatcher
   public async publish(event: Event): Promise<void> {
     const entry = this.toEventBridgeEntry(event);
     await this.sendCommand([entry]);
+    this.eventsLogger.eventPublished(event);
   }
 
   /**
@@ -96,6 +101,7 @@ export class EventBridgeDomainEventDispatcher
   public async publishAll(events: Event[]): Promise<void> {
     const entries = events.map((event) => this.toEventBridgeEntry(event));
     await this.sendCommand(entries);
+    this.eventsLogger.batchEventsPublished(events);
   }
 
   /**

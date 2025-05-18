@@ -51,7 +51,11 @@ export class SESEmailService implements IEmailService {
    * @param {string} defaultSender - The default sender email address.
    * @param {string} [region] - Optional AWS region to use for SES. If not provided, the default region is used.
    */
-  constructor(defaultSender: string, logger: ILogger<unknown>, region?: string) {
+  constructor(
+    defaultSender: string,
+    logger: ILogger<unknown>,
+    region?: string,
+  ) {
     this.sesClient = new SESClient(region ? { region } : {});
     this.defaultSender = defaultSender;
     this.eventsLogger = new EmailEventLogger(logger, defaultSender);

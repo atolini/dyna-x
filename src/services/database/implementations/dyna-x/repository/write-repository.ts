@@ -60,7 +60,10 @@ export class DynaXWriteRepository<T>
     this.schema = schema;
     this.client = new DynamoDBClient(region ? { region: region } : {});
     this.maxBatchItems = maxBatchItems;
-    this.eventsLogger = new DynaXWriteEventLogger(logger, this.schema.getTableName());
+    this.eventsLogger = new DynaXWriteEventLogger(
+      logger,
+      this.schema.getTableName(),
+    );
   }
 
   /**
@@ -95,7 +98,7 @@ export class DynaXWriteRepository<T>
 
     const response: PutItemCommandOutput = await this.client.send(command);
 
-    const itemCreated = unmarshall(response.Attributes!) as unknown as T
+    const itemCreated = unmarshall(response.Attributes!) as unknown as T;
 
     this.eventsLogger.itemCreated(itemCreated);
 
@@ -121,9 +124,7 @@ export class DynaXWriteRepository<T>
    * - {@link https://docs.aws.amazon.com/AWSJavaScriptSDK/v3/latest/client/dynamodb/command/DeleteItemCommand/ | DeleteItemCommandt
    */
   async deleteItem(key: Key): Promise<void> {
-    this.schema.validateKey(
-      key as unknown as Record<string, unknown>
-    );
+    this.schema.validateKey(key as unknown as Record<string, unknown>);
 
     const params: DeleteItemCommandInput = {
       TableName: this.schema.getTableName(),
@@ -180,7 +181,11 @@ export class DynaXWriteRepository<T>
 
     const unprocessedItems = await helper.executeBatches(batches);
 
-    this.eventsLogger.batchWritePerformed(putItems, deleteKeys, unprocessedItems);
+    this.eventsLogger.batchWritePerformed(
+      putItems,
+      deleteKeys,
+      unprocessedItems,
+    );
 
     return unprocessedItems;
   }

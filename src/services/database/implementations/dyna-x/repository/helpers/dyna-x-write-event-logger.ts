@@ -17,7 +17,7 @@ import { Key } from '../../repository/interfaces/key';
 export class DynaXWriteEventLogger {
   private logger: ILogger<unknown>;
   private readonly tableName: string;
-  
+
   constructor(logger: ILogger<unknown>, tableName: string) {
     this.logger = logger;
     this.tableName = tableName;

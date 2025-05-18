@@ -63,11 +63,16 @@ export class EventBridgeDomainEventDispatcher
   private readonly service: string;
   private readonly eventsLogger: EventBridgeEventLogger;
 
-  constructor(eventBusName: string, service: string, logger: ILogger<unknown>, region?: string) {
+  constructor(
+    eventBusName: string,
+    service: string,
+    logger: ILogger<unknown>,
+    region?: string,
+  ) {
     this.eventBusName = eventBusName;
     this.service = service;
     this.client = new EventBridgeClient({ region });
-    this.eventsLogger = new EventBridgeEventLogger(logger, this.eventBusName); 
+    this.eventsLogger = new EventBridgeEventLogger(logger, this.eventBusName);
   }
 
   /**

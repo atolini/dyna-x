@@ -32,8 +32,7 @@ export class DynaXReadRepository<T>
 {
   private schema: DynaXSchema;
   private client: DynamoDBClient;
-    private eventsLogger: DynaXReadEventLogger<T>;
-  
+  private eventsLogger: DynaXReadEventLogger<T>;
 
   /**
    * Initializes the repository with a schema and a DynamoDB client.
@@ -44,7 +43,10 @@ export class DynaXReadRepository<T>
   constructor(schema: DynaXSchema, logger: ILogger<unknown>, region?: string) {
     this.schema = schema;
     this.client = new DynamoDBClient(region ? { region: region } : {});
-    this.eventsLogger = new DynaXReadEventLogger(logger, this.schema.getTableName());
+    this.eventsLogger = new DynaXReadEventLogger(
+      logger,
+      this.schema.getTableName(),
+    );
   }
 
   /**
@@ -66,9 +68,7 @@ export class DynaXReadRepository<T>
    * - {@link https://docs.aws.amazon.com/AWSJavaScriptSDK/v3/latest/client/dynamodb/command/GetItemCommand/ | GetItemCommand}
    */
   async getItem(key: Record<string, any>): Promise<T | null> {
-    this.schema.validateKey(
-      key as Record<string, unknown>,
-    );
+    this.schema.validateKey(key as Record<string, unknown>);
 
     const params: GetItemCommandInput = {
       TableName: this.schema.getTableName(),
@@ -79,7 +79,9 @@ export class DynaXReadRepository<T>
 
     const response: GetItemCommandOutput = await this.client.send(command);
 
-    const item = response.Item ? (unmarshall(response.Item) as unknown as T) : null
+    const item = response.Item
+      ? (unmarshall(response.Item) as unknown as T)
+      : null;
 
     this.eventsLogger.itemFetched(key, item);
 
@@ -142,14 +144,14 @@ export class DynaXReadRepository<T>
       : [];
 
     const lastEvaluatedKey = response.LastEvaluatedKey
-        ? (unmarshall(response.LastEvaluatedKey) as unknown as Key)
-        : undefined;
+      ? (unmarshall(response.LastEvaluatedKey) as unknown as Key)
+      : undefined;
 
     this.eventsLogger.queryExecuted(condition.build(), items, lastEvaluatedKey);
 
     return {
       items,
-      lastEvaluatedKey
+      lastEvaluatedKey,
     };
   }
 }

@@ -19,7 +19,7 @@ import { ILogger } from '../../../../utils/logger/contracts';
  */
 export class TemplateService implements ITemplateService {
   private readonly template: TemplateDelegate;
-  private readonly eventsLogger: TemplateEventLogger; 
+  private readonly eventsLogger: TemplateEventLogger;
 
   /**
    * Initializes the service by compiling the provided Handlebars template string.
@@ -27,7 +27,7 @@ export class TemplateService implements ITemplateService {
    * @param templateString - A raw Handlebars template (e.g., "<h1>{{title}}</h1>").
    */
   constructor(templateString: string, logger: ILogger<unknown>) {
-    this.eventsLogger = new TemplateEventLogger(logger); 
+    this.eventsLogger = new TemplateEventLogger(logger);
     this.template = compile(templateString);
     this.eventsLogger.templateInitialized(templateString);
   }
@@ -44,7 +44,7 @@ export class TemplateService implements ITemplateService {
    */
   compile(data: Record<string, any> = {}): string {
     const result = this.template(data);
-    this.eventsLogger.templateCompiled(data, result); 
+    this.eventsLogger.templateCompiled(data, result);
     return result;
   }
 }

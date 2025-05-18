@@ -8,7 +8,6 @@ import {
   QueryCommandOutput,
 } from '@aws-sdk/client-dynamodb';
 import { marshall, unmarshall } from '@aws-sdk/util-dynamodb';
-import { ILogger } from '../../../../../utils/logger/contracts';
 import { IReadRepository } from '../../../contracts/repository';
 import {
   ConditionBuilder,
@@ -31,19 +30,16 @@ export class DynaXReadRepository<T>
 {
   private schema: DynaXSchema;
   private client: DynamoDBClient;
-  private logger: ILogger<any>;
 
   /**
    * Initializes the repository with a schema and a DynamoDB client.
    *
    * @param {DynaXSchema} schema - The schema defining the table structure.
-   * @param {ILogger<any>} logger - (Optional) The logger instance.
    * @param {string} [region] - (Optional) AWS region to configure the DynamoDB client.
    */
-  constructor(schema: DynaXSchema, logger?: ILogger<any>, region?: string) {
+  constructor(schema: DynaXSchema, region?: string) {
     this.schema = schema;
     this.client = new DynamoDBClient(region ? { region: region } : {});
-    this.logger = logger;
   }
 
   /**
@@ -74,21 +70,9 @@ export class DynaXReadRepository<T>
       Key: marshall(keyValidated),
     };
 
-    if (this.logger)
-      this.logger.info({
-        message: `[DynamoDB] - GetItem`,
-        params,
-      });
-
     const command: GetItemCommand = new GetItemCommand(params);
 
     const response: GetItemCommandOutput = await this.client.send(command);
-
-    if (this.logger)
-      this.logger.info({
-        message: `[DynamoDB] - GetItem Result`,
-        response,
-      });
 
     return response.Item ? (unmarshall(response.Item) as unknown as T) : null;
   }
@@ -135,21 +119,9 @@ export class DynaXReadRepository<T>
       params.IndexName = indexName;
     }
 
-    if (this.logger)
-      this.logger.info({
-        message: `[DynamoDB] - QueryItem`,
-        params,
-      });
-
     const command = new QueryCommand(params);
 
     const response: QueryCommandOutput = await this.client.send(command);
-
-    if (this.logger)
-      this.logger.info({
-        message: `[DynamoDB] - QueryItem Result`,
-        response,
-      });
 
     return response.Items
       ? (response.Items.map((i) => unmarshall(i)) as T[])

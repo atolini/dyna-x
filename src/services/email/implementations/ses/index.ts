@@ -1,5 +1,7 @@
 import { SESClient, SendEmailCommand } from '@aws-sdk/client-ses';
 import { IEmailService, EmailMessage } from '../../contracts';
+import { EmailEventLogger } from './helpers/email-event-logger';
+import { ILogger } from '../../../../utils/logger/contracts';
 
 /**
  * @class SESEmailService
@@ -41,6 +43,7 @@ import { IEmailService, EmailMessage } from '../../contracts';
 export class SESEmailService implements IEmailService {
   private sesClient: SESClient;
   private defaultSender: string;
+  private eventsLogger: EmailEventLogger;
 
   /**
    * Creates an instance of SESEmailService.
@@ -48,9 +51,10 @@ export class SESEmailService implements IEmailService {
    * @param {string} defaultSender - The default sender email address.
    * @param {string} [region] - Optional AWS region to use for SES. If not provided, the default region is used.
    */
-  constructor(defaultSender: string, region?: string) {
+  constructor(defaultSender: string, logger: ILogger<unknown>, region?: string) {
     this.sesClient = new SESClient(region ? { region } : {});
     this.defaultSender = defaultSender;
+    this.eventsLogger = new EmailEventLogger(logger, defaultSender);
   }
 
   /**
@@ -117,5 +121,7 @@ export class SESEmailService implements IEmailService {
     });
 
     await this.sesClient.send(command);
+
+    this.eventsLogger.emailSent(message);
   }
 }

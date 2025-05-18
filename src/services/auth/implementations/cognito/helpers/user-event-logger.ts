@@ -16,7 +16,7 @@ import { ILogger } from '../../../../../utils/logger/contracts';
  * eventLogger.userCreated('john.doe', [{ Name: 'email', Value: 'john.doe@example.com' }]);
  */
 export class UserEventLogger {
-  private logger: ILogger<any>;
+  private logger: ILogger<unknown>;
   private readonly userPoolId: string;
 
   /**
@@ -25,7 +25,7 @@ export class UserEventLogger {
    * @param {ILogger<any>} logger - A logger instance that implements the ILogger interface.
    * @param {string} userPoolId - The ID of the Cognito User Pool associated with the user events.
    */
-  constructor(logger: ILogger<any>, userPoolId: string) {
+  constructor(logger: ILogger<unknown>, userPoolId: string) {
     this.logger = logger;
     this.userPoolId = userPoolId;
   }

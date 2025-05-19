@@ -1,9 +1,11 @@
 /**
+ * @interface IUpdateBuilder
+ * @template T - Type of the result returned by the build() method.
+ *
+ * @description
  * Interface for building update expressions for database operations.
  * This interface allows for the construction of complex update expressions.
  * It provides methods for setting values, removing fields, and incrementing numeric values.
- *
- * @template T Type of the result returned by the build() method
  */
 export interface IUpdateBuilder<T> {
   /**

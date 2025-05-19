@@ -1,27 +1,8 @@
-import { IUpdateBuilder } from '../../../contracts/update-builder';
-
-export type UpdateExpressionResult = {
-  /**
-   * The complete update expression string combining all operations
-   * @example "SET #name = :value REMOVE #age"
-   */
-  UpdateExpression: string;
-
-  /**
-   * Mapping of expression attribute name placeholders to actual field names
-   * @example { "#name": "username", "#age": "user_age" }
-   */
-  ExpressionAttributeNames: Record<string, string>;
-
-  /**
-   * Mapping of expression value placeholders to their corresponding values
-   * @example { ":value": { S: "john_doe" } }
-   */
-  ExpressionAttributeValues: Record<string, any>;
-};
+import { IUpdateBuilder } from '../../contracts/i-update-builder';
+import { UpdateExpressionResult } from './update-expression-result';
 
 /**
- * @class UpdateBuilder
+ * @class DynamoDBUpdateBuilder
  * @implements {IUpdateBuilder<UpdateExpressionResult>}
  *
  * @classdesc
@@ -49,7 +30,9 @@ export type UpdateExpressionResult = {
  * //   ExpressionAttributeValues: { ":val0": { S: "john_doe" }, ":val2": { N: "1" } }
  * // }
  */
-export class UpdateBuilder implements IUpdateBuilder<UpdateExpressionResult> {
+export class DynamoDBUpdateBuilder
+  implements IUpdateBuilder<UpdateExpressionResult>
+{
   private updateExpressions: string[] = [];
   private expressionAttributeNames: Record<string, string> = {};
   private expressionAttributeValues: Record<string, any> = {};
@@ -60,9 +43,9 @@ export class UpdateBuilder implements IUpdateBuilder<UpdateExpressionResult> {
    *
    * @param {string} field The name of the attribute to set
    * @param {any} value The value to set
-   * @returns {UpdateBuilder} The builder instance for chaining
+   * @returns {DynamoDBUpdateBuilder} The builder instance for chaining
    */
-  set(field: string, value: any): UpdateBuilder {
+  set(field: string, value: any): DynamoDBUpdateBuilder {
     return this.addUpdateExpression('SET', field, value);
   }
 
@@ -70,9 +53,9 @@ export class UpdateBuilder implements IUpdateBuilder<UpdateExpressionResult> {
    * Adds a REMOVE operation to the update expression.
    *
    * @param {string} field The name of the attribute to remove
-   * @returns {UpdateBuilder} The builder instance for chaining
+   * @returns {DynamoDBUpdateBuilder} The builder instance for chaining
    */
-  remove(field: string): UpdateBuilder {
+  remove(field: string): DynamoDBUpdateBuilder {
     this.updateExpressions.push(`REMOVE #attr${this.index}`);
     this.expressionAttributeNames[`#attr${this.index}`] = field;
     this.index++;
@@ -84,9 +67,9 @@ export class UpdateBuilder implements IUpdateBuilder<UpdateExpressionResult> {
    *
    * @param {string} field The name of the attribute to add to
    * @param {number} value The numeric value to add
-   * @returns {UpdateBuilder} The builder instance for chaining
+   * @returns {DynamoDBUpdateBuilder} The builder instance for chaining
    */
-  add(field: string, value: number): UpdateBuilder {
+  add(field: string, value: number): DynamoDBUpdateBuilder {
     return this.addUpdateExpression('ADD', field, value);
   }
 
@@ -96,7 +79,7 @@ export class UpdateBuilder implements IUpdateBuilder<UpdateExpressionResult> {
    *
    * @returns {UpdateExpressionResult} The assembled update expression, attribute names, and attribute values
    */
-  build() {
+  build(): UpdateExpressionResult {
     return {
       UpdateExpression: this.updateExpressions.join(' '),
       ExpressionAttributeNames: this.expressionAttributeNames,
@@ -111,13 +94,13 @@ export class UpdateBuilder implements IUpdateBuilder<UpdateExpressionResult> {
    * @param {'SET' | 'ADD'} type The type of update operation
    * @param {string} field The name of the attribute
    * @param {any} value The value to assign or add
-   * @returns {UpdateBuilder} The builder instance for chaining
+   * @returns {DynamoDBUpdateBuilder} The builder instance for chaining
    */
   private addUpdateExpression(
     type: 'SET' | 'ADD',
     field: string,
     value: any,
-  ): UpdateBuilder {
+  ): DynamoDBUpdateBuilder {
     const fieldPlaceholder = `#attr${this.index}`;
     const valuePlaceholder = `:val${this.index}`;
 
@@ -139,7 +122,7 @@ export class UpdateBuilder implements IUpdateBuilder<UpdateExpressionResult> {
    * @returns {object} The DynamoDB-typed value
    * @throws {Error} If the value type is not supported
    */
-  private formatValue(value: any) {
+  private formatValue(value: any): object {
     if (typeof value === 'string') return { S: value };
     if (typeof value === 'number') return { N: value.toString() };
     if (typeof value === 'boolean') return { BOOL: value };

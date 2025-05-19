@@ -28,7 +28,7 @@ import { ConditionExpressionResult } from './condition-expression-result';
  * //   ExpressionAttributeValues: { ":val0": { S: "ACTIVE" }, ":val1": { N: "18" } }
  * // }
  */
-export class ConditionBuilder
+export class DynamoDBConditionBuilder
   implements IConditionBuilder<ConditionExpressionResult>
 {
   private expressions: string[] = [];
@@ -41,9 +41,9 @@ export class ConditionBuilder
    *
    * @param {string} field The name of the attribute to compare
    * @param {any} value The expected value
-   * @returns {ConditionBuilder} The builder instance for chaining
+   * @returns {DynamoDBConditionBuilder} The builder instance for chaining
    */
-  eq(field: string, value: any): ConditionBuilder {
+  eq(field: string, value: any): DynamoDBConditionBuilder {
     return this.addCondition(field, '=', value);
   }
 
@@ -52,9 +52,9 @@ export class ConditionBuilder
    *
    * @param {string} field The name of the attribute to compare
    * @param {any} value The value to compare against
-   * @returns {ConditionBuilder} The builder instance for chaining
+   * @returns {DynamoDBConditionBuilder} The builder instance for chaining
    */
-  ne(field: string, value: any): ConditionBuilder {
+  ne(field: string, value: any): DynamoDBConditionBuilder {
     return this.addCondition(field, '<>', value);
   }
 
@@ -63,9 +63,9 @@ export class ConditionBuilder
    *
    * @param {string} field The name of the attribute to compare
    * @param {any} value The value to compare against
-   * @returns {ConditionBuilder} The builder instance for chaining
+   * @returns {DynamoDBConditionBuilder} The builder instance for chaining
    */
-  gt(field: string, value: any): ConditionBuilder {
+  gt(field: string, value: any): DynamoDBConditionBuilder {
     return this.addCondition(field, '>', value);
   }
 
@@ -74,18 +74,18 @@ export class ConditionBuilder
    *
    * @param {string} field The name of the attribute to compare
    * @param {any} value The value to compare against
-   * @returns {ConditionBuilder} The builder instance for chaining
+   * @returns {DynamoDBConditionBuilder} The builder instance for chaining
    */
-  lt(field: string, value: any): ConditionBuilder {
+  lt(field: string, value: any): DynamoDBConditionBuilder {
     return this.addCondition(field, '<', value);
   }
 
   /**
    * Combines the previous conditions using the AND logical operator.
    *
-   * @returns {ConditionBuilder} The builder instance for chaining
+   * @returns {DynamoDBConditionBuilder} The builder instance for chaining
    */
-  and(): ConditionBuilder {
+  and(): DynamoDBConditionBuilder {
     this.expressions.push('AND');
     return this;
   }
@@ -93,9 +93,9 @@ export class ConditionBuilder
   /**
    * Combines the previous conditions using the OR logical operator.
    *
-   * @returns {ConditionBuilder} The builder instance for chaining
+   * @returns {DynamoDBConditionBuilder} The builder instance for chaining
    */
-  or(): ConditionBuilder {
+  or(): DynamoDBConditionBuilder {
     this.expressions.push('OR');
     return this;
   }
@@ -121,13 +121,13 @@ export class ConditionBuilder
    * @param {string} field The name of the attribute
    * @param {string} operator The comparison operator (e.g., '=', '<>', '>', '<')
    * @param {any} value The value to compare against
-   * @returns {ConditionBuilder} The builder instance for chaining
+   * @returns {DynamoDBConditionBuilder} The builder instance for chaining
    */
   private addCondition(
     field: string,
     operator: string,
     value: any,
-  ): ConditionBuilder {
+  ): DynamoDBConditionBuilder {
     const fieldPlaceholder = `#attr${this.index}`;
     const valuePlaceholder = `:val${this.index}`;
 

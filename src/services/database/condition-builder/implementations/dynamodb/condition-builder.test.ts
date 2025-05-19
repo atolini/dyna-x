@@ -1,10 +1,10 @@
-import { ConditionBuilder } from './';
+import { DynamoDBConditionBuilder } from './dynamodb-condition-builder';
 
 describe('ConditionBuilder', () => {
-  let builder: ConditionBuilder;
+  let builder: DynamoDBConditionBuilder;
 
   beforeEach(() => {
-    builder = new ConditionBuilder();
+    builder = new DynamoDBConditionBuilder();
   });
 
   describe('eq', () => {

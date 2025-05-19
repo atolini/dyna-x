@@ -11,16 +11,15 @@ import {
   CreateUserInput,
   UpdateUserAttributesInput,
   DeleteUserInput,
+  IUserEventLogger,
 } from '../../contracts';
-import { UserEventLogger } from './helpers/user-event-logger';
-import { ILogger } from '../../../../utils/logger/contracts';
 
 /**
  * @class CognitoUserService
  * @implements {IUserService<AttributeType>}
  *
  * @classdesc
- * Service to manage users in AWS Cognito.
+ * Service class for managing users in an AWS Cognito User Pool using administrative operations.
  *
  * Provides methods to create, update, and delete users using the AWS SDK for JavaScript v3.
  *
@@ -46,9 +45,9 @@ import { ILogger } from '../../../../utils/logger/contracts';
  * });
  */
 export class CognitoUserService implements IUserService<AttributeType> {
-  private client: CognitoIdentityProviderClient;
-  private userPoolId: string;
-  private eventsLogger: UserEventLogger;
+  private readonly client: CognitoIdentityProviderClient;
+  private readonly userPoolId: string;
+  private readonly eventLogger: IUserEventLogger;
 
   /**
    * Creates an instance of CognitoUserService.
@@ -56,16 +55,21 @@ export class CognitoUserService implements IUserService<AttributeType> {
    * Initializes the Cognito Identity Provider client to manage users in a specific User Pool.
    *
    * @param {string} userPoolId - The ID of the Cognito User Pool where users will be managed.
+   * @param {IUserEventLogger} eventLogger - Logger instance used to record user-related events.
    * @param {string} [region] - (Optional) AWS region where the User Pool is located.
    * If not provided, the default region configured in the environment will be used.
    *
    * @example
    * const userService = new CognitoUserService('us-east-1_example', 'us-east-1');
    */
-  constructor(userPoolId: string, logger: ILogger<unknown>, region?: string) {
+  constructor(
+    userPoolId: string,
+    eventLogger: IUserEventLogger,
+    region?: string,
+  ) {
     this.client = new CognitoIdentityProviderClient(region ? { region } : {});
     this.userPoolId = userPoolId;
-    this.eventsLogger = new UserEventLogger(logger, userPoolId);
+    this.eventLogger = eventLogger;
   }
 
   /**
@@ -119,7 +123,7 @@ export class CognitoUserService implements IUserService<AttributeType> {
 
     await this.client.send(command);
 
-    this.eventsLogger.userCreated(userName, userAttributes);
+    this.eventLogger.userCreated(userName, userAttributes);
   }
 
   /**
@@ -167,7 +171,7 @@ export class CognitoUserService implements IUserService<AttributeType> {
 
     await this.client.send(command);
 
-    this.eventsLogger.userUpdated(userName, userAttributes);
+    this.eventLogger.userUpdated(userName, userAttributes);
   }
 
   /**
@@ -202,6 +206,6 @@ export class CognitoUserService implements IUserService<AttributeType> {
 
     await this.client.send(command);
 
-    this.eventsLogger.userDeleted(userName);
+    this.eventLogger.userDeleted(userName);
   }
 }

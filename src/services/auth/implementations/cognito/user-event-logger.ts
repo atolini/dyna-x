@@ -1,8 +1,11 @@
 import { AttributeType } from '@aws-sdk/client-cognito-identity-provider';
-import { ILogger } from '../../../../../utils/logger/contracts';
+import { ILogger } from '../../../../utils/logger/contracts';
+import { IUserEventLogger } from '../../contracts';
 
 /**
  * @class UserEventLogger
+ * @implements IUserEventLogger
+ *
  * @classdesc
  * Helper class responsible for logging user-related events performed by the {@link CognitoUserService}.
  *
@@ -15,7 +18,7 @@ import { ILogger } from '../../../../../utils/logger/contracts';
  * const eventLogger = new UserEventLogger(logger, 'us-east-1_example');
  * eventLogger.userCreated('john.doe', [{ Name: 'email', Value: 'john.doe@example.com' }]);
  */
-export class UserEventLogger {
+export class UserEventLogger implements IUserEventLogger {
   private logger: ILogger<unknown>;
   private readonly userPoolId: string;
 
@@ -36,7 +39,7 @@ export class UserEventLogger {
    * @param {string} userName - The username of the newly created user.
    * @param {AttributeType[]} userAttributes - The list of attributes set for the new user.
    */
-  public userCreated(userName: string, userAttributes: AttributeType[]) {
+  public userCreated(userName: string, userAttributes: AttributeType[]): void {
     this.logger.info({
       message: 'User Created',
       userPoolId: this.userPoolId,
@@ -51,7 +54,7 @@ export class UserEventLogger {
    * @param {string} userName - The username of the user whose attributes were updated.
    * @param {AttributeType[]} userAttributes - The updated attributes.
    */
-  public userUpdated(userName: string, userAttributes: AttributeType[]) {
+  public userUpdated(userName: string, userAttributes: AttributeType[]): void {
     this.logger.info({
       message: 'User Updated',
       userPoolId: this.userPoolId,
@@ -65,7 +68,7 @@ export class UserEventLogger {
    *
    * @param {string} userName - The username of the user that was deleted.
    */
-  public userDeleted(userName: string) {
+  public userDeleted(userName: string): void {
     this.logger.info({
       message: 'User Deleted',
       userPoolId: this.userPoolId,

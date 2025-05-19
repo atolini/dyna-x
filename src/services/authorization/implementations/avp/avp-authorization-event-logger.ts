@@ -8,11 +8,14 @@ import {
   AuthorizationResponse,
   BatchAuthorizationRequest,
   BatchAuthorizationResponse,
-} from '../../../contracts';
-import { ILogger } from '../../../../../utils/logger/contracts';
+  IAVPAuthorizationEventLogger,
+} from '../../contracts';
+import { ILogger } from '../../../../utils/logger/contracts';
 
 /**
  * @class AVPAuthorizationEventLogger
+ * @implements IAVPAuthorizationEventLogger
+ *
  * @classdesc
  * Logger utility for tracking authorization events within the {@link AVPAuthorizationService}.
  *
@@ -25,7 +28,9 @@ import { ILogger } from '../../../../../utils/logger/contracts';
  * const eventLogger = new AVPAuthorizationEventLogger(logger, 'store-id');
  * eventLogger.authorizationChecked(request, response);
  */
-export class AVPAuthorizationEventLogger {
+export class AVPAuthorizationEventLogger
+  implements IAVPAuthorizationEventLogger
+{
   private readonly logger: ILogger<unknown>;
   private readonly policyStoreId: string;
 

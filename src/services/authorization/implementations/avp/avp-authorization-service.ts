@@ -1,24 +1,23 @@
 import {
-  VerifiedPermissionsClient,
-  IsAuthorizedCommand,
-  BatchIsAuthorizedCommand,
   ActionIdentifier,
-  EntityIdentifier,
-  ContextDefinition,
-  IsAuthorizedWithTokenCommand,
+  BatchIsAuthorizedCommand,
   BatchIsAuthorizedWithTokenCommand,
+  ContextDefinition,
+  EntityIdentifier,
+  IsAuthorizedCommand,
+  IsAuthorizedWithTokenCommand,
+  VerifiedPermissionsClient,
   VerifiedPermissionsClientConfig,
 } from '@aws-sdk/client-verifiedpermissions';
 
 import {
-  IAuthorizationService,
   AuthorizationRequest,
   AuthorizationResponse,
   BatchAuthorizationRequest,
   BatchAuthorizationResponse,
+  IAuthorizationService,
+  IAVPAuthorizationEventLogger,
 } from '../../contracts';
-import { ILogger } from '../../../../utils/logger/contracts';
-import { AVPAuthorizationEventLogger } from './helpers/avp-authorization-event-logger';
 
 interface Token {
   accessToken: string;
@@ -68,15 +67,16 @@ export class AVPAuthorizationService
       EntityIdentifier
     >
 {
-  private client: VerifiedPermissionsClient;
-  private policyStoreId: string;
-  private token: Token | null;
-  private eventsLogger: AVPAuthorizationEventLogger;
+  private readonly client: VerifiedPermissionsClient;
+  private readonly policyStoreId: string;
+  private readonly token: Token | null;
+  private readonly eventLogger: IAVPAuthorizationEventLogger;
 
   /**
    * Creates an instance of AVPAuthorizationService.
    *
    * @param {string} policyStoreId - The ID of the policy store to be used for authorization checks.
+   * @param {IAVPAuthorizationEventLogger} eventLogger -Logger instance responsible for recording events related to authorization checks.
    * @param {Token} [token] - Optional token credentials containing an access token and an identity token.
    * If provided, the service will use token-based authorization for requests.
    * @param {VerifiedPermissionsClientConfig} [clientConfig] - Optional configuration for the VerifiedPermissionsClient.
@@ -94,7 +94,7 @@ export class AVPAuthorizationService
    */
   constructor(
     policyStoreId: string,
-    logger: ILogger<unknown>,
+    eventLogger: IAVPAuthorizationEventLogger,
     token?: Token,
     clientConfig?: VerifiedPermissionsClientConfig,
   ) {
@@ -103,10 +103,7 @@ export class AVPAuthorizationService
       clientConfig ? clientConfig : {},
     );
     this.token = token || null;
-    this.eventsLogger = new AVPAuthorizationEventLogger(
-      logger,
-      this.policyStoreId,
-    );
+    this.eventLogger = eventLogger;
   }
 
   /**
@@ -172,7 +169,7 @@ export class AVPAuthorizationService
       decision: response.decision ?? 'DENY',
     };
 
-    this.eventsLogger.authorizationChecked(request, result);
+    this.eventLogger.authorizationChecked(request, result);
 
     return result;
   }
@@ -254,7 +251,7 @@ export class AVPAuthorizationService
 
     const result = { results };
 
-    this.eventsLogger.batchAuthorizationChecked(request, result);
+    this.eventLogger.batchAuthorizationChecked(request, result);
 
     return result;
   }

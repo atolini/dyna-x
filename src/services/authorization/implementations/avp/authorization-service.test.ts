@@ -10,25 +10,29 @@ import {
 import {
   AuthorizationRequest,
   BatchAuthorizationRequest,
-  IAuthorizationService,
-} from '../../../contracts';
-import { AVPAuthorizationService } from '..';
+} from '../../contracts';
+import { AVPAuthorizationService } from './avp-authorization-service';
+import { AVPAuthorizationEventLogger } from './avp-authorization-event-logger';
+import { Logger } from '../../../../utils/logger/implementations';
 
 const vpClientMock = mockClient(VerifiedPermissionsClient);
 
 describe('AmazonVerifiedPermissionsService - isAuthorized', () => {
   const policyStoreId = 'test-policy-store';
 
-  let service: IAuthorizationService<
-    ActionIdentifier,
-    EntityIdentifier,
-    ContextDefinition,
-    EntityIdentifier
-  >;
+  const service = new AVPAuthorizationService(
+    policyStoreId,
+    new AVPAuthorizationEventLogger(
+      new Logger({
+        requestId: 'request-id',
+        service: 'service-1',
+      }),
+      policyStoreId,
+    ),
+  );
 
   beforeEach(() => {
     vpClientMock.reset();
-    service = new AVPAuthorizationService(policyStoreId);
   });
 
   it('should return ALLOW decision', async () => {

@@ -1,5 +1,5 @@
-import { IUpdateBuilder } from '../../contracts/i-update-builder';
-import { DynamoUpdateExpressionResult } from './dynamo-update-expression-result';
+import { IUpdateBuilder } from '@database/update-builder/contracts/i-update-builder';
+import { DynamoUpdateExpressionResult } from '@database/update-builder/implementations/dynamo/dynamo-update-expression-result';
 
 /**
  * @class DynamoUpdateBuilder
@@ -16,7 +16,7 @@ import { DynamoUpdateExpressionResult } from './dynamo-update-expression-result'
  *
  * @example
  * // Example usage:
- * const builder = new UpdateBuilder();
+ * const builder = new DynamoUpdateBuilder();
  * const update = builder
  *   .set('username', 'john_doe')
  *   .remove('user_age')
@@ -42,10 +42,10 @@ export class DynamoUpdateBuilder
    * Adds a SET operation to the update expression.
    *
    * @param {string} field The name of the attribute to set
-   * @param {any} value The value to set
+   * @param {unknown} value The value to set
    * @returns {DynamoUpdateBuilder} The builder instance for chaining
    */
-  set(field: string, value: any): DynamoUpdateBuilder {
+  set(field: string, value: unknown): DynamoUpdateBuilder {
     return this.addUpdateExpression('SET', field, value);
   }
 
@@ -77,7 +77,7 @@ export class DynamoUpdateBuilder
    * Builds and returns the final update expression object,
    * ready to be used in a DynamoDB update operation.
    *
-   * @returns {DynamoUpdateExpressionResult} The assembled update expression, attribute names, and attribute values
+   * @returns {DynamoUpdateExpressionResult} An object containing the UpdateExpression, ExpressionAttributeNames, and ExpressionAttributeValues
    */
   build(): DynamoUpdateExpressionResult {
     return {

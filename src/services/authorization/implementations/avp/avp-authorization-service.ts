@@ -70,7 +70,12 @@ export class AVPAuthorizationService
   private readonly client: VerifiedPermissionsClient;
   private readonly policyStoreId: string;
   private readonly token: Token | null;
-  private readonly eventLogger: IAVPAuthorizationEventLogger;
+  private readonly eventLogger: IAVPAuthorizationEventLogger<
+    ActionIdentifier,
+    EntityIdentifier,
+    ContextDefinition,
+    EntityIdentifier
+  >;
 
   /**
    * Creates an instance of AVPAuthorizationService.
@@ -94,7 +99,12 @@ export class AVPAuthorizationService
    */
   constructor(
     policyStoreId: string,
-    eventLogger: IAVPAuthorizationEventLogger,
+    eventLogger: IAVPAuthorizationEventLogger<
+      ActionIdentifier,
+      EntityIdentifier,
+      ContextDefinition,
+      EntityIdentifier
+    >,
     token?: Token,
     clientConfig?: VerifiedPermissionsClientConfig,
   ) {
@@ -141,7 +151,7 @@ export class AVPAuthorizationService
       EntityIdentifier
     >,
   ): Promise<AuthorizationResponse<EntityIdentifier>> {
-    const { resourceId, entityId, context, action } = request;
+    const { resource: resourceId, entity: entityId, context, action } = request;
 
     const params = {
       policyStoreId: this.policyStoreId,
@@ -165,7 +175,7 @@ export class AVPAuthorizationService
     const response = await this.client.send(command);
 
     const result = {
-      resourceId: request.resourceId,
+      resourceId: request.resource,
       decision: response.decision ?? 'DENY',
     };
 
@@ -219,7 +229,7 @@ export class AVPAuthorizationService
     >,
   ): Promise<BatchAuthorizationResponse<EntityIdentifier>> {
     const requests = request.requests.map((r) => {
-      const { resourceId, entityId, context, action } = r;
+      const { resource: resourceId, entity: entityId, context, action } = r;
 
       return {
         principal: entityId,
@@ -245,7 +255,7 @@ export class AVPAuthorizationService
 
     const results: AuthorizationResponse<EntityIdentifier>[] =
       response.results?.map((result, index) => ({
-        resourceId: request.requests[index].resourceId,
+        resourceId: request.requests[index].resource,
         decision: result.decision ?? 'DENY',
       })) ?? [];
 

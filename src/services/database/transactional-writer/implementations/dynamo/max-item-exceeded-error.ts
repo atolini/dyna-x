@@ -13,6 +13,8 @@ export class MaxItemsExceededError extends Error {
    * @param {number} maxItems - The maximum number of allowed items.
    */
   constructor(maxItems: number) {
-    super(`Transaction batch exceeds the maximum allowed limit of ${maxItems} items.`);
+    super(
+      `Transaction batch exceeds the maximum allowed limit of ${maxItems} items.`,
+    );
   }
 }

@@ -29,7 +29,13 @@ import { ILogger } from '../../../logger/contracts';
  * eventLogger.authorizationChecked(request, response);
  */
 export class AVPAuthorizationEventLogger
-  implements IAVPAuthorizationEventLogger
+  implements
+    IAVPAuthorizationEventLogger<
+      ActionIdentifier,
+      EntityIdentifier,
+      ContextDefinition,
+      EntityIdentifier
+    >
 {
   private readonly logger: ILogger<unknown>;
   private readonly policyStoreId: string;

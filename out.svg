@@ -1,0 +1,774 @@
+<svg version="1.1" baseProfile="full" width="7281.0" height="540.0" viewBox="0 0 7281 540" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ev="http://www.w3.org/2001/xml-events">
+<desc >#.interface: fill=lightblue
+#.enumeration: fill=lightgreen
+#.type: fill=lightgray
+
+[&lt;interface&gt;IConditionBuilder&lt;T&gt;||+eq(): IConditionBuilder&lt;T&gt;;+ne(): IConditionBuilder&lt;T&gt;;+gt(): IConditionBuilder&lt;T&gt;;+lt(): IConditionBuilder&lt;T&gt;;+and(): IConditionBuilder&lt;T&gt;;+or(): IConditionBuilder&lt;T&gt;;+build(): T]
+[&lt;interface&gt;IReadRepositoryEventLogger&lt;T,K,C&gt;||+itemFetched(): void;+queryExecuted(): void]
+[&lt;interface&gt;IReadRepository&lt;T,K,C&gt;||+getItem(): Promise&lt;T&gt;;+query(): Promise&lt;{ items: T\[\]; lastEvaluatedKey?: K; }&gt;]
+[&lt;interface&gt;IWriteRepositoryEventLogger&lt;T,K,U,C&gt;||+itemCreated(): void;+itemDeleted(): void;+itemUpdated(): void;+batchWritePerformed(): void]
+[&lt;interface&gt;IWriteRepository&lt;T,K,C,U&gt;||+putItem(): Promise&lt;T&gt;;+deleteItem(): Promise&lt;void&gt;;+batchWriteItems(): Promise&lt;{ type: &quot;put&quot; \| &quot;delete&quot;; item: T \| K; }\[\]&gt;;+update(): Promise&lt;T&gt;]
+[&lt;interface&gt;IDatabaseSchema&lt;K,T&gt;||+getTableName(): string;+validateKey(): void]
+[&lt;interface&gt;ITransactionalWriteUnit&lt;Container,Item&gt;|+container: Container;+item: Item|]
+[&lt;interface&gt;ITransactionalWriter&lt;Container,Item&gt;||+write(): Promise&lt;void&gt;]
+[&lt;interface&gt;IUpdateBuilder&lt;T&gt;||+set(): IUpdateBuilder&lt;T&gt;;+remove(): IUpdateBuilder&lt;T&gt;;+add(): IUpdateBuilder&lt;T&gt;;+build(): T]
+[DynamoConditionBuilder|-expressions: string\[\];-attributeNames: Record&lt;string, string&gt;;-attributeValues: Record&lt;string, any&gt;;-index: number|+eq(): DynamoConditionBuilder;+ne(): DynamoConditionBuilder;+gt(): DynamoConditionBuilder;+lt(): DynamoConditionBuilder;+and(): DynamoConditionBuilder;+or(): DynamoConditionBuilder;+build(): DynamoConditionExpressionResult;-addCondition(): DynamoConditionBuilder;-formatValue(): object]
+[IConditionBuilder]&lt;:--[DynamoConditionBuilder]
+[&lt;type&gt;DynamoConditionExpressionResult|+ConditionExpression: string;+ExpressionAttributeNames: Record&lt;string, string&gt;;+ExpressionAttributeValues: Record&lt;string, AttributeValue&gt;|]
+[DynamoReadRepositoryEventLogger&lt;T&gt;|-logger: ILogger&lt;unknown&gt;;-tableName: string|+itemFetched(): void;+queryExecuted(): void]
+[IReadRepositoryEventLogger]&lt;:--[DynamoReadRepositoryEventLogger&lt;T&gt;]
+[DynamoReadRepository&lt;T&gt;|-client: DynamoDBClient;-tableName: string;-schema: DynamoSchema&lt;T&gt;;-eventLogger: DynamoReadRepositoryEventLogger&lt;T&gt;|+getItem(): Promise&lt;T&gt;;+query(): Promise&lt;{ items: T\[\]; lastEvaluatedKey?: Key; }&gt;;-validateKey(): void]
+[IReadRepository]&lt;:--[DynamoReadRepository&lt;T&gt;]
+[DynamoWriteRepositoryEventLogger&lt;T&gt;|-logger: ILogger&lt;unknown&gt;;-tableName: string|+itemCreated(): void;+itemDeleted(): void;+itemUpdated(): void;+batchWritePerformed(): void]
+[IWriteRepositoryEventLogger]&lt;:--[DynamoWriteRepositoryEventLogger&lt;T&gt;]
+[DynamoWriteRepository&lt;T&gt;|-client: DynamoDBClient;-tableName: string;-schema: DynamoSchema&lt;T&gt;;-eventLogger: DynamoWriteRepositoryEventLogger&lt;T&gt;|+putItem(): Promise&lt;T&gt;;+deleteItem(): Promise&lt;void&gt;;+update(): Promise&lt;T&gt;]
+[IWriteRepository]&lt;:--[DynamoWriteRepository&lt;T&gt;]
+[DynamoSchema&lt;T&gt;|-tableName: string;-partitionKey: KeyConfig;-sortKey?: KeyConfig|+getTableName(): string;+validateKey(): void;-validateField(): void]
+[IDatabaseSchema]&lt;:--[DynamoSchema&lt;T&gt;]
+[InvalidKeyError||]
+[&lt;interface&gt;KeyConfig|+name: string;+type: &quot;string&quot; \| &quot;number&quot;|]
+[DynamoTransactionWrite|-client: DynamoDBClient;-maxBatchItems: number|+write(): Promise&lt;void&gt;;-validateKeys(): void;-validateBatchSize(): void]
+[ITransactionalWriter]&lt;:--[DynamoTransactionWrite]
+[MaxItemsExceededError|+name: &quot;MaxItemsExceededError&quot;|]
+[DynamoUpdateBuilder|-updateExpressions: string\[\];-expressionAttributeNames: Record&lt;string, string&gt;;-expressionAttributeValues: Record&lt;string, any&gt;;-index: number|+set(): DynamoUpdateBuilder;+remove(): DynamoUpdateBuilder;+add(): DynamoUpdateBuilder;+build(): DynamoUpdateExpressionResult;-addUpdateExpression(): DynamoUpdateBuilder;-formatValue(): object]
+[IUpdateBuilder]&lt;:--[DynamoUpdateBuilder]
+[&lt;type&gt;DynamoUpdateExpressionResult|+UpdateExpression: string;+ExpressionAttributeNames: Record&lt;string, string&gt;;+ExpressionAttributeValues: Record&lt;string, any&gt;|]</desc>
+<g stroke-width="1.0" text-align="left" font="12pt Helvetica, Arial, sans-serif" font-size="12pt" font-family="Helvetica" font-weight="normal" font-style="normal">
+<g font-family="Helvetica" font-size="12pt" font-weight="bold" font-style="normal" stroke-width="3.0" stroke-linejoin="round" stroke-linecap="round" stroke="#33322E">
+<g stroke="transparent" fill="transparent">
+<rect x="0.0" y="0.0" height="540.0" width="7281.0" stroke="none"></rect>
+</g>
+<g transform="translate(8, 8)" fill="#33322E">
+<g transform="translate(20, 20)" fill="#eee8d5" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal">
+<g stroke-dasharray="6 6">
+<path d="M3094.5 113.8 L3094.5 189 L3094.5 209 L3094.5 209.0 " fill="none"></path>
+</g>
+<path d="M3099.8 113.8 L3094.5 113.8 L3089.2 113.8 L3094.5 100.5 Z"></path>
+<g stroke-dasharray="6 6">
+<path d="M3860.5 113.8 L3860.5 189 L3860.5 282.5 L3860.5 282.5 " fill="none"></path>
+</g>
+<path d="M3865.8 113.8 L3860.5 113.8 L3855.2 113.8 L3860.5 100.5 Z"></path>
+<g stroke-dasharray="6 6">
+<path d="M4297.5 113.8 L4297.5 189 L4297.5 241.5 L4297.5 241.5 " fill="none"></path>
+</g>
+<path d="M4302.8 113.8 L4297.5 113.8 L4292.2 113.8 L4297.5 100.5 Z"></path>
+<g stroke-dasharray="6 6">
+<path d="M4734.0 113.8 L4734 189 L4734 266 L4734.0 266.0 " fill="none"></path>
+</g>
+<path d="M4739.3 113.8 L4734.0 113.8 L4728.7 113.8 L4734.0 100.5 Z"></path>
+<g stroke-dasharray="6 6">
+<path d="M5170.0 113.8 L5170 189 L5170 257.5 L5170.0 257.5 " fill="none"></path>
+</g>
+<path d="M5175.3 113.8 L5170.0 113.8 L5164.7 113.8 L5170.0 100.5 Z"></path>
+<g stroke-dasharray="6 6">
+<path d="M5540.5 113.8 L5540.5 189 L5540.5 265.5 L5540.5 265.5 " fill="none"></path>
+</g>
+<path d="M5545.8 113.8 L5540.5 113.8 L5535.2 113.8 L5540.5 100.5 Z"></path>
+<g stroke-dasharray="6 6">
+<path d="M6178.5 113.8 L6178.5 189 L6178.5 274 L6178.5 274.0 " fill="none"></path>
+</g>
+<path d="M6183.8 113.8 L6178.5 113.8 L6173.2 113.8 L6178.5 100.5 Z"></path>
+<g stroke-dasharray="6 6">
+<path d="M6698.5 113.8 L6698.5 189 L6698.5 233.5 L6698.5 233.5 " fill="none"></path>
+</g>
+<path d="M6703.8 113.8 L6698.5 113.8 L6693.2 113.8 L6698.5 100.5 Z"></path>
+<g data-name="IConditionBuilder&lt;T&gt;">
+<g fill="lightblue" stroke="#33322E" data-name="IConditionBuilder&lt;T&gt;">
+<rect x="0.0" y="0.0" height="169.0" width="243.0" data-name="IConditionBuilder&lt;T&gt;"></rect>
+<path d="M0.0 32.0 L243.0 32.0" fill="none" data-name="IConditionBuilder&lt;T&gt;"></path>
+<path d="M0.0 40.0 L243.0 40.0" fill="none" data-name="IConditionBuilder&lt;T&gt;"></path>
+</g>
+<g transform="translate(0, 0)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="IConditionBuilder&lt;T&gt;" data-compartment="0">
+<g transform="translate(8, 8)" fill="#33322E" text-align="center" data-name="IConditionBuilder&lt;T&gt;" data-compartment="0">
+<a id="src/services/database/condition-builder/contracts/i-condition-builder.ts.IConditionBuilder&lt;T&gt;" xlink:href="src/services/database/condition-builder/contracts/i-condition-builder.ts"><text x="113.5" y="14.1" stroke="none" text-anchor="middle" data-name="IConditionBuilder&lt;T&gt;" data-compartment="0">IConditionBuilder&lt;T&gt;</text></a>
+
+</g>
+</g>
+<g transform="translate(0, 32)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="IConditionBuilder&lt;T&gt;" data-compartment="1">
+<g transform="translate(8, 8)" fill="#33322E" data-name="IConditionBuilder&lt;T&gt;" data-compartment="1">
+
+</g>
+</g>
+<g transform="translate(0, 40)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="IConditionBuilder&lt;T&gt;" data-compartment="2">
+<g transform="translate(8, 8)" fill="#33322E" text-align="left" data-name="IConditionBuilder&lt;T&gt;" data-compartment="2">
+<text x="0.0" y="14.1" stroke="none" data-name="IConditionBuilder&lt;T&gt;" data-compartment="2">+eq(): IConditionBuilder&lt;T&gt;</text>
+<text x="0.0" y="30.3" stroke="none" data-name="IConditionBuilder&lt;T&gt;" data-compartment="2">+ne(): IConditionBuilder&lt;T&gt;</text>
+<text x="0.0" y="46.5" stroke="none" data-name="IConditionBuilder&lt;T&gt;" data-compartment="2">+gt(): IConditionBuilder&lt;T&gt;</text>
+<text x="0.0" y="62.7" stroke="none" data-name="IConditionBuilder&lt;T&gt;" data-compartment="2">+lt(): IConditionBuilder&lt;T&gt;</text>
+<text x="0.0" y="78.9" stroke="none" data-name="IConditionBuilder&lt;T&gt;" data-compartment="2">+and(): IConditionBuilder&lt;T&gt;</text>
+<text x="0.0" y="95.1" stroke="none" data-name="IConditionBuilder&lt;T&gt;" data-compartment="2">+or(): IConditionBuilder&lt;T&gt;</text>
+<text x="0.0" y="111.3" stroke="none" data-name="IConditionBuilder&lt;T&gt;" data-compartment="2">+build(): T</text>
+
+</g>
+</g>
+</g>
+<g data-name="IReadRepositoryEventLogger&lt;T,K,C&gt;">
+<g fill="lightblue" stroke="#33322E" data-name="IReadRepositoryEventLogger&lt;T,K,C&gt;">
+<rect x="283.0" y="40.5" height="88.0" width="312.0" data-name="IReadRepositoryEventLogger&lt;T,K,C&gt;"></rect>
+<path d="M283.0 72.5 L595.0 72.5" fill="none" data-name="IReadRepositoryEventLogger&lt;T,K,C&gt;"></path>
+<path d="M283.0 80.5 L595.0 80.5" fill="none" data-name="IReadRepositoryEventLogger&lt;T,K,C&gt;"></path>
+</g>
+<g transform="translate(283, 40.5)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="IReadRepositoryEventLogger&lt;T,K,C&gt;" data-compartment="0">
+<g transform="translate(8, 8)" fill="#33322E" text-align="center" data-name="IReadRepositoryEventLogger&lt;T,K,C&gt;" data-compartment="0">
+<a id="src/services/database/repository/contracts/i-read-repository-event-logger.ts.IReadRepositoryEventLogger&lt;T,K,C&gt;" xlink:href="src/services/database/repository/contracts/i-read-repository-event-logger.ts"><text x="148.0" y="14.1" stroke="none" text-anchor="middle" data-name="IReadRepositoryEventLogger&lt;T,K,C&gt;" data-compartment="0">IReadRepositoryEventLogger&lt;T,K,C&gt;</text></a>
+
+</g>
+</g>
+<g transform="translate(283, 72.5)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="IReadRepositoryEventLogger&lt;T,K,C&gt;" data-compartment="1">
+<g transform="translate(8, 8)" fill="#33322E" data-name="IReadRepositoryEventLogger&lt;T,K,C&gt;" data-compartment="1">
+
+</g>
+</g>
+<g transform="translate(283, 80.5)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="IReadRepositoryEventLogger&lt;T,K,C&gt;" data-compartment="2">
+<g transform="translate(8, 8)" fill="#33322E" text-align="left" data-name="IReadRepositoryEventLogger&lt;T,K,C&gt;" data-compartment="2">
+<text x="0.0" y="14.1" stroke="none" data-name="IReadRepositoryEventLogger&lt;T,K,C&gt;" data-compartment="2">+itemFetched(): void</text>
+<text x="0.0" y="30.3" stroke="none" data-name="IReadRepositoryEventLogger&lt;T,K,C&gt;" data-compartment="2">+queryExecuted(): void</text>
+
+</g>
+</g>
+</g>
+<g data-name="IReadRepository&lt;T,K,C&gt;">
+<g fill="lightblue" stroke="#33322E" data-name="IReadRepository&lt;T,K,C&gt;">
+<rect x="635.0" y="24.0" height="121.0" width="250.0" data-name="IReadRepository&lt;T,K,C&gt;"></rect>
+<path d="M635.0 56.0 L885.0 56.0" fill="none" data-name="IReadRepository&lt;T,K,C&gt;"></path>
+<path d="M635.0 64.0 L885.0 64.0" fill="none" data-name="IReadRepository&lt;T,K,C&gt;"></path>
+</g>
+<g transform="translate(635, 24)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="IReadRepository&lt;T,K,C&gt;" data-compartment="0">
+<g transform="translate(8, 8)" fill="#33322E" text-align="center" data-name="IReadRepository&lt;T,K,C&gt;" data-compartment="0">
+<a id="src/services/database/repository/contracts/i-read-repository.ts.IReadRepository&lt;T,K,C&gt;" xlink:href="src/services/database/repository/contracts/i-read-repository.ts"><text x="117.0" y="14.1" stroke="none" text-anchor="middle" data-name="IReadRepository&lt;T,K,C&gt;" data-compartment="0">IReadRepository&lt;T,K,C&gt;</text></a>
+
+</g>
+</g>
+<g transform="translate(635, 56)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="IReadRepository&lt;T,K,C&gt;" data-compartment="1">
+<g transform="translate(8, 8)" fill="#33322E" data-name="IReadRepository&lt;T,K,C&gt;" data-compartment="1">
+
+</g>
+</g>
+<g transform="translate(635, 64)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="IReadRepository&lt;T,K,C&gt;" data-compartment="2">
+<g transform="translate(8, 8)" fill="#33322E" text-align="left" data-name="IReadRepository&lt;T,K,C&gt;" data-compartment="2">
+<text x="0.0" y="14.1" stroke="none" data-name="IReadRepository&lt;T,K,C&gt;" data-compartment="2">+getItem(): Promise&lt;T&gt;</text>
+<text x="0.0" y="30.3" stroke="none" data-name="IReadRepository&lt;T,K,C&gt;" data-compartment="2">+query(): Promise&lt;{ items: T[]</text>
+<text x="0.0" y="46.5" stroke="none" data-name="IReadRepository&lt;T,K,C&gt;" data-compartment="2">lastEvaluatedKey?: K</text>
+<text x="0.0" y="62.7" stroke="none" data-name="IReadRepository&lt;T,K,C&gt;" data-compartment="2">}&gt;</text>
+
+</g>
+</g>
+</g>
+<g data-name="IWriteRepositoryEventLogger&lt;T,K,U,C&gt;">
+<g fill="lightblue" stroke="#33322E" data-name="IWriteRepositoryEventLogger&lt;T,K,U,C&gt;">
+<rect x="925.0" y="24.0" height="121.0" width="328.0" data-name="IWriteRepositoryEventLogger&lt;T,K,U,C&gt;"></rect>
+<path d="M925.0 56.0 L1253.0 56.0" fill="none" data-name="IWriteRepositoryEventLogger&lt;T,K,U,C&gt;"></path>
+<path d="M925.0 64.0 L1253.0 64.0" fill="none" data-name="IWriteRepositoryEventLogger&lt;T,K,U,C&gt;"></path>
+</g>
+<g transform="translate(925, 24)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="IWriteRepositoryEventLogger&lt;T,K,U,C&gt;" data-compartment="0">
+<g transform="translate(8, 8)" fill="#33322E" text-align="center" data-name="IWriteRepositoryEventLogger&lt;T,K,U,C&gt;" data-compartment="0">
+<a id="src/services/database/repository/contracts/i-write-repository-event-logger.ts.IWriteRepositoryEventLogger&lt;T,K,U,C&gt;" xlink:href="src/services/database/repository/contracts/i-write-repository-event-logger.ts"><text x="156.0" y="14.1" stroke="none" text-anchor="middle" data-name="IWriteRepositoryEventLogger&lt;T,K,U,C&gt;" data-compartment="0">IWriteRepositoryEventLogger&lt;T,K,U,C&gt;</text></a>
+
+</g>
+</g>
+<g transform="translate(925, 56)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="IWriteRepositoryEventLogger&lt;T,K,U,C&gt;" data-compartment="1">
+<g transform="translate(8, 8)" fill="#33322E" data-name="IWriteRepositoryEventLogger&lt;T,K,U,C&gt;" data-compartment="1">
+
+</g>
+</g>
+<g transform="translate(925, 64)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="IWriteRepositoryEventLogger&lt;T,K,U,C&gt;" data-compartment="2">
+<g transform="translate(8, 8)" fill="#33322E" text-align="left" data-name="IWriteRepositoryEventLogger&lt;T,K,U,C&gt;" data-compartment="2">
+<text x="0.0" y="14.1" stroke="none" data-name="IWriteRepositoryEventLogger&lt;T,K,U,C&gt;" data-compartment="2">+itemCreated(): void</text>
+<text x="0.0" y="30.3" stroke="none" data-name="IWriteRepositoryEventLogger&lt;T,K,U,C&gt;" data-compartment="2">+itemDeleted(): void</text>
+<text x="0.0" y="46.5" stroke="none" data-name="IWriteRepositoryEventLogger&lt;T,K,U,C&gt;" data-compartment="2">+itemUpdated(): void</text>
+<text x="0.0" y="62.7" stroke="none" data-name="IWriteRepositoryEventLogger&lt;T,K,U,C&gt;" data-compartment="2">+batchWritePerformed(): void</text>
+
+</g>
+</g>
+</g>
+<g data-name="IWriteRepository&lt;T,K,C,U&gt;">
+<g fill="lightblue" stroke="#33322E" data-name="IWriteRepository&lt;T,K,C,U&gt;">
+<rect x="1293.0" y="8.0" height="153.0" width="418.0" data-name="IWriteRepository&lt;T,K,C,U&gt;"></rect>
+<path d="M1293.0 40.0 L1711.0 40.0" fill="none" data-name="IWriteRepository&lt;T,K,C,U&gt;"></path>
+<path d="M1293.0 48.0 L1711.0 48.0" fill="none" data-name="IWriteRepository&lt;T,K,C,U&gt;"></path>
+</g>
+<g transform="translate(1293, 8)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="IWriteRepository&lt;T,K,C,U&gt;" data-compartment="0">
+<g transform="translate(8, 8)" fill="#33322E" text-align="center" data-name="IWriteRepository&lt;T,K,C,U&gt;" data-compartment="0">
+<a id="src/services/database/repository/contracts/i-write-repository.ts.IWriteRepository&lt;T,K,C,U&gt;" xlink:href="src/services/database/repository/contracts/i-write-repository.ts"><text x="201.0" y="14.1" stroke="none" text-anchor="middle" data-name="IWriteRepository&lt;T,K,C,U&gt;" data-compartment="0">IWriteRepository&lt;T,K,C,U&gt;</text></a>
+
+</g>
+</g>
+<g transform="translate(1293, 40)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="IWriteRepository&lt;T,K,C,U&gt;" data-compartment="1">
+<g transform="translate(8, 8)" fill="#33322E" data-name="IWriteRepository&lt;T,K,C,U&gt;" data-compartment="1">
+
+</g>
+</g>
+<g transform="translate(1293, 48)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="IWriteRepository&lt;T,K,C,U&gt;" data-compartment="2">
+<g transform="translate(8, 8)" fill="#33322E" text-align="left" data-name="IWriteRepository&lt;T,K,C,U&gt;" data-compartment="2">
+<text x="0.0" y="14.1" stroke="none" data-name="IWriteRepository&lt;T,K,C,U&gt;" data-compartment="2">+putItem(): Promise&lt;T&gt;</text>
+<text x="0.0" y="30.3" stroke="none" data-name="IWriteRepository&lt;T,K,C,U&gt;" data-compartment="2">+deleteItem(): Promise&lt;void&gt;</text>
+<text x="0.0" y="46.5" stroke="none" data-name="IWriteRepository&lt;T,K,C,U&gt;" data-compartment="2">+batchWriteItems(): Promise&lt;{ type: &quot;put&quot; | &quot;delete&quot;</text>
+<text x="0.0" y="62.7" stroke="none" data-name="IWriteRepository&lt;T,K,C,U&gt;" data-compartment="2">item: T | K</text>
+<text x="0.0" y="78.9" stroke="none" data-name="IWriteRepository&lt;T,K,C,U&gt;" data-compartment="2">}[]&gt;</text>
+<text x="0.0" y="95.1" stroke="none" data-name="IWriteRepository&lt;T,K,C,U&gt;" data-compartment="2">+update(): Promise&lt;T&gt;</text>
+
+</g>
+</g>
+</g>
+<g data-name="IDatabaseSchema&lt;K,T&gt;">
+<g fill="lightblue" stroke="#33322E" data-name="IDatabaseSchema&lt;K,T&gt;">
+<rect x="1751.0" y="40.5" height="88.0" width="207.0" data-name="IDatabaseSchema&lt;K,T&gt;"></rect>
+<path d="M1751.0 72.5 L1958.0 72.5" fill="none" data-name="IDatabaseSchema&lt;K,T&gt;"></path>
+<path d="M1751.0 80.5 L1958.0 80.5" fill="none" data-name="IDatabaseSchema&lt;K,T&gt;"></path>
+</g>
+<g transform="translate(1751, 40.5)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="IDatabaseSchema&lt;K,T&gt;" data-compartment="0">
+<g transform="translate(8, 8)" fill="#33322E" text-align="center" data-name="IDatabaseSchema&lt;K,T&gt;" data-compartment="0">
+<a id="src/services/database/schema/contracts/i-database-schema.ts.IDatabaseSchema&lt;K,T&gt;" xlink:href="src/services/database/schema/contracts/i-database-schema.ts"><text x="95.5" y="14.1" stroke="none" text-anchor="middle" data-name="IDatabaseSchema&lt;K,T&gt;" data-compartment="0">IDatabaseSchema&lt;K,T&gt;</text></a>
+
+</g>
+</g>
+<g transform="translate(1751, 72.5)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="IDatabaseSchema&lt;K,T&gt;" data-compartment="1">
+<g transform="translate(8, 8)" fill="#33322E" data-name="IDatabaseSchema&lt;K,T&gt;" data-compartment="1">
+
+</g>
+</g>
+<g transform="translate(1751, 80.5)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="IDatabaseSchema&lt;K,T&gt;" data-compartment="2">
+<g transform="translate(8, 8)" fill="#33322E" text-align="left" data-name="IDatabaseSchema&lt;K,T&gt;" data-compartment="2">
+<text x="0.0" y="14.1" stroke="none" data-name="IDatabaseSchema&lt;K,T&gt;" data-compartment="2">+getTableName(): string</text>
+<text x="0.0" y="30.3" stroke="none" data-name="IDatabaseSchema&lt;K,T&gt;" data-compartment="2">+validateKey(): void</text>
+
+</g>
+</g>
+</g>
+<g data-name="ITransactionalWriteUnit&lt;Container,Item&gt;">
+<g fill="lightblue" stroke="#33322E" data-name="ITransactionalWriteUnit&lt;Container,Item&gt;">
+<rect x="1998.0" y="40.5" height="88.0" width="336.0" data-name="ITransactionalWriteUnit&lt;Container,Item&gt;"></rect>
+<path d="M1998.0 72.5 L2334.0 72.5" fill="none" data-name="ITransactionalWriteUnit&lt;Container,Item&gt;"></path>
+<path d="M1998.0 120.5 L2334.0 120.5" fill="none" data-name="ITransactionalWriteUnit&lt;Container,Item&gt;"></path>
+</g>
+<g transform="translate(1998, 40.5)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="ITransactionalWriteUnit&lt;Container,Item&gt;" data-compartment="0">
+<g transform="translate(8, 8)" fill="#33322E" text-align="center" data-name="ITransactionalWriteUnit&lt;Container,Item&gt;" data-compartment="0">
+<a id="src/services/database/transactional-writer/contracts/i-transactional-write-unit.ts.ITransactionalWriteUnit&lt;Container,Item&gt;" xlink:href="src/services/database/transactional-writer/contracts/i-transactional-write-unit.ts"><text x="160.0" y="14.1" stroke="none" text-anchor="middle" data-name="ITransactionalWriteUnit&lt;Container,Item&gt;" data-compartment="0">ITransactionalWriteUnit&lt;Container,Item&gt;</text></a>
+
+</g>
+</g>
+<g transform="translate(1998, 72.5)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="ITransactionalWriteUnit&lt;Container,Item&gt;" data-compartment="1">
+<g transform="translate(8, 8)" fill="#33322E" text-align="left" data-name="ITransactionalWriteUnit&lt;Container,Item&gt;" data-compartment="1">
+<text x="0.0" y="14.1" stroke="none" data-name="ITransactionalWriteUnit&lt;Container,Item&gt;" data-compartment="1">+container: Container</text>
+<text x="0.0" y="30.3" stroke="none" data-name="ITransactionalWriteUnit&lt;Container,Item&gt;" data-compartment="1">+item: Item</text>
+
+</g>
+</g>
+<g transform="translate(1998, 120.5)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="ITransactionalWriteUnit&lt;Container,Item&gt;" data-compartment="2">
+<g transform="translate(8, 8)" fill="#33322E" data-name="ITransactionalWriteUnit&lt;Container,Item&gt;" data-compartment="2">
+
+</g>
+</g>
+</g>
+<g data-name="ITransactionalWriter&lt;Container,Item&gt;">
+<g fill="lightblue" stroke="#33322E" data-name="ITransactionalWriter&lt;Container,Item&gt;">
+<rect x="2374.0" y="48.5" height="72.0" width="311.0" data-name="ITransactionalWriter&lt;Container,Item&gt;"></rect>
+<path d="M2374.0 80.5 L2685.0 80.5" fill="none" data-name="ITransactionalWriter&lt;Container,Item&gt;"></path>
+<path d="M2374.0 88.5 L2685.0 88.5" fill="none" data-name="ITransactionalWriter&lt;Container,Item&gt;"></path>
+</g>
+<g transform="translate(2374, 48.5)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="ITransactionalWriter&lt;Container,Item&gt;" data-compartment="0">
+<g transform="translate(8, 8)" fill="#33322E" text-align="center" data-name="ITransactionalWriter&lt;Container,Item&gt;" data-compartment="0">
+<a id="src/services/database/transactional-writer/contracts/i-transactional-writer.ts.ITransactionalWriter&lt;Container,Item&gt;" xlink:href="src/services/database/transactional-writer/contracts/i-transactional-writer.ts"><text x="147.5" y="14.1" stroke="none" text-anchor="middle" data-name="ITransactionalWriter&lt;Container,Item&gt;" data-compartment="0">ITransactionalWriter&lt;Container,Item&gt;</text></a>
+
+</g>
+</g>
+<g transform="translate(2374, 80.5)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="ITransactionalWriter&lt;Container,Item&gt;" data-compartment="1">
+<g transform="translate(8, 8)" fill="#33322E" data-name="ITransactionalWriter&lt;Container,Item&gt;" data-compartment="1">
+
+</g>
+</g>
+<g transform="translate(2374, 88.5)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="ITransactionalWriter&lt;Container,Item&gt;" data-compartment="2">
+<g transform="translate(8, 8)" fill="#33322E" text-align="left" data-name="ITransactionalWriter&lt;Container,Item&gt;" data-compartment="2">
+<text x="0.0" y="14.1" stroke="none" data-name="ITransactionalWriter&lt;Container,Item&gt;" data-compartment="2">+write(): Promise&lt;void&gt;</text>
+
+</g>
+</g>
+</g>
+<g data-name="IUpdateBuilder&lt;T&gt;">
+<g fill="lightblue" stroke="#33322E" data-name="IUpdateBuilder&lt;T&gt;">
+<rect x="2725.0" y="24.0" height="121.0" width="254.0" data-name="IUpdateBuilder&lt;T&gt;"></rect>
+<path d="M2725.0 56.0 L2979.0 56.0" fill="none" data-name="IUpdateBuilder&lt;T&gt;"></path>
+<path d="M2725.0 64.0 L2979.0 64.0" fill="none" data-name="IUpdateBuilder&lt;T&gt;"></path>
+</g>
+<g transform="translate(2725, 24)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="IUpdateBuilder&lt;T&gt;" data-compartment="0">
+<g transform="translate(8, 8)" fill="#33322E" text-align="center" data-name="IUpdateBuilder&lt;T&gt;" data-compartment="0">
+<a id="src/services/database/update-builder/contracts/i-update-builder.ts.IUpdateBuilder&lt;T&gt;" xlink:href="src/services/database/update-builder/contracts/i-update-builder.ts"><text x="119.0" y="14.1" stroke="none" text-anchor="middle" data-name="IUpdateBuilder&lt;T&gt;" data-compartment="0">IUpdateBuilder&lt;T&gt;</text></a>
+
+</g>
+</g>
+<g transform="translate(2725, 56)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="IUpdateBuilder&lt;T&gt;" data-compartment="1">
+<g transform="translate(8, 8)" fill="#33322E" data-name="IUpdateBuilder&lt;T&gt;" data-compartment="1">
+
+</g>
+</g>
+<g transform="translate(2725, 64)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="IUpdateBuilder&lt;T&gt;" data-compartment="2">
+<g transform="translate(8, 8)" fill="#33322E" text-align="left" data-name="IUpdateBuilder&lt;T&gt;" data-compartment="2">
+<text x="0.0" y="14.1" stroke="none" data-name="IUpdateBuilder&lt;T&gt;" data-compartment="2">+set(): IUpdateBuilder&lt;T&gt;</text>
+<text x="0.0" y="30.3" stroke="none" data-name="IUpdateBuilder&lt;T&gt;" data-compartment="2">+remove(): IUpdateBuilder&lt;T&gt;</text>
+<text x="0.0" y="46.5" stroke="none" data-name="IUpdateBuilder&lt;T&gt;" data-compartment="2">+add(): IUpdateBuilder&lt;T&gt;</text>
+<text x="0.0" y="62.7" stroke="none" data-name="IUpdateBuilder&lt;T&gt;" data-compartment="2">+build(): T</text>
+
+</g>
+</g>
+</g>
+<g data-name="DynamoConditionBuilder">
+<g fill="#eee8d5" stroke="#33322E" data-name="DynamoConditionBuilder">
+<rect x="2912.5" y="209.0" height="275.0" width="364.0" data-name="DynamoConditionBuilder"></rect>
+<path d="M2912.5 241.0 L3276.5 241.0" fill="none" data-name="DynamoConditionBuilder"></path>
+<path d="M2912.5 322.0 L3276.5 322.0" fill="none" data-name="DynamoConditionBuilder"></path>
+</g>
+<g transform="translate(2912.5, 209)" font-family="Helvetica" font-size="12pt" font-weight="bold" font-style="normal" data-name="DynamoConditionBuilder" data-compartment="0">
+<g transform="translate(8, 8)" fill="#33322E" text-align="center" data-name="DynamoConditionBuilder" data-compartment="0">
+<a id="src/services/database/condition-builder/implementations/dynamo/dynamo-condition-builder.ts.DynamoConditionBuilder" xlink:href="src/services/database/condition-builder/implementations/dynamo/dynamo-condition-builder.ts"><text x="174.0" y="14.1" stroke="none" text-anchor="middle" data-name="DynamoConditionBuilder" data-compartment="0">DynamoConditionBuilder</text></a>
+
+</g>
+</g>
+<g transform="translate(2912.5, 241)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="DynamoConditionBuilder" data-compartment="1">
+<g transform="translate(8, 8)" fill="#33322E" text-align="left" data-name="DynamoConditionBuilder" data-compartment="1">
+<text x="0.0" y="14.1" stroke="none" data-name="DynamoConditionBuilder" data-compartment="1">-expressions: string[]</text>
+<text x="0.0" y="30.3" stroke="none" data-name="DynamoConditionBuilder" data-compartment="1">-attributeNames: Record&lt;string, string&gt;</text>
+<text x="0.0" y="46.5" stroke="none" data-name="DynamoConditionBuilder" data-compartment="1">-attributeValues: Record&lt;string, any&gt;</text>
+<text x="0.0" y="62.7" stroke="none" data-name="DynamoConditionBuilder" data-compartment="1">-index: number</text>
+
+</g>
+</g>
+<g transform="translate(2912.5, 322)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="DynamoConditionBuilder" data-compartment="2">
+<g transform="translate(8, 8)" fill="#33322E" text-align="left" data-name="DynamoConditionBuilder" data-compartment="2">
+<text x="0.0" y="14.1" stroke="none" data-name="DynamoConditionBuilder" data-compartment="2">+eq(): DynamoConditionBuilder</text>
+<text x="0.0" y="30.3" stroke="none" data-name="DynamoConditionBuilder" data-compartment="2">+ne(): DynamoConditionBuilder</text>
+<text x="0.0" y="46.5" stroke="none" data-name="DynamoConditionBuilder" data-compartment="2">+gt(): DynamoConditionBuilder</text>
+<text x="0.0" y="62.7" stroke="none" data-name="DynamoConditionBuilder" data-compartment="2">+lt(): DynamoConditionBuilder</text>
+<text x="0.0" y="78.9" stroke="none" data-name="DynamoConditionBuilder" data-compartment="2">+and(): DynamoConditionBuilder</text>
+<text x="0.0" y="95.1" stroke="none" data-name="DynamoConditionBuilder" data-compartment="2">+or(): DynamoConditionBuilder</text>
+<text x="0.0" y="111.3" stroke="none" data-name="DynamoConditionBuilder" data-compartment="2">+build(): DynamoConditionExpressionResult</text>
+<text x="0.0" y="127.5" stroke="none" data-name="DynamoConditionBuilder" data-compartment="2">-addCondition(): DynamoConditionBuilder</text>
+<text x="0.0" y="143.7" stroke="none" data-name="DynamoConditionBuilder" data-compartment="2">-formatValue(): object</text>
+
+</g>
+</g>
+</g>
+<g data-name="IConditionBuilder">
+<g fill="#eee8d5" stroke="#33322E" data-name="IConditionBuilder">
+<rect x="3019.0" y="68.5" height="32.0" width="151.0" data-name="IConditionBuilder"></rect>
+</g>
+<g transform="translate(3019, 68.5)" font-family="Helvetica" font-size="12pt" font-weight="bold" font-style="normal" data-name="IConditionBuilder" data-compartment="0">
+<g transform="translate(8, 8)" fill="#33322E" text-align="center" data-name="IConditionBuilder" data-compartment="0">
+<text x="67.5" y="14.1" stroke="none" text-anchor="middle" data-name="IConditionBuilder" data-compartment="0">IConditionBuilder</text>
+
+</g>
+</g>
+</g>
+<g data-name="DynamoConditionExpressionResult">
+<g fill="lightgray" stroke="#33322E" data-name="DynamoConditionExpressionResult">
+<rect x="3210.0" y="32.0" height="105.0" width="486.0" data-name="DynamoConditionExpressionResult"></rect>
+<path d="M3210.0 64.0 L3696.0 64.0" fill="none" data-name="DynamoConditionExpressionResult"></path>
+<path d="M3210.0 129.0 L3696.0 129.0" fill="none" data-name="DynamoConditionExpressionResult"></path>
+</g>
+<g transform="translate(3210, 32)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="DynamoConditionExpressionResult" data-compartment="0">
+<g transform="translate(8, 8)" fill="#33322E" text-align="center" data-name="DynamoConditionExpressionResult" data-compartment="0">
+<a id="src/services/database/condition-builder/implementations/dynamo/dynamo-condition-expression-result.ts.DynamoConditionExpressionResult" xlink:href="src/services/database/condition-builder/implementations/dynamo/dynamo-condition-expression-result.ts"><text x="235.0" y="14.1" stroke="none" text-anchor="middle" data-name="DynamoConditionExpressionResult" data-compartment="0">DynamoConditionExpressionResult</text></a>
+
+</g>
+</g>
+<g transform="translate(3210, 64)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="DynamoConditionExpressionResult" data-compartment="1">
+<g transform="translate(8, 8)" fill="#33322E" text-align="left" data-name="DynamoConditionExpressionResult" data-compartment="1">
+<text x="0.0" y="14.1" stroke="none" data-name="DynamoConditionExpressionResult" data-compartment="1">+ConditionExpression: string</text>
+<text x="0.0" y="30.3" stroke="none" data-name="DynamoConditionExpressionResult" data-compartment="1">+ExpressionAttributeNames: Record&lt;string, string&gt;</text>
+<text x="0.0" y="46.5" stroke="none" data-name="DynamoConditionExpressionResult" data-compartment="1">+ExpressionAttributeValues: Record&lt;string, AttributeValue&gt;</text>
+
+</g>
+</g>
+<g transform="translate(3210, 129)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="DynamoConditionExpressionResult" data-compartment="2">
+<g transform="translate(8, 8)" fill="#33322E" data-name="DynamoConditionExpressionResult" data-compartment="2">
+
+</g>
+</g>
+</g>
+<g data-name="DynamoReadRepositoryEventLogger&lt;T&gt;">
+<g fill="#eee8d5" stroke="#33322E" data-name="DynamoReadRepositoryEventLogger&lt;T&gt;">
+<rect x="3691.0" y="282.5" height="128.0" width="339.0" data-name="DynamoReadRepositoryEventLogger&lt;T&gt;"></rect>
+<path d="M3691.0 314.5 L4030.0 314.5" fill="none" data-name="DynamoReadRepositoryEventLogger&lt;T&gt;"></path>
+<path d="M3691.0 362.5 L4030.0 362.5" fill="none" data-name="DynamoReadRepositoryEventLogger&lt;T&gt;"></path>
+</g>
+<g transform="translate(3691, 282.5)" font-family="Helvetica" font-size="12pt" font-weight="bold" font-style="normal" data-name="DynamoReadRepositoryEventLogger&lt;T&gt;" data-compartment="0">
+<g transform="translate(8, 8)" fill="#33322E" text-align="center" data-name="DynamoReadRepositoryEventLogger&lt;T&gt;" data-compartment="0">
+<a id="src/services/database/repository/implementations/dynamo/dynamo-read-repository-event-logger.ts.DynamoReadRepositoryEventLogger&lt;T&gt;" xlink:href="src/services/database/repository/implementations/dynamo/dynamo-read-repository-event-logger.ts"><text x="161.5" y="14.1" stroke="none" text-anchor="middle" data-name="DynamoReadRepositoryEventLogger&lt;T&gt;" data-compartment="0">DynamoReadRepositoryEventLogger&lt;T&gt;</text></a>
+
+</g>
+</g>
+<g transform="translate(3691, 314.5)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="DynamoReadRepositoryEventLogger&lt;T&gt;" data-compartment="1">
+<g transform="translate(8, 8)" fill="#33322E" text-align="left" data-name="DynamoReadRepositoryEventLogger&lt;T&gt;" data-compartment="1">
+<text x="0.0" y="14.1" stroke="none" data-name="DynamoReadRepositoryEventLogger&lt;T&gt;" data-compartment="1">-logger: ILogger&lt;unknown&gt;</text>
+<text x="0.0" y="30.3" stroke="none" data-name="DynamoReadRepositoryEventLogger&lt;T&gt;" data-compartment="1">-tableName: string</text>
+
+</g>
+</g>
+<g transform="translate(3691, 362.5)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="DynamoReadRepositoryEventLogger&lt;T&gt;" data-compartment="2">
+<g transform="translate(8, 8)" fill="#33322E" text-align="left" data-name="DynamoReadRepositoryEventLogger&lt;T&gt;" data-compartment="2">
+<text x="0.0" y="14.1" stroke="none" data-name="DynamoReadRepositoryEventLogger&lt;T&gt;" data-compartment="2">+itemFetched(): void</text>
+<text x="0.0" y="30.3" stroke="none" data-name="DynamoReadRepositoryEventLogger&lt;T&gt;" data-compartment="2">+queryExecuted(): void</text>
+
+</g>
+</g>
+</g>
+<g data-name="IReadRepositoryEventLogger">
+<g fill="#eee8d5" stroke="#33322E" data-name="IReadRepositoryEventLogger">
+<rect x="3736.0" y="68.5" height="32.0" width="249.0" data-name="IReadRepositoryEventLogger"></rect>
+</g>
+<g transform="translate(3736, 68.5)" font-family="Helvetica" font-size="12pt" font-weight="bold" font-style="normal" data-name="IReadRepositoryEventLogger" data-compartment="0">
+<g transform="translate(8, 8)" fill="#33322E" text-align="center" data-name="IReadRepositoryEventLogger" data-compartment="0">
+<text x="116.5" y="14.1" stroke="none" text-anchor="middle" data-name="IReadRepositoryEventLogger" data-compartment="0">IReadRepositoryEventLogger</text>
+
+</g>
+</g>
+</g>
+<g data-name="DynamoReadRepository&lt;T&gt;">
+<g fill="#eee8d5" stroke="#33322E" data-name="DynamoReadRepository&lt;T&gt;">
+<rect x="4070.0" y="241.5" height="210.0" width="455.0" data-name="DynamoReadRepository&lt;T&gt;"></rect>
+<path d="M4070.0 273.5 L4525.0 273.5" fill="none" data-name="DynamoReadRepository&lt;T&gt;"></path>
+<path d="M4070.0 354.5 L4525.0 354.5" fill="none" data-name="DynamoReadRepository&lt;T&gt;"></path>
+</g>
+<g transform="translate(4070, 241.5)" font-family="Helvetica" font-size="12pt" font-weight="bold" font-style="normal" data-name="DynamoReadRepository&lt;T&gt;" data-compartment="0">
+<g transform="translate(8, 8)" fill="#33322E" text-align="center" data-name="DynamoReadRepository&lt;T&gt;" data-compartment="0">
+<a id="src/services/database/repository/implementations/dynamo/dynamo-read-repository.ts.DynamoReadRepository&lt;T&gt;" xlink:href="src/services/database/repository/implementations/dynamo/dynamo-read-repository.ts"><text x="219.5" y="14.1" stroke="none" text-anchor="middle" data-name="DynamoReadRepository&lt;T&gt;" data-compartment="0">DynamoReadRepository&lt;T&gt;</text></a>
+
+</g>
+</g>
+<g transform="translate(4070, 273.5)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="DynamoReadRepository&lt;T&gt;" data-compartment="1">
+<g transform="translate(8, 8)" fill="#33322E" text-align="left" data-name="DynamoReadRepository&lt;T&gt;" data-compartment="1">
+<text x="0.0" y="14.1" stroke="none" data-name="DynamoReadRepository&lt;T&gt;" data-compartment="1">-client: DynamoDBClient</text>
+<text x="0.0" y="30.3" stroke="none" data-name="DynamoReadRepository&lt;T&gt;" data-compartment="1">-tableName: string</text>
+<text x="0.0" y="46.5" stroke="none" data-name="DynamoReadRepository&lt;T&gt;" data-compartment="1">-schema: DynamoSchema&lt;T&gt;</text>
+<text x="0.0" y="62.7" stroke="none" data-name="DynamoReadRepository&lt;T&gt;" data-compartment="1">-eventLogger: DynamoReadRepositoryEventLogger&lt;T&gt;</text>
+
+</g>
+</g>
+<g transform="translate(4070, 354.5)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="DynamoReadRepository&lt;T&gt;" data-compartment="2">
+<g transform="translate(8, 8)" fill="#33322E" text-align="left" data-name="DynamoReadRepository&lt;T&gt;" data-compartment="2">
+<text x="0.0" y="14.1" stroke="none" data-name="DynamoReadRepository&lt;T&gt;" data-compartment="2">+getItem(): Promise&lt;T&gt;</text>
+<text x="0.0" y="30.3" stroke="none" data-name="DynamoReadRepository&lt;T&gt;" data-compartment="2">+query(): Promise&lt;{ items: T[]</text>
+<text x="0.0" y="46.5" stroke="none" data-name="DynamoReadRepository&lt;T&gt;" data-compartment="2">lastEvaluatedKey?: Key</text>
+<text x="0.0" y="62.7" stroke="none" data-name="DynamoReadRepository&lt;T&gt;" data-compartment="2">}&gt;</text>
+<text x="0.0" y="78.9" stroke="none" data-name="DynamoReadRepository&lt;T&gt;" data-compartment="2">-validateKey(): void</text>
+
+</g>
+</g>
+</g>
+<g data-name="IReadRepository">
+<g fill="#eee8d5" stroke="#33322E" data-name="IReadRepository">
+<rect x="4223.5" y="68.5" height="32.0" width="148.0" data-name="IReadRepository"></rect>
+</g>
+<g transform="translate(4223.5, 68.5)" font-family="Helvetica" font-size="12pt" font-weight="bold" font-style="normal" data-name="IReadRepository" data-compartment="0">
+<g transform="translate(8, 8)" fill="#33322E" text-align="center" data-name="IReadRepository" data-compartment="0">
+<text x="66.0" y="14.1" stroke="none" text-anchor="middle" data-name="IReadRepository" data-compartment="0">IReadRepository</text>
+
+</g>
+</g>
+</g>
+<g data-name="DynamoWriteRepositoryEventLogger&lt;T&gt;">
+<g fill="#eee8d5" stroke="#33322E" data-name="DynamoWriteRepositoryEventLogger&lt;T&gt;">
+<rect x="4565.0" y="266.0" height="161.0" width="338.0" data-name="DynamoWriteRepositoryEventLogger&lt;T&gt;"></rect>
+<path d="M4565.0 298.0 L4903.0 298.0" fill="none" data-name="DynamoWriteRepositoryEventLogger&lt;T&gt;"></path>
+<path d="M4565.0 346.0 L4903.0 346.0" fill="none" data-name="DynamoWriteRepositoryEventLogger&lt;T&gt;"></path>
+</g>
+<g transform="translate(4565, 266)" font-family="Helvetica" font-size="12pt" font-weight="bold" font-style="normal" data-name="DynamoWriteRepositoryEventLogger&lt;T&gt;" data-compartment="0">
+<g transform="translate(8, 8)" fill="#33322E" text-align="center" data-name="DynamoWriteRepositoryEventLogger&lt;T&gt;" data-compartment="0">
+<a id="src/services/database/repository/implementations/dynamo/dynamo-write-repository-event-logger.ts.DynamoWriteRepositoryEventLogger&lt;T&gt;" xlink:href="src/services/database/repository/implementations/dynamo/dynamo-write-repository-event-logger.ts"><text x="161.0" y="14.1" stroke="none" text-anchor="middle" data-name="DynamoWriteRepositoryEventLogger&lt;T&gt;" data-compartment="0">DynamoWriteRepositoryEventLogger&lt;T&gt;</text></a>
+
+</g>
+</g>
+<g transform="translate(4565, 298)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="DynamoWriteRepositoryEventLogger&lt;T&gt;" data-compartment="1">
+<g transform="translate(8, 8)" fill="#33322E" text-align="left" data-name="DynamoWriteRepositoryEventLogger&lt;T&gt;" data-compartment="1">
+<text x="0.0" y="14.1" stroke="none" data-name="DynamoWriteRepositoryEventLogger&lt;T&gt;" data-compartment="1">-logger: ILogger&lt;unknown&gt;</text>
+<text x="0.0" y="30.3" stroke="none" data-name="DynamoWriteRepositoryEventLogger&lt;T&gt;" data-compartment="1">-tableName: string</text>
+
+</g>
+</g>
+<g transform="translate(4565, 346)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="DynamoWriteRepositoryEventLogger&lt;T&gt;" data-compartment="2">
+<g transform="translate(8, 8)" fill="#33322E" text-align="left" data-name="DynamoWriteRepositoryEventLogger&lt;T&gt;" data-compartment="2">
+<text x="0.0" y="14.1" stroke="none" data-name="DynamoWriteRepositoryEventLogger&lt;T&gt;" data-compartment="2">+itemCreated(): void</text>
+<text x="0.0" y="30.3" stroke="none" data-name="DynamoWriteRepositoryEventLogger&lt;T&gt;" data-compartment="2">+itemDeleted(): void</text>
+<text x="0.0" y="46.5" stroke="none" data-name="DynamoWriteRepositoryEventLogger&lt;T&gt;" data-compartment="2">+itemUpdated(): void</text>
+<text x="0.0" y="62.7" stroke="none" data-name="DynamoWriteRepositoryEventLogger&lt;T&gt;" data-compartment="2">+batchWritePerformed(): void</text>
+
+</g>
+</g>
+</g>
+<g data-name="IWriteRepositoryEventLogger">
+<g fill="#eee8d5" stroke="#33322E" data-name="IWriteRepositoryEventLogger">
+<rect x="4610.0" y="68.5" height="32.0" width="248.0" data-name="IWriteRepositoryEventLogger"></rect>
+</g>
+<g transform="translate(4610, 68.5)" font-family="Helvetica" font-size="12pt" font-weight="bold" font-style="normal" data-name="IWriteRepositoryEventLogger" data-compartment="0">
+<g transform="translate(8, 8)" fill="#33322E" text-align="center" data-name="IWriteRepositoryEventLogger" data-compartment="0">
+<text x="116.0" y="14.1" stroke="none" text-anchor="middle" data-name="IWriteRepositoryEventLogger" data-compartment="0">IWriteRepositoryEventLogger</text>
+
+</g>
+</g>
+</g>
+<g data-name="DynamoWriteRepository&lt;T&gt;">
+<g fill="#eee8d5" stroke="#33322E" data-name="DynamoWriteRepository&lt;T&gt;">
+<rect x="4943.0" y="257.5" height="178.0" width="454.0" data-name="DynamoWriteRepository&lt;T&gt;"></rect>
+<path d="M4943.0 289.5 L5397.0 289.5" fill="none" data-name="DynamoWriteRepository&lt;T&gt;"></path>
+<path d="M4943.0 370.5 L5397.0 370.5" fill="none" data-name="DynamoWriteRepository&lt;T&gt;"></path>
+</g>
+<g transform="translate(4943, 257.5)" font-family="Helvetica" font-size="12pt" font-weight="bold" font-style="normal" data-name="DynamoWriteRepository&lt;T&gt;" data-compartment="0">
+<g transform="translate(8, 8)" fill="#33322E" text-align="center" data-name="DynamoWriteRepository&lt;T&gt;" data-compartment="0">
+<a id="src/services/database/repository/implementations/dynamo/dynamo-write-repository.ts.DynamoWriteRepository&lt;T&gt;" xlink:href="src/services/database/repository/implementations/dynamo/dynamo-write-repository.ts"><text x="219.0" y="14.1" stroke="none" text-anchor="middle" data-name="DynamoWriteRepository&lt;T&gt;" data-compartment="0">DynamoWriteRepository&lt;T&gt;</text></a>
+
+</g>
+</g>
+<g transform="translate(4943, 289.5)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="DynamoWriteRepository&lt;T&gt;" data-compartment="1">
+<g transform="translate(8, 8)" fill="#33322E" text-align="left" data-name="DynamoWriteRepository&lt;T&gt;" data-compartment="1">
+<text x="0.0" y="14.1" stroke="none" data-name="DynamoWriteRepository&lt;T&gt;" data-compartment="1">-client: DynamoDBClient</text>
+<text x="0.0" y="30.3" stroke="none" data-name="DynamoWriteRepository&lt;T&gt;" data-compartment="1">-tableName: string</text>
+<text x="0.0" y="46.5" stroke="none" data-name="DynamoWriteRepository&lt;T&gt;" data-compartment="1">-schema: DynamoSchema&lt;T&gt;</text>
+<text x="0.0" y="62.7" stroke="none" data-name="DynamoWriteRepository&lt;T&gt;" data-compartment="1">-eventLogger: DynamoWriteRepositoryEventLogger&lt;T&gt;</text>
+
+</g>
+</g>
+<g transform="translate(4943, 370.5)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="DynamoWriteRepository&lt;T&gt;" data-compartment="2">
+<g transform="translate(8, 8)" fill="#33322E" text-align="left" data-name="DynamoWriteRepository&lt;T&gt;" data-compartment="2">
+<text x="0.0" y="14.1" stroke="none" data-name="DynamoWriteRepository&lt;T&gt;" data-compartment="2">+putItem(): Promise&lt;T&gt;</text>
+<text x="0.0" y="30.3" stroke="none" data-name="DynamoWriteRepository&lt;T&gt;" data-compartment="2">+deleteItem(): Promise&lt;void&gt;</text>
+<text x="0.0" y="46.5" stroke="none" data-name="DynamoWriteRepository&lt;T&gt;" data-compartment="2">+update(): Promise&lt;T&gt;</text>
+
+</g>
+</g>
+</g>
+<g data-name="IWriteRepository">
+<g fill="#eee8d5" stroke="#33322E" data-name="IWriteRepository">
+<rect x="5096.5" y="68.5" height="32.0" width="147.0" data-name="IWriteRepository"></rect>
+</g>
+<g transform="translate(5096.5, 68.5)" font-family="Helvetica" font-size="12pt" font-weight="bold" font-style="normal" data-name="IWriteRepository" data-compartment="0">
+<g transform="translate(8, 8)" fill="#33322E" text-align="center" data-name="IWriteRepository" data-compartment="0">
+<text x="65.5" y="14.1" stroke="none" text-anchor="middle" data-name="IWriteRepository" data-compartment="0">IWriteRepository</text>
+
+</g>
+</g>
+</g>
+<g data-name="DynamoSchema&lt;T&gt;">
+<g fill="#eee8d5" stroke="#33322E" data-name="DynamoSchema&lt;T&gt;">
+<rect x="5437.0" y="265.5" height="162.0" width="207.0" data-name="DynamoSchema&lt;T&gt;"></rect>
+<path d="M5437.0 297.5 L5644.0 297.5" fill="none" data-name="DynamoSchema&lt;T&gt;"></path>
+<path d="M5437.0 362.5 L5644.0 362.5" fill="none" data-name="DynamoSchema&lt;T&gt;"></path>
+</g>
+<g transform="translate(5437, 265.5)" font-family="Helvetica" font-size="12pt" font-weight="bold" font-style="normal" data-name="DynamoSchema&lt;T&gt;" data-compartment="0">
+<g transform="translate(8, 8)" fill="#33322E" text-align="center" data-name="DynamoSchema&lt;T&gt;" data-compartment="0">
+<a id="src/services/database/schema/implementations/dynamo/dynamo-schema.ts.DynamoSchema&lt;T&gt;" xlink:href="src/services/database/schema/implementations/dynamo/dynamo-schema.ts"><text x="95.5" y="14.1" stroke="none" text-anchor="middle" data-name="DynamoSchema&lt;T&gt;" data-compartment="0">DynamoSchema&lt;T&gt;</text></a>
+
+</g>
+</g>
+<g transform="translate(5437, 297.5)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="DynamoSchema&lt;T&gt;" data-compartment="1">
+<g transform="translate(8, 8)" fill="#33322E" text-align="left" data-name="DynamoSchema&lt;T&gt;" data-compartment="1">
+<text x="0.0" y="14.1" stroke="none" data-name="DynamoSchema&lt;T&gt;" data-compartment="1">-tableName: string</text>
+<text x="0.0" y="30.3" stroke="none" data-name="DynamoSchema&lt;T&gt;" data-compartment="1">-partitionKey: KeyConfig</text>
+<text x="0.0" y="46.5" stroke="none" data-name="DynamoSchema&lt;T&gt;" data-compartment="1">-sortKey?: KeyConfig</text>
+
+</g>
+</g>
+<g transform="translate(5437, 362.5)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="DynamoSchema&lt;T&gt;" data-compartment="2">
+<g transform="translate(8, 8)" fill="#33322E" text-align="left" data-name="DynamoSchema&lt;T&gt;" data-compartment="2">
+<text x="0.0" y="14.1" stroke="none" data-name="DynamoSchema&lt;T&gt;" data-compartment="2">+getTableName(): string</text>
+<text x="0.0" y="30.3" stroke="none" data-name="DynamoSchema&lt;T&gt;" data-compartment="2">+validateKey(): void</text>
+<text x="0.0" y="46.5" stroke="none" data-name="DynamoSchema&lt;T&gt;" data-compartment="2">-validateField(): void</text>
+
+</g>
+</g>
+</g>
+<g data-name="IDatabaseSchema">
+<g fill="#eee8d5" stroke="#33322E" data-name="IDatabaseSchema">
+<rect x="5460.0" y="68.5" height="32.0" width="161.0" data-name="IDatabaseSchema"></rect>
+</g>
+<g transform="translate(5460, 68.5)" font-family="Helvetica" font-size="12pt" font-weight="bold" font-style="normal" data-name="IDatabaseSchema" data-compartment="0">
+<g transform="translate(8, 8)" fill="#33322E" text-align="center" data-name="IDatabaseSchema" data-compartment="0">
+<text x="72.5" y="14.1" stroke="none" text-anchor="middle" data-name="IDatabaseSchema" data-compartment="0">IDatabaseSchema</text>
+
+</g>
+</g>
+</g>
+<g data-name="InvalidKeyError">
+<g fill="#eee8d5" stroke="#33322E" data-name="InvalidKeyError">
+<rect x="5661.0" y="60.5" height="48.0" width="137.0" data-name="InvalidKeyError"></rect>
+<path d="M5661.0 92.5 L5798.0 92.5" fill="none" data-name="InvalidKeyError"></path>
+<path d="M5661.0 100.5 L5798.0 100.5" fill="none" data-name="InvalidKeyError"></path>
+</g>
+<g transform="translate(5661, 60.5)" font-family="Helvetica" font-size="12pt" font-weight="bold" font-style="normal" data-name="InvalidKeyError" data-compartment="0">
+<g transform="translate(8, 8)" fill="#33322E" text-align="center" data-name="InvalidKeyError" data-compartment="0">
+<a id="src/services/database/schema/implementations/dynamo/invalid-key-error.ts.InvalidKeyError" xlink:href="src/services/database/schema/implementations/dynamo/invalid-key-error.ts"><text x="60.5" y="14.1" stroke="none" text-anchor="middle" data-name="InvalidKeyError" data-compartment="0">InvalidKeyError</text></a>
+
+</g>
+</g>
+<g transform="translate(5661, 92.5)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="InvalidKeyError" data-compartment="1">
+<g transform="translate(8, 8)" fill="#33322E" data-name="InvalidKeyError" data-compartment="1">
+
+</g>
+</g>
+<g transform="translate(5661, 100.5)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="InvalidKeyError" data-compartment="2">
+<g transform="translate(8, 8)" fill="#33322E" data-name="InvalidKeyError" data-compartment="2">
+
+</g>
+</g>
+</g>
+<g data-name="KeyConfig">
+<g fill="lightblue" stroke="#33322E" data-name="KeyConfig">
+<rect x="5838.0" y="40.5" height="88.0" width="213.0" data-name="KeyConfig"></rect>
+<path d="M5838.0 72.5 L6051.0 72.5" fill="none" data-name="KeyConfig"></path>
+<path d="M5838.0 120.5 L6051.0 120.5" fill="none" data-name="KeyConfig"></path>
+</g>
+<g transform="translate(5838, 40.5)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="KeyConfig" data-compartment="0">
+<g transform="translate(8, 8)" fill="#33322E" text-align="center" data-name="KeyConfig" data-compartment="0">
+<a id="src/services/database/schema/implementations/dynamo/key-config.ts.KeyConfig" xlink:href="src/services/database/schema/implementations/dynamo/key-config.ts"><text x="98.5" y="14.1" stroke="none" text-anchor="middle" data-name="KeyConfig" data-compartment="0">KeyConfig</text></a>
+
+</g>
+</g>
+<g transform="translate(5838, 72.5)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="KeyConfig" data-compartment="1">
+<g transform="translate(8, 8)" fill="#33322E" text-align="left" data-name="KeyConfig" data-compartment="1">
+<text x="0.0" y="14.1" stroke="none" data-name="KeyConfig" data-compartment="1">+name: string</text>
+<text x="0.0" y="30.3" stroke="none" data-name="KeyConfig" data-compartment="1">+type: &quot;string&quot; | &quot;number&quot;</text>
+
+</g>
+</g>
+<g transform="translate(5838, 120.5)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="KeyConfig" data-compartment="2">
+<g transform="translate(8, 8)" fill="#33322E" data-name="KeyConfig" data-compartment="2">
+
+</g>
+</g>
+</g>
+<g data-name="DynamoTransactionWrite">
+<g fill="#eee8d5" stroke="#33322E" data-name="DynamoTransactionWrite">
+<rect x="6069.5" y="274.0" height="145.0" width="218.0" data-name="DynamoTransactionWrite"></rect>
+<path d="M6069.5 306.0 L6287.5 306.0" fill="none" data-name="DynamoTransactionWrite"></path>
+<path d="M6069.5 354.0 L6287.5 354.0" fill="none" data-name="DynamoTransactionWrite"></path>
+</g>
+<g transform="translate(6069.5, 274)" font-family="Helvetica" font-size="12pt" font-weight="bold" font-style="normal" data-name="DynamoTransactionWrite" data-compartment="0">
+<g transform="translate(8, 8)" fill="#33322E" text-align="center" data-name="DynamoTransactionWrite" data-compartment="0">
+<a id="src/services/database/transactional-writer/implementations/dynamo/dynamo-transaction-write.ts.DynamoTransactionWrite" xlink:href="src/services/database/transactional-writer/implementations/dynamo/dynamo-transaction-write.ts"><text x="101.0" y="14.1" stroke="none" text-anchor="middle" data-name="DynamoTransactionWrite" data-compartment="0">DynamoTransactionWrite</text></a>
+
+</g>
+</g>
+<g transform="translate(6069.5, 306)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="DynamoTransactionWrite" data-compartment="1">
+<g transform="translate(8, 8)" fill="#33322E" text-align="left" data-name="DynamoTransactionWrite" data-compartment="1">
+<text x="0.0" y="14.1" stroke="none" data-name="DynamoTransactionWrite" data-compartment="1">-client: DynamoDBClient</text>
+<text x="0.0" y="30.3" stroke="none" data-name="DynamoTransactionWrite" data-compartment="1">-maxBatchItems: number</text>
+
+</g>
+</g>
+<g transform="translate(6069.5, 354)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="DynamoTransactionWrite" data-compartment="2">
+<g transform="translate(8, 8)" fill="#33322E" text-align="left" data-name="DynamoTransactionWrite" data-compartment="2">
+<text x="0.0" y="14.1" stroke="none" data-name="DynamoTransactionWrite" data-compartment="2">+write(): Promise&lt;void&gt;</text>
+<text x="0.0" y="30.3" stroke="none" data-name="DynamoTransactionWrite" data-compartment="2">-validateKeys(): void</text>
+<text x="0.0" y="46.5" stroke="none" data-name="DynamoTransactionWrite" data-compartment="2">-validateBatchSize(): void</text>
+
+</g>
+</g>
+</g>
+<g data-name="ITransactionalWriter">
+<g fill="#eee8d5" stroke="#33322E" data-name="ITransactionalWriter">
+<rect x="6091.0" y="68.5" height="32.0" width="175.0" data-name="ITransactionalWriter"></rect>
+</g>
+<g transform="translate(6091, 68.5)" font-family="Helvetica" font-size="12pt" font-weight="bold" font-style="normal" data-name="ITransactionalWriter" data-compartment="0">
+<g transform="translate(8, 8)" fill="#33322E" text-align="center" data-name="ITransactionalWriter" data-compartment="0">
+<text x="79.5" y="14.1" stroke="none" text-anchor="middle" data-name="ITransactionalWriter" data-compartment="0">ITransactionalWriter</text>
+
+</g>
+</g>
+</g>
+<g data-name="MaxItemsExceededError">
+<g fill="#eee8d5" stroke="#33322E" data-name="MaxItemsExceededError">
+<rect x="6306.0" y="48.5" height="72.0" width="286.0" data-name="MaxItemsExceededError"></rect>
+<path d="M6306.0 80.5 L6592.0 80.5" fill="none" data-name="MaxItemsExceededError"></path>
+<path d="M6306.0 112.5 L6592.0 112.5" fill="none" data-name="MaxItemsExceededError"></path>
+</g>
+<g transform="translate(6306, 48.5)" font-family="Helvetica" font-size="12pt" font-weight="bold" font-style="normal" data-name="MaxItemsExceededError" data-compartment="0">
+<g transform="translate(8, 8)" fill="#33322E" text-align="center" data-name="MaxItemsExceededError" data-compartment="0">
+<a id="src/services/database/transactional-writer/implementations/dynamo/max-item-exceeded-error.ts.MaxItemsExceededError" xlink:href="src/services/database/transactional-writer/implementations/dynamo/max-item-exceeded-error.ts"><text x="135.0" y="14.1" stroke="none" text-anchor="middle" data-name="MaxItemsExceededError" data-compartment="0">MaxItemsExceededError</text></a>
+
+</g>
+</g>
+<g transform="translate(6306, 80.5)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="MaxItemsExceededError" data-compartment="1">
+<g transform="translate(8, 8)" fill="#33322E" text-align="left" data-name="MaxItemsExceededError" data-compartment="1">
+<text x="0.0" y="14.1" stroke="none" data-name="MaxItemsExceededError" data-compartment="1">+name: &quot;MaxItemsExceededError&quot;</text>
+
+</g>
+</g>
+<g transform="translate(6306, 112.5)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="MaxItemsExceededError" data-compartment="2">
+<g transform="translate(8, 8)" fill="#33322E" data-name="MaxItemsExceededError" data-compartment="2">
+
+</g>
+</g>
+</g>
+<g data-name="DynamoUpdateBuilder">
+<g fill="#eee8d5" stroke="#33322E" data-name="DynamoUpdateBuilder">
+<rect x="6491.0" y="233.5" height="226.0" width="415.0" data-name="DynamoUpdateBuilder"></rect>
+<path d="M6491.0 265.5 L6906.0 265.5" fill="none" data-name="DynamoUpdateBuilder"></path>
+<path d="M6491.0 346.5 L6906.0 346.5" fill="none" data-name="DynamoUpdateBuilder"></path>
+</g>
+<g transform="translate(6491, 233.5)" font-family="Helvetica" font-size="12pt" font-weight="bold" font-style="normal" data-name="DynamoUpdateBuilder" data-compartment="0">
+<g transform="translate(8, 8)" fill="#33322E" text-align="center" data-name="DynamoUpdateBuilder" data-compartment="0">
+<a id="src/services/database/update-builder/implementations/dynamo/dynamo-update-builder.ts.DynamoUpdateBuilder" xlink:href="src/services/database/update-builder/implementations/dynamo/dynamo-update-builder.ts"><text x="199.5" y="14.1" stroke="none" text-anchor="middle" data-name="DynamoUpdateBuilder" data-compartment="0">DynamoUpdateBuilder</text></a>
+
+</g>
+</g>
+<g transform="translate(6491, 265.5)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="DynamoUpdateBuilder" data-compartment="1">
+<g transform="translate(8, 8)" fill="#33322E" text-align="left" data-name="DynamoUpdateBuilder" data-compartment="1">
+<text x="0.0" y="14.1" stroke="none" data-name="DynamoUpdateBuilder" data-compartment="1">-updateExpressions: string[]</text>
+<text x="0.0" y="30.3" stroke="none" data-name="DynamoUpdateBuilder" data-compartment="1">-expressionAttributeNames: Record&lt;string, string&gt;</text>
+<text x="0.0" y="46.5" stroke="none" data-name="DynamoUpdateBuilder" data-compartment="1">-expressionAttributeValues: Record&lt;string, any&gt;</text>
+<text x="0.0" y="62.7" stroke="none" data-name="DynamoUpdateBuilder" data-compartment="1">-index: number</text>
+
+</g>
+</g>
+<g transform="translate(6491, 346.5)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="DynamoUpdateBuilder" data-compartment="2">
+<g transform="translate(8, 8)" fill="#33322E" text-align="left" data-name="DynamoUpdateBuilder" data-compartment="2">
+<text x="0.0" y="14.1" stroke="none" data-name="DynamoUpdateBuilder" data-compartment="2">+set(): DynamoUpdateBuilder</text>
+<text x="0.0" y="30.3" stroke="none" data-name="DynamoUpdateBuilder" data-compartment="2">+remove(): DynamoUpdateBuilder</text>
+<text x="0.0" y="46.5" stroke="none" data-name="DynamoUpdateBuilder" data-compartment="2">+add(): DynamoUpdateBuilder</text>
+<text x="0.0" y="62.7" stroke="none" data-name="DynamoUpdateBuilder" data-compartment="2">+build(): DynamoUpdateExpressionResult</text>
+<text x="0.0" y="78.9" stroke="none" data-name="DynamoUpdateBuilder" data-compartment="2">-addUpdateExpression(): DynamoUpdateBuilder</text>
+<text x="0.0" y="95.1" stroke="none" data-name="DynamoUpdateBuilder" data-compartment="2">-formatValue(): object</text>
+
+</g>
+</g>
+</g>
+<g data-name="IUpdateBuilder">
+<g fill="#eee8d5" stroke="#33322E" data-name="IUpdateBuilder">
+<rect x="6632.0" y="68.5" height="32.0" width="133.0" data-name="IUpdateBuilder"></rect>
+</g>
+<g transform="translate(6632, 68.5)" font-family="Helvetica" font-size="12pt" font-weight="bold" font-style="normal" data-name="IUpdateBuilder" data-compartment="0">
+<g transform="translate(8, 8)" fill="#33322E" text-align="center" data-name="IUpdateBuilder" data-compartment="0">
+<text x="58.5" y="14.1" stroke="none" text-anchor="middle" data-name="IUpdateBuilder" data-compartment="0">IUpdateBuilder</text>
+
+</g>
+</g>
+</g>
+<g data-name="DynamoUpdateExpressionResult">
+<g fill="lightgray" stroke="#33322E" data-name="DynamoUpdateExpressionResult">
+<rect x="6805.0" y="32.0" height="105.0" width="420.0" data-name="DynamoUpdateExpressionResult"></rect>
+<path d="M6805.0 64.0 L7225.0 64.0" fill="none" data-name="DynamoUpdateExpressionResult"></path>
+<path d="M6805.0 129.0 L7225.0 129.0" fill="none" data-name="DynamoUpdateExpressionResult"></path>
+</g>
+<g transform="translate(6805, 32)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="DynamoUpdateExpressionResult" data-compartment="0">
+<g transform="translate(8, 8)" fill="#33322E" text-align="center" data-name="DynamoUpdateExpressionResult" data-compartment="0">
+<a id="src/services/database/update-builder/implementations/dynamo/dynamo-update-expression-result.ts.DynamoUpdateExpressionResult" xlink:href="src/services/database/update-builder/implementations/dynamo/dynamo-update-expression-result.ts"><text x="202.0" y="14.1" stroke="none" text-anchor="middle" data-name="DynamoUpdateExpressionResult" data-compartment="0">DynamoUpdateExpressionResult</text></a>
+
+</g>
+</g>
+<g transform="translate(6805, 64)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="DynamoUpdateExpressionResult" data-compartment="1">
+<g transform="translate(8, 8)" fill="#33322E" text-align="left" data-name="DynamoUpdateExpressionResult" data-compartment="1">
+<text x="0.0" y="14.1" stroke="none" data-name="DynamoUpdateExpressionResult" data-compartment="1">+UpdateExpression: string</text>
+<text x="0.0" y="30.3" stroke="none" data-name="DynamoUpdateExpressionResult" data-compartment="1">+ExpressionAttributeNames: Record&lt;string, string&gt;</text>
+<text x="0.0" y="46.5" stroke="none" data-name="DynamoUpdateExpressionResult" data-compartment="1">+ExpressionAttributeValues: Record&lt;string, any&gt;</text>
+
+</g>
+</g>
+<g transform="translate(6805, 129)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="DynamoUpdateExpressionResult" data-compartment="2">
+<g transform="translate(8, 8)" fill="#33322E" data-name="DynamoUpdateExpressionResult" data-compartment="2">
+
+</g>
+</g>
+</g>
+</g>
+</g>
+</g>
+</g>
+</svg>

@@ -2,30 +2,33 @@ import { IConditionBuilder } from '@database/condition-builder/contracts/i-condi
 
 /**
  * @interface IReadRepository
- * @template T Type of the item to be read
- * @template K Type of the key used to identify items
- * @template C Type of the condition builder response (build result)
+ * @template T - The type of the item stored in the database.
+ * @template K - The type of the key used to uniquely identify an item.
+ * @template C - The type of the condition builder used for queries, extending IConditionBuilder<any>.
  *
  * @description
- * Interface for read-only database operations.
- * Provides methods to retrieve and query items from a database.
+ * Defines the contract for a repository that supports read-only operations,
+ * such as fetching a single item by key or querying multiple items using conditions.
  */
-export interface IReadRepository<T, K, C> {
+export interface IReadRepository<T, K, C extends IConditionBuilder<any>> {
   /**
    * Retrieves a single item by its key.
-   * @param {K} key The key of the item to retrieve.
-   * @returns {Promise<T | null>} The retrieved item or null if not found.
+   *
+   * @param key - The key used to locate the item.
+   * @returns A promise resolving to the item if found, or null otherwise.
    */
   getItem(key: K): Promise<T | null>;
 
   /**
-   * Queries the database using conditions.
-   * @param {IConditionBuilder<C>} condition The query conditions.
-   * @param {string} [indexName] Optional index name to query against.
-   * @returns {Promise<T[] | null>} Array of matching items or null if none found.
+   * Queries items from the database based on provided conditions.
+   *
+   * @param condition - A condition builder instance defining the query conditions.
+   * @param indexName - (Optional) The name of the secondary index to use for the query.
+   * @returns A promise resolving to an object containing the matched items and,
+   *          if pagination is required, the last evaluated key. Returns null if no items matched.
    */
   query(
-    condition: IConditionBuilder<C>,
+    condition: C,
     indexName?: string,
   ): Promise<{ items: T[]; lastEvaluatedKey?: K } | null>;
 }

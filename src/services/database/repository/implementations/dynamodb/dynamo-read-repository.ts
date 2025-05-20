@@ -1,6 +1,6 @@
 import { marshall, unmarshall } from '@aws-sdk/util-dynamodb';
 import { DynamoConditionBuilder } from '../../../condition-builder/implementations/dynamo/dynamo-condition-builder';
-import { DynamoSchema } from '../../../database-schema/implementations/dynamo/dynamo-schema';
+import { DynamoSchema } from '../../../schema/implementations/dynamo/dynamo-schema';
 import { IReadRepository } from '../../contracts/i-read-repository';
 import { DynamoReadRepositoryEventLogger } from './dynamo-read-repository-event-logger';
 import { Key } from './key';
@@ -15,12 +15,21 @@ import {
 } from '@aws-sdk/client-dynamodb';
 import { DynamoConditionExpressionResult } from '../../../condition-builder/implementations/dynamo/dynamo-condition-expression-result';
 
+/**
+ *
+ */
 export class DynamoReadRepository<T>
   implements IReadRepository<T, Key, DynamoConditionExpressionResult>
 {
   private readonly client: DynamoDBClient;
   private readonly tableName: string;
 
+  /**
+   *
+   * @param schema
+   * @param eventLogger
+   * @param region
+   */
   constructor(
     private readonly schema: DynamoSchema,
     private readonly eventLogger: DynamoReadRepositoryEventLogger<T>,
@@ -30,6 +39,10 @@ export class DynamoReadRepository<T>
     this.tableName = this.schema.getTableName();
   }
 
+  /**
+   *
+   * @param key
+   */
   async getItem(key: Key): Promise<T | null> {
     this.validateKey(key);
 
@@ -51,6 +64,14 @@ export class DynamoReadRepository<T>
     return item;
   }
 
+  /**
+   *
+   * @param condition
+   * @param indexName
+   * @param consistentRead
+   * @param limit
+   * @param exclusiveStartKey
+   */
   async query(
     condition: DynamoConditionBuilder,
     indexName?: string,
@@ -100,6 +121,10 @@ export class DynamoReadRepository<T>
     };
   }
 
+  /**
+   *
+   * @param key
+   */
   private validateKey(key: Key) {
     this.schema.validateKey(key);
   }

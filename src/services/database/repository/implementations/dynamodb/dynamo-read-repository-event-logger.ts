@@ -52,6 +52,7 @@ export class DynamoReadRepositoryEventLogger<T>
    * Logs a query execution event.
    *
    * @param {DynamoConditionExpressionResult} condition - The condition used in the query.
+   * @param conditions
    * @param {T[]} results - The list of items returned by the query.
    * @param {Key | undefined} lastEvaluatedKey - The key used for pagination, if any.
    */

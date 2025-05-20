@@ -11,7 +11,7 @@ import {
 import { marshall, unmarshall } from '@aws-sdk/util-dynamodb';
 import { IConditionBuilder } from '../../../condition-builder/contracts/i-condition-builder';
 import { DynamoConditionExpressionResult } from '../../../condition-builder/implementations/dynamo/dynamo-condition-expression-result';
-import { DynamoSchema } from '../../../database-schema/implementations/dynamo/dynamo-schema';
+import { DynamoSchema } from '../../../schema/implementations/dynamo/dynamo-schema';
 import { IUpdateBuilder } from '../../../update-builder/contracts/i-update-builder';
 import { DynamoUpdateExpressionResult } from '../../../update-builder/implementations/dynamo/dynamo-update-expression-result';
 import { IWriteRepository } from '../../contracts/i-write-repository';
@@ -21,6 +21,9 @@ import { merge } from 'lodash';
 
 type DynamoItem = Record<string, unknown>;
 
+/**
+ *
+ */
 export class DynamoWriteRepository<T extends DynamoItem>
   implements
     IWriteRepository<
@@ -33,6 +36,12 @@ export class DynamoWriteRepository<T extends DynamoItem>
   private readonly client: DynamoDBClient;
   private readonly tableName: string;
 
+  /**
+   *
+   * @param schema
+   * @param eventLogger
+   * @param region
+   */
   constructor(
     private readonly schema: DynamoSchema,
     private eventLogger: DynamoWriteRepositoryEventLogger<T>,
@@ -42,6 +51,10 @@ export class DynamoWriteRepository<T extends DynamoItem>
     this.tableName = this.schema.getTableName();
   }
 
+  /**
+   *
+   * @param item
+   */
   async putItem(item: T): Promise<T> {
     this.schema.validateKey(item);
 
@@ -59,6 +72,10 @@ export class DynamoWriteRepository<T extends DynamoItem>
     return item;
   }
 
+  /**
+   *
+   * @param key
+   */
   async deleteItem(key: Key): Promise<void> {
     this.schema.validateKey(key);
 
@@ -74,6 +91,12 @@ export class DynamoWriteRepository<T extends DynamoItem>
     this.eventLogger.itemDeleted(key);
   }
 
+  /**
+   *
+   * @param update
+   * @param key
+   * @param condition
+   */
   async update(
     update: IUpdateBuilder<DynamoUpdateExpressionResult>,
     key: Key,

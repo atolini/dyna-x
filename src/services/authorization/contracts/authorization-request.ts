@@ -16,7 +16,7 @@
  */
 export interface AuthorizationRequest<A, I, C, R> {
   /** The identifier of the entity (e.g., user ID) making the request. */
-  entityId: I;
+  entity: I;
 
   /** The action being requested (e.g., 'create', 'delete'). */
   action: A;
@@ -25,5 +25,5 @@ export interface AuthorizationRequest<A, I, C, R> {
   context?: C;
 
   /** The identifier of the resource being accessed (e.g., an object ID or ARN). */
-  resourceId: R;
+  resource: R;
 }

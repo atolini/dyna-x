@@ -1,4 +1,4 @@
-import { ILogger } from '../../logger/contracts';
+import { ILogger } from '../../../services/logger/contracts';
 import { IResponseBuilder } from '../../response-builder/contracts';
 import { DynamoErrorHandler } from './handlers/dynamo-error-handler';
 import { IErrorActions } from '../contracts/i-error-actions';

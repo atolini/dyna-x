@@ -4,7 +4,7 @@ import {
   TransactWriteItemsCommand,
   TransactWriteItemsInput,
 } from '@aws-sdk/client-dynamodb';
-import { ILogger } from '../../../../../utils/logger/contracts';
+import { ILogger } from '../../../../logger/contracts';
 import { ITransactionalWriter } from '../../contracts/i-transactional-writer';
 import { MaxItemsExceededError } from '../../../repository/implementations/dynamodb/helpers/max-item-exceeded-error';
 import { v4 as uuidv4 } from 'uuid';

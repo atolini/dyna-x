@@ -1,4 +1,4 @@
-import { ILogger } from '../../../../../utils/logger/contracts';
+import { ILogger } from '../../../../logger/contracts';
 import { Event } from '../index';
 
 /**

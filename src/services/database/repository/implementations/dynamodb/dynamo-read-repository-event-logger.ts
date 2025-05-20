@@ -1,4 +1,4 @@
-import { ILogger } from '../../../../../utils/logger/contracts';
+import { ILogger } from '../../../../logger/contracts';
 import { DynamoConditionExpressionResult } from '../../../condition-builder/implementations/dynamo/dynamo-condition-expression-result';
 import { IReadRepositoryEventLogger } from '../../contracts/i-read-repository-event-logger';
 import { Key } from './key';

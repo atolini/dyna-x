@@ -19,6 +19,7 @@
       "@logger-service/*": ["logger-service/*"],
       "@storage/*": ["storage/*"],
       "@template/*": ["template/*"],
+      "@logger/*": ["logger/*"],
     }
   },
   "include": ["src/**/*", "_to_delete"],

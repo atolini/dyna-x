@@ -5,7 +5,7 @@ import {
 } from '@aws-sdk/client-eventbridge';
 import { DomainEvent } from '../../../../utils/domain-event/implementations';
 import { IDomainEventDispatcher } from '../../contracts';
-import { ILogger } from '../../../../utils/logger/contracts';
+import { ILogger } from '../../../logger/contracts';
 import { EventBridgeEventLogger } from './helpers/event-bridge-event-logger';
 
 /**

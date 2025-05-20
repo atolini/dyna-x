@@ -11,7 +11,7 @@ import {
   TransactionInProgressException,
 } from '@aws-sdk/client-dynamodb';
 import { IResponseBuilder } from '../../../../response-builder/contracts';
-import { ILogger } from '../../../../logger/contracts';
+import { ILogger } from '../../../../../services/logger/contracts';
 import { MaxItemsExceededError } from '../../../../../services/database/repository/implementations/dynamodb/helpers/max-item-exceeded-error';
 import { InvalidKeyError } from '../../../../../../_to_delete/dyna-x/schema';
 import { IErrorActions } from '../../../contracts';

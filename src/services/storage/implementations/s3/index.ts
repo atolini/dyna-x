@@ -7,7 +7,7 @@ import {
 } from '@aws-sdk/client-s3';
 import { Readable } from 'stream';
 import { IStorageService } from '../../contracts';
-import { ILogger } from '../../../../utils/logger/contracts';
+import { ILogger } from '../../../logger/contracts';
 import { S3StorageEventLogger } from './helpers/s3-storage-event-logger';
 
 /**

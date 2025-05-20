@@ -10,7 +10,7 @@ import {
   BatchAuthorizationResponse,
   IAVPAuthorizationEventLogger,
 } from '../../contracts';
-import { ILogger } from '../../../../utils/logger/contracts';
+import { ILogger } from '../../../logger/contracts';
 
 /**
  * @class AVPAuthorizationEventLogger

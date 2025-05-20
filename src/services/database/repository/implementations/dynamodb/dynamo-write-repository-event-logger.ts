@@ -1,4 +1,4 @@
-import { ILogger } from '../../../../../utils/logger/contracts';
+import { ILogger } from '../../../../logger/contracts';
 import { DynamoConditionExpressionResult } from '../../../condition-builder/implementations/dynamo/dynamo-condition-expression-result';
 import { DynamoUpdateExpressionResult } from '../../../update-builder/implementations/dynamo/dynamo-update-expression-result';
 import { IWriteRepositoryEventLogger } from '../../contracts/i-write-repository-event-logger';

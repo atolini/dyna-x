@@ -1,5 +1,5 @@
-import { IConditionBuilder } from '../../contracts/i-condition-builder';
-import { DynamoConditionExpressionResult } from './dynamo-condition-expression-result';
+import { IConditionBuilder } from '@database/condition-builder/contracts/i-condition-builder';
+import { DynamoConditionExpressionResult } from '@database/condition-builder/implementations/dynamo/dynamo-condition-expression-result';
 
 /**
  * @class DynamoConditionBuilder

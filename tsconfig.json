@@ -9,17 +9,17 @@
     "declaration": true,
     "declarationMap": true,
     "emitDeclarationOnly": false,
-    "baseUrl": "./src",
+    "baseUrl": "./src/services",
     "paths": {
-      "@auth/*": ["auth/*"], 
-      "@authorization/*": ["authorization/*"], 
+      "@auth/*": ["auth/*"],
+      "@authorization/*": ["authorization/*"],
       "@database/*": ["database/*"],
       "@email/*": ["email/*"],
       "@event-dispatcher/*": ["event-dispatcher/*"],
       "@logger-service/*": ["logger-service/*"],
       "@storage/*": ["storage/*"],
       "@template/*": ["template/*"],
-      "@logger/*": ["logger/*"],
+      "@logger/*": ["logger/*"]
     }
   },
   "include": ["src/**/*", "_to_delete"],

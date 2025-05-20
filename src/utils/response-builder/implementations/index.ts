@@ -1,9 +1,17 @@
 import { APIGatewayProxyResult } from 'aws-lambda';
 import { IResponseBuilder } from '../contracts';
 
+/**
+ *
+ */
 export class ResponseBuilder
   implements IResponseBuilder<APIGatewayProxyResult>
 {
+  /**
+   *
+   * @param message
+   * @param details
+   */
   forbidden(message = 'Forbidden', details?: unknown): APIGatewayProxyResult {
     return {
       statusCode: 403,
@@ -12,6 +20,11 @@ export class ResponseBuilder
     };
   }
 
+  /**
+   *
+   * @param message
+   * @param details
+   */
   tooManyRequests(
     message = 'Too Many Requests',
     details?: unknown,
@@ -23,6 +36,10 @@ export class ResponseBuilder
     };
   }
 
+  /**
+   *
+   * @param data
+   */
   ok<T>(data: T): APIGatewayProxyResult {
     return {
       statusCode: 200,
@@ -31,6 +48,10 @@ export class ResponseBuilder
     };
   }
 
+  /**
+   *
+   * @param data
+   */
   created<T>(data: T): APIGatewayProxyResult {
     return {
       statusCode: 201,
@@ -39,6 +60,11 @@ export class ResponseBuilder
     };
   }
 
+  /**
+   *
+   * @param message
+   * @param details
+   */
   badRequest(message: string, details?: unknown): APIGatewayProxyResult {
     return {
       statusCode: 400,
@@ -47,6 +73,10 @@ export class ResponseBuilder
     };
   }
 
+  /**
+   *
+   * @param message
+   */
   notFound(message: string): APIGatewayProxyResult {
     return {
       statusCode: 404,
@@ -55,6 +85,11 @@ export class ResponseBuilder
     };
   }
 
+  /**
+   *
+   * @param message
+   * @param details
+   */
   internalError(
     message = 'Internal Server Error',
     details?: unknown,
@@ -66,6 +101,12 @@ export class ResponseBuilder
     };
   }
 
+  /**
+   *
+   * @param statusCode
+   * @param success
+   * @param payload
+   */
   custom<T>(
     statusCode: number,
     success: boolean,

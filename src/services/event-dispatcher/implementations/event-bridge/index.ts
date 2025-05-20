@@ -63,6 +63,9 @@ export class EventBridgeDomainEventDispatcher
   private readonly service: string;
   private readonly eventsLogger: EventBridgeEventLogger;
 
+  /**
+   *
+   */
   constructor(
     eventBusName: string,
     service: string,

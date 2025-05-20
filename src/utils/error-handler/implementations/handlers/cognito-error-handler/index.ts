@@ -36,6 +36,9 @@ import {
 export class CognitoErrorHandler<T, R extends IResponseBuilder<T>>
   implements IErrorActions<T, R>
 {
+  /**
+   *
+   */
   canHandle(error: Error): boolean {
     return (
       error instanceof InternalErrorException ||
@@ -49,6 +52,9 @@ export class CognitoErrorHandler<T, R extends IResponseBuilder<T>>
     );
   }
 
+  /**
+   *
+   */
   handle(error: Error, logger: ILogger<any>, resBuilder: R): T {
     if (error instanceof UserNotFoundException) {
       logger.error({

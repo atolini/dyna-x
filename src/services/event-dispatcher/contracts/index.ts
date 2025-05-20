@@ -1,5 +1,6 @@
 /**
  * @interface IDomainEventDispatcher
+ * @template E - The type of the domain event to be dispatched.
  *
  * @description
  * Contract for dispatching domain events within a system.
@@ -9,21 +10,6 @@
  * abstracts the mechanism of dispatching, allowing implementations for different transport
  * mechanisms such as in-memory event buses, message queues, or cloud event systems
  * like AWS EventBridge.
- *
- * @template E - The type of the domain event to be dispatched.
- *
- * @method publish
- * Dispatches a single domain event.
- *
- * @method publishAll
- * Dispatches an array of domain events.
- *
- * @example
- * class UserCreatedEvent { ... }
- *
- * const dispatcher: IDomainEventDispatcher<UserCreatedEvent> = new EventBridgeDomainEventDispatcher(...);
- * const event = new UserCreatedEvent(...);
- * await dispatcher.publish(event);
  */
 export interface IDomainEventDispatcher<E> {
   /**

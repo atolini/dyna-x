@@ -27,6 +27,9 @@ import {
 export class SESEmailErrorHandler<T, R extends IResponseBuilder<T>>
   implements IErrorActions<T, R>
 {
+  /**
+   *
+   */
   canHandle(error: Error): boolean {
     return (
       error instanceof AccountSendingPausedException ||
@@ -37,6 +40,9 @@ export class SESEmailErrorHandler<T, R extends IResponseBuilder<T>>
     );
   }
 
+  /**
+   *
+   */
   handle(error: Error, logger: ILogger<any>, resBuilder: R): T {
     const errorMap = [
       {

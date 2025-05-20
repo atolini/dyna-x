@@ -11,6 +11,6 @@
     "emitDeclarationOnly": false,
     "paths": {}
   },
-  "include": ["src/**/*"],
+  "include": ["src/**/*", "_to_delete"],
   "exclude": ["src/**/*.test.ts", "src/**/*.spec.ts", "node_modules"]
 }

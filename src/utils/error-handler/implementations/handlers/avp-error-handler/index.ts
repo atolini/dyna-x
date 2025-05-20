@@ -29,6 +29,9 @@ import {
 export class AVPAuthorizationErrorHandler<T, R extends IResponseBuilder<T>>
   implements IErrorActions<T, R>
 {
+  /**
+   *
+   */
   canHandle(error: Error): boolean {
     return (
       error instanceof ResourceNotFoundException ||
@@ -39,6 +42,9 @@ export class AVPAuthorizationErrorHandler<T, R extends IResponseBuilder<T>>
     );
   }
 
+  /**
+   *
+   */
   handle(error: Error, logger: ILogger<any>, resBuilder: R): T {
     const message = 'AVP Authorization operation failed';
 

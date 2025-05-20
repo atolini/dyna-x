@@ -18,7 +18,7 @@ import { ILogger } from '../contracts';
  *   userId: 'user-123'
  * };
  */
-interface LoggerContext {
+export interface LoggerContext {
   requestId: string;
   service: string;
   userId?: string;
@@ -100,7 +100,7 @@ export class Logger implements ILogger<LoggerContext> {
       level,
       timestamp: new Date().toISOString(),
       ...this.baseContext,
-      ...(typeof item === 'string' ? { message: item } : item),
+      ...(typeof item === 'string' ? { message: item } : { details: item }),
     };
 
     console.log(JSON.stringify(logEntry));

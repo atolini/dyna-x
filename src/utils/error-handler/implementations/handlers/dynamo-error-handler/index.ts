@@ -12,8 +12,8 @@ import {
 } from '@aws-sdk/client-dynamodb';
 import { IResponseBuilder } from '../../../../response-builder/contracts';
 import { ILogger } from '../../../../logger/contracts';
-import { MaxItemsExceededError } from '../../../../../services/database/implementations/dyna-x/errors/max-item-exceeded-error';
-import { InvalidKeyError } from '../../../../../services/database/implementations/dyna-x/schema';
+import { MaxItemsExceededError } from '../../../../../services/database/repository/implementations/dynamodb/helpers/max-item-exceeded-error';
+import { InvalidKeyError } from '../../../../../../_to_delete/dyna-x/schema';
 import { IErrorActions } from '../../../contracts';
 
 /**
@@ -61,12 +61,18 @@ export class DynamoErrorHandler<T, R extends IResponseBuilder<T>>
     InvalidKeyError,
   ]);
 
+  /**
+   *
+   */
   canHandle(error: Error): boolean {
     return Array.from(this.retryableErrors).some(
       (errorType) => error instanceof errorType,
     );
   }
 
+  /**
+   *
+   */
   handle(error: Error, logger: ILogger<any>, resBuilder: R): T {
     const errorMap = [
       {

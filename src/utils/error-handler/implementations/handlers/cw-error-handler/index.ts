@@ -30,6 +30,9 @@ import {
 export class CloudWatchLogErrorHandler<T, R extends IResponseBuilder<T>>
   implements IErrorActions<T, R>
 {
+  /**
+   *
+   */
   canHandle(error: Error): boolean {
     return (
       error instanceof DataAlreadyAcceptedException ||
@@ -41,6 +44,9 @@ export class CloudWatchLogErrorHandler<T, R extends IResponseBuilder<T>>
     );
   }
 
+  /**
+   *
+   */
   handle(error: Error, logger: ILogger<any>, resBuilder: R): T {
     if (error instanceof ResourceNotFoundException) {
       logger.error({ name: error.name, message: error.message });

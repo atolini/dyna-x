@@ -35,6 +35,9 @@
 export abstract class DomainEvent<T> {
   private readonly createdAt: Date;
 
+  /**
+   *
+   */
   constructor() {
     this.createdAt = new Date();
   }

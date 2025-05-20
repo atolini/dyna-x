@@ -28,6 +28,9 @@ import {
 export class S3ErrorHandler<T, R extends IResponseBuilder<T>>
   implements IErrorActions<T, R>
 {
+  /**
+   *
+   */
   canHandle(error: Error): boolean {
     return (
       error instanceof EncryptionTypeMismatch ||
@@ -38,6 +41,9 @@ export class S3ErrorHandler<T, R extends IResponseBuilder<T>>
     );
   }
 
+  /**
+   *
+   */
   handle(error: Error, logger: ILogger<any>, resBuilder: R): T {
     const errorMap = [
       {

@@ -1,9 +1,4 @@
 import {
-  ActionIdentifier,
-  EntityIdentifier,
-  ContextDefinition,
-} from '@aws-sdk/client-verifiedpermissions';
-import {
   AuthorizationRequest,
   AuthorizationResponse,
   BatchAuthorizationRequest,
@@ -12,13 +7,17 @@ import {
 
 /**
  * @interface IAVPAuthorizationEventLogger
- *
+ * @template A The type that identifies the action (e.g., 'read', 'delete').
+ * @template I The type that identifies the identity or user (e.g., user ID).
+ * @template C The type that identifies the context of the request (e.g., roles, environment, metadata).
+ * @template R The type that identifies the resource (e.g., resource ID or ARN).
+ * 
  * @description
  * Defines the contract for an event logger that tracks authorization checks made via AWS Verified Permissions.
  *
  * This interface supports logging of both single and batch authorization decisions.
  */
-export interface IAVPAuthorizationEventLogger {
+export interface IAVPAuthorizationEventLogger<A, E, C, R>{
   /**
    * Logs a single authorization decision.
    *
@@ -27,12 +26,12 @@ export interface IAVPAuthorizationEventLogger {
    */
   authorizationChecked(
     request: AuthorizationRequest<
-      ActionIdentifier,
-      EntityIdentifier,
-      ContextDefinition,
-      EntityIdentifier
+      A,
+      E,
+      C,
+      R
     >,
-    response: AuthorizationResponse<EntityIdentifier>,
+    response: AuthorizationResponse<E>,
   ): void;
 
   /**
@@ -43,11 +42,11 @@ export interface IAVPAuthorizationEventLogger {
    */
   batchAuthorizationChecked(
     request: BatchAuthorizationRequest<
-      ActionIdentifier,
-      EntityIdentifier,
-      ContextDefinition,
-      EntityIdentifier
+      A,
+      E,
+      C,
+      R
     >,
-    response: BatchAuthorizationResponse<EntityIdentifier>,
+    response: BatchAuthorizationResponse<E>,
   ): void;
 }

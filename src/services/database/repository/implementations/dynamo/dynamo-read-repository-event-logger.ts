@@ -1,7 +1,7 @@
-import { ILogger } from '../../../../logger/contracts';
-import { DynamoConditionExpressionResult } from '../../../condition-builder/implementations/dynamo/dynamo-condition-expression-result';
-import { IReadRepositoryEventLogger } from '../../contracts/i-read-repository-event-logger';
-import { Key } from './key';
+import { ILogger } from '@logger/contracts';
+import { DynamoConditionExpressionResult } from '@database/condition-builder/implementations/dynamo/dynamo-condition-expression-result';
+import { IReadRepositoryEventLogger } from '@database/repository/contracts/i-read-repository-event-logger';
+import { Key } from '@database/repository/implementations/dynamo/key';
 
 /**
  * @class DynamoReadRepositoryEventLogger

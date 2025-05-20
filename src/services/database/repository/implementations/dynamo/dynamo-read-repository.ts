@@ -1,9 +1,3 @@
-import { marshall, unmarshall } from '@aws-sdk/util-dynamodb';
-import { DynamoConditionBuilder } from '../../../condition-builder/implementations/dynamo/dynamo-condition-builder';
-import { DynamoSchema } from '../../../schema/implementations/dynamo/dynamo-schema';
-import { IReadRepository } from '../../contracts/i-read-repository';
-import { DynamoReadRepositoryEventLogger } from './dynamo-read-repository-event-logger';
-import { Key } from './key';
 import {
   DynamoDBClient,
   GetItemCommand,
@@ -13,25 +7,38 @@ import {
   QueryCommandInput,
   QueryCommandOutput,
 } from '@aws-sdk/client-dynamodb';
-import { DynamoConditionExpressionResult } from '../../../condition-builder/implementations/dynamo/dynamo-condition-expression-result';
+import { marshall, unmarshall } from '@aws-sdk/util-dynamodb';
+import { DynamoConditionBuilder } from '@database/condition-builder/implementations/dynamo/dynamo-condition-builder';
+import { IReadRepository } from '@database/repository/contracts/i-read-repository';
+import { DynamoItem } from '@database/repository/implementations/dynamo/dynamo-item';
+import { DynamoReadRepositoryEventLogger } from '@database/repository/implementations/dynamo/dynamo-read-repository-event-logger';
+import { Key } from '@database/repository/implementations/dynamo/key';
+import { DynamoSchema } from '@database/schema/implementations/dynamo/dynamo-schema';
 
 /**
+ * @class DynamoReadRepository
+ * @template T The type of item stored in the DynamoDB table.
  *
+ * @classdesc
+ * Repository implementation for reading data from a DynamoDB table.
+ * This class uses the AWS SDK v3 for DynamoDB and supports item fetching
+ * and querying using a condition builder.
  */
-export class DynamoReadRepository<T>
-  implements IReadRepository<T, Key, DynamoConditionExpressionResult>
+export class DynamoReadRepository<T extends DynamoItem>
+  implements IReadRepository<T, Key, DynamoConditionBuilder>
 {
   private readonly client: DynamoDBClient;
   private readonly tableName: string;
 
   /**
+   * Constructs a new instance of DynamoReadRepository.
    *
-   * @param schema
-   * @param eventLogger
-   * @param region
+   * @param schema The schema used to validate and describe the table structure.
+   * @param eventLogger Logger used to track read events.
+   * @param region AWS region where the DynamoDB table is located.
    */
   constructor(
-    private readonly schema: DynamoSchema,
+    private readonly schema: DynamoSchema<T>,
     private readonly eventLogger: DynamoReadRepositoryEventLogger<T>,
     region: string,
   ) {
@@ -40,8 +47,10 @@ export class DynamoReadRepository<T>
   }
 
   /**
+   * Fetches a single item from the table using the provided key.
    *
-   * @param key
+   * @param key The primary key used to identify the item.
+   * @returns A promise that resolves to the item if found, or null if not found.
    */
   async getItem(key: Key): Promise<T | null> {
     this.validateKey(key);
@@ -65,12 +74,14 @@ export class DynamoReadRepository<T>
   }
 
   /**
+   * Executes a query operation on the table using the provided condition.
    *
-   * @param condition
-   * @param indexName
-   * @param consistentRead
-   * @param limit
-   * @param exclusiveStartKey
+   * @param condition A condition builder that defines the query expression.
+   * @param indexName Optional index name to query against a secondary index.
+   * @param consistentRead Whether to use strongly consistent reads (default: false).
+   * @param limit Optional limit on the number of items to return.
+   * @param exclusiveStartKey Optional key to start the query from (for pagination).
+   * @returns A promise that resolves to an object containing the items and an optional lastEvaluatedKey.
    */
   async query(
     condition: DynamoConditionBuilder,
@@ -122,8 +133,10 @@ export class DynamoReadRepository<T>
   }
 
   /**
+   * Validates the given key against the schema definition.
    *
-   * @param key
+   * @param key The key to validate.
+   * @throws Error if the key is invalid according to the schema.
    */
   private validateKey(key: Key) {
     this.schema.validateKey(key);

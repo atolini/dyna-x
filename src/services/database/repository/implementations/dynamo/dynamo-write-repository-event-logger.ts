@@ -1,8 +1,8 @@
-import { ILogger } from '../../../../logger/contracts';
-import { DynamoConditionExpressionResult } from '../../../condition-builder/implementations/dynamo/dynamo-condition-expression-result';
-import { DynamoUpdateExpressionResult } from '../../../update-builder/implementations/dynamo/dynamo-update-expression-result';
-import { IWriteRepositoryEventLogger } from '../../contracts/i-write-repository-event-logger';
-import { Key } from './key';
+import { ILogger } from '@logger/contracts';
+import { DynamoConditionExpressionResult } from '@database/condition-builder/implementations/dynamo/dynamo-condition-expression-result';
+import { DynamoUpdateExpressionResult } from '@database/update-builder/implementations/dynamo/dynamo-update-expression-result';
+import { IWriteRepositoryEventLogger } from '@database/repository/contracts/i-write-repository-event-logger';
+import { Key } from '@database/repository/implementations/dynamo/key';
 
 /**
  * @class DynamoWriteRepositoryEventLogger

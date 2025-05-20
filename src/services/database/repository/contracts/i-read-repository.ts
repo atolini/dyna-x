@@ -1,4 +1,4 @@
-import { IConditionBuilder } from '../../condition-builder/contracts/i-condition-builder';
+import { IConditionBuilder } from '@database/condition-builder/contracts/i-condition-builder';
 
 /**
  * @interface IReadRepository

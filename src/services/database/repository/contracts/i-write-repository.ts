@@ -1,5 +1,5 @@
-import { IConditionBuilder } from '../../condition-builder/contracts/i-condition-builder';
-import { IUpdateBuilder } from '../../update-builder/contracts/i-update-builder';
+import { IConditionBuilder } from '@database/condition-builder/contracts/i-condition-builder';
+import { IUpdateBuilder } from '@database/update-builder/contracts/i-update-builder';
 
 /**
  * @interface IWriteRepository

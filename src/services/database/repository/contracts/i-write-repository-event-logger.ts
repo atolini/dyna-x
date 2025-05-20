@@ -1,39 +1,44 @@
 /**
  * @interface IWriteRepositoryEventLogger
+ * @template T - The type representing an individual item in the repository.
+ * @template K - The type representing the key used to identify items.
+ * @template U - The type representing the update expression or object used during updates.
+ * @template C - The type representing conditions used for conditional operations.
+ *
  * @description
- * Interface for logging write operations on a repository, such as create, update, delete,
- * and batch write events.
+ * Defines the contract for logging write operations in a repository context, including
+ * creation, deletion, updates, and batch write events. This is useful for auditing,
+ * debugging, and monitoring purposes in systems interacting with databases like DynamoDB.
  */
-// Tipo de item
-// K chave
-// Updates format
-// C conditions format
 export interface IWriteRepositoryEventLogger<T, K, U, C> {
   /**
-   * Logs a single item creation or replacement event.
-   * @param item - The item that was put into the table.
+   * Logs an event for creating or replacing a single item in the repository.
+   *
+   * @param {T} item - The item that was added or replaced in the repository.
    */
   itemCreated(item: T): void;
 
   /**
-   * Logs a deletion event.
-   * @param key - The key of the item that was deleted.
+   * Logs an event when a single item is deleted from the repository.
+   *
+   * @param {K} key - The key identifying the item that was deleted.
    */
   itemDeleted(key: K): void;
 
   /**
-   * Logs an update event.
-   * @param key - The key of the item being updated.
-   * @param updates - The update expression object.
-   * @param conditions - (Optional) Conditions applied to the update.
+   * Logs an event for updating a single item in the repository.
+   *
+   * @param {K} key - The key identifying the item to be updated.
+   * @param {U} updates - The update instructions or object.
+   * @param {C} [conditions] - Optional conditions that were applied to the update operation.
    */
   itemUpdated(key: K, updates: U, conditions?: C): void;
 
   /**
-   * Logs a batch write operation.
-   * @param putItems - Items that were inserted or replaced.
-   * @param deleteKeys - Keys of items that were deleted.
-   * @param unprocessedItems - (Optional) Items that were not processed in the batch.
+   * Logs an event for a batch write operation involving multiple items.
+   *
+   * @param {T[]} putItems - The list of items that were inserted or replaced.
+   * @param {K[]} deleteKeys - The list of keys identifying the items that were deleted.
    */
   batchWritePerformed(putItems: T[], deleteKeys: K[]): void;
 }

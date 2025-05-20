@@ -1,4 +1,4 @@
-import { TransactionalWriteUnit } from './transactional-write-unit';
+import { ITransactionalWriteUnit } from './i-transactional-write-unit';
 
 /**
  * @interface ITransactionalWriter
@@ -22,5 +22,5 @@ export interface ITransactionalWriter<Container, Item> {
    * @returns A promise that resolves when the transactional write operation completes successfully,
    *          or rejects if the transaction fails.
    */
-  write(units: TransactionalWriteUnit<Container, Item>[]): Promise<void>;
+  write(units: ITransactionalWriteUnit<Container, Item>[]): Promise<void>;
 }

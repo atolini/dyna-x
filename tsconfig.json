@@ -9,7 +9,17 @@
     "declaration": true,
     "declarationMap": true,
     "emitDeclarationOnly": false,
-    "paths": {}
+    "baseUrl": "./src",
+    "paths": {
+      "@auth/*": ["auth/*"], 
+      "@authorization/*": ["authorization/*"], 
+      "@database/*": ["database/*"],
+      "@email/*": ["email/*"],
+      "@event-dispatcher/*": ["event-dispatcher/*"],
+      "@logger-service/*": ["logger-service/*"],
+      "@storage/*": ["storage/*"],
+      "@template/*": ["template/*"],
+    }
   },
   "include": ["src/**/*", "_to_delete"],
   "exclude": ["src/**/*.test.ts", "src/**/*.spec.ts", "node_modules"]

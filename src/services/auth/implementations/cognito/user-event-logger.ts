@@ -18,7 +18,7 @@ import { IUserEventLogger } from '../../contracts';
  * const eventLogger = new UserEventLogger(logger, 'us-east-1_example');
  * eventLogger.userCreated('john.doe', [{ Name: 'email', Value: 'john.doe@example.com' }]);
  */
-export class UserEventLogger implements IUserEventLogger {
+export class UserEventLogger implements IUserEventLogger<AttributeType[]> {
   private logger: ILogger<unknown>;
   private readonly userPoolId: string;
 

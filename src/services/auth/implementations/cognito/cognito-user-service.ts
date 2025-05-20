@@ -47,7 +47,7 @@ import {
 export class CognitoUserService implements IUserService<AttributeType> {
   private readonly client: CognitoIdentityProviderClient;
   private readonly userPoolId: string;
-  private readonly eventLogger: IUserEventLogger;
+  private readonly eventLogger: IUserEventLogger<AttributeType[]>;
 
   /**
    * Creates an instance of CognitoUserService.
@@ -64,7 +64,7 @@ export class CognitoUserService implements IUserService<AttributeType> {
    */
   constructor(
     userPoolId: string,
-    eventLogger: IUserEventLogger,
+    eventLogger: IUserEventLogger<AttributeType[]>,
     region?: string,
   ) {
     this.client = new CognitoIdentityProviderClient(region ? { region } : {});

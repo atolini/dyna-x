@@ -9,17 +9,18 @@
     "declaration": true,
     "declarationMap": true,
     "emitDeclarationOnly": false,
-    "baseUrl": "./src/services",
+    "baseUrl": "./src",
     "paths": {
-      "@auth/*": ["auth/*"],
-      "@authorization/*": ["authorization/*"],
-      "@database/*": ["database/*"],
-      "@email/*": ["email/*"],
-      "@event-dispatcher/*": ["event-dispatcher/*"],
-      "@logger-service/*": ["logger-service/*"],
-      "@storage/*": ["storage/*"],
-      "@template/*": ["template/*"],
-      "@logger/*": ["logger/*"]
+      "@auth/*": ["services/auth/*"],
+      "@authorization/*": ["services/authorization/*"],
+      "@database/*": ["services/database/*"],
+      "@email/*": ["services/email/*"],
+      "@event-dispatcher/*": ["services/event-dispatcher/*"],
+      "@logger-service/*": ["services/logger-service/*"],
+      "@storage/*": ["services/storage/*"],
+      "@template/*": ["services/template/*"],
+      "@logger/*": ["services/logger/*"],
+      "@event/*": ["utils/event/*"]
     }
   },
   "include": ["src/**/*", "_to_delete"],

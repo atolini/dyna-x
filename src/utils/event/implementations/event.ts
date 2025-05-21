@@ -1,4 +1,4 @@
-import { IEvent } from "@event/contracts/i-event";
+import { IEvent } from '@event/contracts/i-event';
 
 /**
  * @class DomainEvent
@@ -56,9 +56,9 @@ export abstract class DomainEvent implements IEvent {
    * containing all its own enumerable properties.
    * Useful for sending or logging event data in a transport-safe format.
    */
- public getEvent(): object {
-  return JSON.parse(JSON.stringify(this));
-}
+  public getEvent(): object {
+    return JSON.parse(JSON.stringify(this));
+  }
 
   /**
    * Returns the type of the event, which is the name of the class.

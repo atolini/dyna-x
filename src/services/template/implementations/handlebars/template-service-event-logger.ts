@@ -1,4 +1,5 @@
 import { ILogger } from '@logger/contracts';
+import { ITemplateServiceEventLogger } from '@template/contracts/i-template-service-event-logger';
 
 /**
  * @class TemplateEventLogger
@@ -15,7 +16,7 @@ import { ILogger } from '@logger/contracts';
  * eventLogger.templateInitialized('<h1>{{title}}</h1>');
  * eventLogger.templateCompiled({ title: 'Hello' });
  */
-export class TemplateEventLogger {
+export class TemplateEventLogger implements ITemplateServiceEventLogger {
   private logger: ILogger<unknown>;
 
   /**

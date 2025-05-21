@@ -1,6 +1,6 @@
 import { TemplateDelegate, compile } from 'handlebars';
 import { ITemplateService } from '../../contracts';
-import { TemplateEventLogger } from './helpers/template-event-logger';
+import { TemplateEventLogger } from './template-service-event-logger';
 import { ILogger } from '@logger/contracts';
 
 /**

@@ -11,7 +11,7 @@
     "emitDeclarationOnly": false,
     "baseUrl": "./src",
     "paths": {
-      "@auth/*": ["services/auth/*"],
+      "@user-directory/*": ["services/user-directory/*"],
       "@authorization/*": ["services/authorization/*"],
       "@database/*": ["services/database/*"],
       "@email/*": ["services/email/*"],
@@ -20,7 +20,9 @@
       "@file-storage/*": ["services/file-storage/*"],
       "@template/*": ["services/template/*"],
       "@logger/*": ["services/logger/*"],
-      "@event/*": ["utils/event/*"]
+      "@event/*": ["utils/event/*"],
+      "@response-builder/*": ["utils/response-builder/*"],
+      "@error-handler/*": ["utils/error-handler/*"]
     }
   },
   "include": ["src/**/*", "_to_delete"],

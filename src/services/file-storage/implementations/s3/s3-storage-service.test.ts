@@ -8,13 +8,13 @@ import {
 } from '@aws-sdk/client-s3';
 import { Readable } from 'stream';
 import { S3StorageService } from './';
-import { IStorageService } from '../../contracts';
+import { IFileStorageService } from '../../contracts';
 
 describe('S3StorageService', () => {
   const s3Mock = mockClient(S3Client);
   const bucketName = 'test-bucket';
   const region = 'us-east-1';
-  let storageService: IStorageService;
+  let storageService: IFileStorageService;
 
   beforeEach(() => {
     s3Mock.reset();

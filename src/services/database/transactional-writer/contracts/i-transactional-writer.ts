@@ -1,4 +1,4 @@
-import { ITransactionalWriteUnit } from './i-transactional-write-unit';
+import { ITransactionalWriteUnit } from '.';
 
 /**
  * @interface ITransactionalWriter

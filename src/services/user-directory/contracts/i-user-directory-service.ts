@@ -7,7 +7,7 @@ import { CreateUserInput, DeleteUserInput, UpdateUserAttributesInput } from '.';
  * @description
  * Interface for user service operations such as creating, updating, and deleting users.
  */
-export interface IUserService<T> {
+export interface IUserDirectoryService<T> {
   /**
    * Creates a new user with the specified input.
    *

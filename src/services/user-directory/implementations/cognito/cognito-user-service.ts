@@ -7,7 +7,7 @@ import {
 } from '@aws-sdk/client-cognito-identity-provider';
 
 import {
-  IUserService,
+  IUserDirectoryService,
   CreateUserInput,
   UpdateUserAttributesInput,
   DeleteUserInput,
@@ -16,7 +16,7 @@ import {
 
 /**
  * @class CognitoUserService
- * @implements {IUserService<AttributeType>}
+ * @implements {IUserDirectoryService<AttributeType>}
  *
  * @classdesc
  * Service class for managing users in an AWS Cognito User Pool using administrative operations.
@@ -44,7 +44,7 @@ import {
  *   suppressMessage: true
  * });
  */
-export class CognitoUserService implements IUserService<AttributeType> {
+export class CognitoUserService implements IUserDirectoryService<AttributeType> {
   private readonly client: CognitoIdentityProviderClient;
   private readonly userPoolId: string;
   private readonly eventLogger: IUserEventLogger<AttributeType[]>;

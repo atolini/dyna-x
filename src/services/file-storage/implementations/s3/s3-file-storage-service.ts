@@ -6,13 +6,15 @@ import {
   ListObjectsV2Command,
 } from '@aws-sdk/client-s3';
 import { Readable } from 'stream';
-import { IStorageService } from '../../contracts';
-import { ILogger } from '../../../logger/contracts';
-import { S3StorageEventLogger } from './helpers/s3-storage-event-logger';
+import {
+  IFileStorageService,
+  IFileStorageServiceEventLogger,
+} from '@file-storage/contracts';
+import { S3StorageEventLogger } from '@file-storage/implementations/s3';
 
 /**
  * @class S3StorageService
- * @implements {IStorageService}
+ * @implements {IFileStorageService}
  *
  * @classdesc
  * AWS S3 implementation of the IStorageService interface for file storage operations.
@@ -25,10 +27,8 @@ import { S3StorageEventLogger } from './helpers/s3-storage-event-logger';
  * const storage = new S3StorageService('my-bucket', 'us-east-1');
  * await storage.uploadFile('folder/file.txt', 'content', 'text/plain');
  */
-export class S3StorageService implements IStorageService {
+export class S3StorageService implements IFileStorageService {
   private s3: S3Client;
-  private bucketName: string;
-  private readonly eventsLogger: S3StorageEventLogger;
 
   /**
    * Constructs a new instance of S3StorageService.
@@ -36,10 +36,12 @@ export class S3StorageService implements IStorageService {
    * @param {string} bucketName - The name of the S3 bucket to operate on.
    * @param {string} [region] - AWS region for the S3 client (optional).
    */
-  constructor(bucketName: string, logger: ILogger<unknown>, region?: string) {
+  constructor(
+    private readonly bucketName: string,
+    private readonly eventLogger: IFileStorageServiceEventLogger,
+    region?: string,
+  ) {
     this.s3 = new S3Client(region ? { region } : {});
-    this.bucketName = bucketName;
-    this.eventsLogger = new S3StorageEventLogger(logger, this.bucketName);
   }
 
   /**
@@ -70,7 +72,7 @@ export class S3StorageService implements IStorageService {
 
     await this.s3.send(command);
 
-    this.eventsLogger.fileUploaded(key, contentType);
+    this.eventLogger.fileUploaded(key, contentType);
   }
 
   /**
@@ -103,7 +105,7 @@ export class S3StorageService implements IStorageService {
       chunks.push(chunk);
     }
 
-    this.eventsLogger.fileRetrieved(key);
+    this.eventLogger.fileRetrieved(key);
 
     return Buffer.concat(chunks).toString('utf-8');
   }
@@ -125,7 +127,7 @@ export class S3StorageService implements IStorageService {
 
     await this.s3.send(command);
 
-    this.eventsLogger.fileDeleted(key);
+    this.eventLogger.fileDeleted(key);
   }
 
   /**
@@ -154,7 +156,7 @@ export class S3StorageService implements IStorageService {
       continuationToken = response.NextContinuationToken;
     } while (continuationToken);
 
-    this.eventsLogger.filesListed(keys);
+    this.eventLogger.filesListed(keys);
 
     return keys;
   }

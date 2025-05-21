@@ -1,6 +1,6 @@
 import { Readable } from 'stream';
 
-export interface IStorageService {
+export interface IFileStorageService {
   /**
    * Uploads a file to the storage.
    * @param key - The identifier (path) of the file in storage.

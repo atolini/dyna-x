@@ -1,5 +1,5 @@
 /**
- * @interface IDomainEventDispatcher
+ * @interface IEventDispatcher
  * @template E - The type of the domain event to be dispatched.
  *
  * @description
@@ -11,7 +11,7 @@
  * mechanisms such as in-memory event buses, message queues, or cloud event systems
  * like AWS EventBridge.
  */
-export interface IDomainEventDispatcher<E> {
+export interface IEventDispatcher<E> {
   /**
    * Publishes a single domain event.
    *

@@ -1,9 +1,6 @@
-import { ILogger } from '../../../services/logger/contracts';
-import { IResponseBuilder } from '../../response-builder/contracts';
-import { DynamoErrorHandler } from './handlers/dynamo-error-handler';
-import { IErrorActions } from '../contracts/i-error-actions';
-import { S3ErrorHandler } from './handlers/s3-error-handler';
-import { CognitoErrorHandler } from './handlers/cognito-error-handler';
+import { ILogger } from '@logger/contracts';
+import { IResponseBuilder } from '@response-builder/contracts';
+import { IErrorActions } from '@error-handler/contracts';
 
 /**
  * @class ErrorHandler
@@ -40,20 +37,16 @@ export class ErrorHandler<T, R extends IResponseBuilder<T>> {
    *
    * @param resBuilder - The response builder used to create error responses.
    * @param logger - Optional logger instance to log errors.
-   * @param handlers - Optional list of custom error handlers to process errors.
+   * @param handlers - List of custom error handlers to process errors.
    */
   constructor(
     resBuilder: R,
     logger: ILogger<any>,
-    handlers?: IErrorActions<T, R>[],
+    handlers: IErrorActions<T, R>[],
   ) {
     this.resBuilder = resBuilder;
     this.logger = logger;
-    this.handlers = handlers ?? [
-      new DynamoErrorHandler<T, R>(), // Default handler for DynamoDB-related errors
-      new S3ErrorHandler<T, R>(), // Default handler for S3-related errors
-      new CognitoErrorHandler<T, R>(), // Default handler for Cognito-related errors
-    ];
+    this.handlers = handlers ?? [];
   }
 
   /**

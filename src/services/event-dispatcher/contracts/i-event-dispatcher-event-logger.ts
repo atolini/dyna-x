@@ -11,13 +11,17 @@ export interface IEventDispatcherEventLogger<E> {
    * Logs a single event.
    *
    * @param event - The event instance to be logged.
+   * @param transport - The name or identifier of the transport used to dispatch the event
+   *                    (e.g., 'sns', 'kafka', 'rabbitmq').
    */
-  eventPublished(event: E): void;
+  eventPublished(event: E, transport: string): void;
 
   /**
    * Logs multiple events.
    *
    * @param events - An array of event instances to be logged.
+   * @param transport - The name or identifier of the transport used to dispatch the events
+   *                    (e.g., 'sns', 'kafka', 'rabbitmq').
    */
-  batchEventsPublished(events: E[]): void;
+  batchEventsPublished(events: E[], transport: string): void;
 }

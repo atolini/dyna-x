@@ -1,7 +1,7 @@
-import { DomainEvent } from "../../../../utils/event/implementations/event";
+import { IEvent } from "@event/contracts/i-event";
 
 /**
- * @interface IEvent
+ * @interface EventWrapper
  * @template T - Event type.
  *
  * @description
@@ -21,8 +21,8 @@ import { DomainEvent } from "../../../../utils/event/implementations/event";
  *   userId: 'user-789'
  * };
  */
-export interface IEvent<T = object>{
-  event: T;
+export interface EventWrapper {
+  event: IEvent;
   requestId: string;
   userId?: string;
 }

@@ -1,8 +1,9 @@
-import { ILogger } from '../../../../logger/contracts';
-import { Event } from '../index';
+import { IEventDispatcherEventLogger } from '@event-dispatcher/contracts/i-event-dispatcher-event-logger';
+import { ILogger } from '@logger/contracts';
+import { EventWrapper } from './event-wrapper';
 
 /**
- * @class EventBridgeEventLogger
+ * @class EventBridgeServiceEventLogger
  * @classdesc
  * Helper class responsible for logging domain events dispatched via {@link EventBridgeDomainEventDispatcher}.
  *
@@ -13,34 +14,29 @@ import { Event } from '../index';
  *
  * @example
  * const logger = new Logger<Context>({...}); // implements ILogger
- * const eventLogger = new EventBridgeEventLogger(logger, 'my-event-bus');
+ * const eventLogger = new EventBridgeServiceEventLogger(logger, 'my-event-bus');
  * eventLogger.eventPublished({ event: new UserCreatedEvent(...), requestId: 'abc-123' });
  */
-export class EventBridgeEventLogger {
-  private readonly logger: ILogger<unknown>;
-  private readonly eventBusName: string;
-
+export class EventBridgeServiceEventLogger
+  implements IEventDispatcherEventLogger<EventWrapper>
+{
   /**
-   * Constructs a new EventBridgeEventLogger.
+   * Constructs a new EventBridgeServiceEventLogger.
    *
-   * @param logger - A logger instance that implements the ILogger interface.
    * @param eventBusName - The name of the EventBridge bus where events are published.
    */
-  constructor(logger: ILogger<unknown>, eventBusName: string) {
-    this.logger = logger;
-    this.eventBusName = eventBusName;
-  }
+  constructor(private readonly logger: ILogger<any>) {}
 
   /**
    * Logs a single event dispatch.
    *
    * @param event - The event metadata and domain event instance.
    */
-  public eventPublished(event: Event): void {
+  public eventPublished(event: EventWrapper, transport: string): void {
     const { requestId, userId, event: domainEvent } = event;
     this.logger.info({
       message: 'Domain Event Published',
-      eventBusName: this.eventBusName,
+      eventBusName: transport,
       eventType: domainEvent.getType(),
       timestamp: domainEvent.getCreatedAt().toISOString(),
       payload: domainEvent.getEvent(),
@@ -54,7 +50,7 @@ export class EventBridgeEventLogger {
    *
    * @param events - An array of event metadata and domain event instances.
    */
-  public batchEventsPublished(events: Event[]): void {
-    events.forEach((event) => this.eventPublished(event));
+  public batchEventsPublished(events: EventWrapper[], transport: string): void {
+    events.forEach((event) => this.eventPublished(event, transport));
   }
 }

@@ -3,40 +3,13 @@ import {
   PutEventsCommand,
   PutEventsRequestEntry,
 } from '@aws-sdk/client-eventbridge';
-import { DomainEvent } from '../../../../utils/domain-event/implementations';
-import { IDomainEventDispatcher } from '../../contracts';
-import { ILogger } from '../../../logger/contracts';
-import { EventBridgeEventLogger } from './helpers/event-bridge-event-logger';
+import { IEventDispatcher } from '@event-dispatcher/contracts/i-event-dispatcher';
+import { IEventDispatcherEventLogger } from '@event-dispatcher/contracts/i-event-dispatcher-event-logger';
+import { EventWrapper } from './event-wrapper';
 
 /**
- * @interface Event
- *
- * @description
- * Represents a wrapper object for a domain event that includes metadata for tracing.
- * This interface is used when dispatching events to external systems, such as AWS EventBridge,
- * to ensure consistent inclusion of contextual information like `requestId`.
- *
- * @property {DomainEvent<object>} event - The domain event instance to be dispatched. It contains the core event data and metadata (e.g., type, timestamp).
- * @property {string} requestId - A unique identifier associated with the request that triggered this event.
- * This ID can be used for distributed tracing across services.
- * @property {string} userId- Optional user ID associated with the event. This can be useful for tracking which user initiated the event.
- *
- * @example
- * const event: Event = {
- *   event: new UserCreatedEvent({ userId: '123' }),
- *   requestId: 'req-456',
- *   userId: 'user-789'
- * };
- */
-export interface Event {
-  event: DomainEvent<object>;
-  requestId: string;
-  userId?: string;
-}
-
-/**
- * @class EventBridgeDomainEventDispatcher
- * @implements {IDomainEventDispatcher<Event>}
+ * @class EventBridgeServiceEventDispatcher
+ * @implements {IEventDispatcher<EventWrapper>}
  *
  * @classdesc
  * Implementation of IDomainEventDispatcher that sends domain events to AWS EventBridge.
@@ -56,32 +29,26 @@ export interface Event {
  * await bus.publish({ event, requestId: 'abc-123' });
  */
 export class EventBridgeDomainEventDispatcher
-  implements IDomainEventDispatcher<Event>
+  implements IEventDispatcher<EventWrapper>
 {
-  private readonly eventBusName: string;
   private readonly client: EventBridgeClient;
-  private readonly service: string;
-  private readonly eventsLogger: EventBridgeEventLogger;
 
   /**
    *
    */
   constructor(
-    eventBusName: string,
-    service: string,
-    logger: ILogger<unknown>,
+    private readonly eventBusName: string,
+    private readonly service: string,
+    private readonly eventLogger: IEventDispatcherEventLogger<EventWrapper>,
     region?: string,
   ) {
-    this.eventBusName = eventBusName;
-    this.service = service;
-    this.client = new EventBridgeClient({ region });
-    this.eventsLogger = new EventBridgeEventLogger(logger, this.eventBusName);
+    this.client = new EventBridgeClient(region ? { region } : {});
   }
 
   /**
    * Publishes a single domain event to AWS EventBridge.
    *
-   * @param {Event} event - Object containing the domain event instance and a unique requestId for tracing.
+   * @param {IEvent<any>} event - Object containing the domain event instance and a unique requestId for tracing.
    * @returns {Promise<void>} A promise that resolves when the event has been successfully published.
    *
    * @throws {InternalException} Throws if there is an error on the EventBridge service side.
@@ -89,16 +56,16 @@ export class EventBridgeDomainEventDispatcher
    * This function uses the AWS SDK command:
    * - {@link https://docs.aws.amazon.com/AWSJavaScriptSDK/v3/latest/client/eventbridge/command/PutEventsCommand/ | PutEventsCommand} for more details.
    */
-  public async publish(event: Event): Promise<void> {
+  public async publish(event: EventWrapper): Promise<void> {
     const entry = this.toEventBridgeEntry(event);
     await this.sendCommand([entry]);
-    this.eventsLogger.eventPublished(event);
+    this.eventLogger.eventPublished(event, this.eventBusName);
   }
 
   /**
    * Publishes multiple domain events to AWS EventBridge in a single batch request.
    *
-   * @param {Event[]} events - Array of objects each containing a domain event instance and a requestId.
+   * @param {IEvent<any>[]} events - Array of objects each containing a domain event instance and a requestId.
    * @returns {Promise<void>} A promise that resolves when all events have been successfully published.
    *
    * @throws {InternalException} Throws if there is an error on the EventBridge service side.
@@ -106,10 +73,10 @@ export class EventBridgeDomainEventDispatcher
    * This function uses the AWS SDK command:
    * - {@link https://docs.aws.amazon.com/AWSJavaScriptSDK/v3/latest/client/eventbridge/command/PutEventsCommand/ | PutEventsCommand} for more details.
    */
-  public async publishAll(events: Event[]): Promise<void> {
+  public async publishAll(events: EventWrapper[]): Promise<void> {
     const entries = events.map((event) => this.toEventBridgeEntry(event));
     await this.sendCommand(entries);
-    this.eventsLogger.batchEventsPublished(events);
+    this.eventLogger.batchEventsPublished(events, this.eventBusName);
   }
 
   /**
@@ -128,10 +95,10 @@ export class EventBridgeDomainEventDispatcher
    * Converts a domain event into an EventBridge entry.
    *
    * @private
-   * @param {Event} event - The domain event to convert.
+   * @param {IEvent<any>} event - The domain event to convert.
    * @returns {PutEventsRequestEntry} The EventBridge entry.
    */
-  private toEventBridgeEntry(event: Event): PutEventsRequestEntry {
+  private toEventBridgeEntry(event: EventWrapper): PutEventsRequestEntry {
     const e = event.event;
     const eventType = e.getType();
     const eventDetail = e.getEvent();

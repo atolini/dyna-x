@@ -14,7 +14,7 @@ import {
 } from '@aws-sdk/client-cognito-identity-provider';
 
 /**
- * @class CognitoErrorHandler
+ * @class CognitoUserDirectoryServiceErrorHandler
  * @implements {IErrorActions<T, R>}
  * @template T - Response type
  * @template R - Response builder type
@@ -33,7 +33,7 @@ import {
  * - **InvalidEmailRoleAccessPolicyException**: If Cognito isn't allowed to use your email identity.
  * - **UserNotFoundException**: If the specified user does not exist in the User Pool.
  */
-export class CognitoErrorHandler<T, R extends IResponseBuilder<T>>
+export class CognitoUserDirectoryServiceErrorHandler<T, R extends IResponseBuilder<T>>
   implements IErrorActions<T, R>
 {
   /**

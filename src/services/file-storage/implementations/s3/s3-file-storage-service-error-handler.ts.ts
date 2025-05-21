@@ -10,7 +10,7 @@ import {
 } from '@aws-sdk/client-s3';
 
 /**
- * @class S3ErrorHandler
+ * @class S3FileStorageServiceErrorHandler
  * @implements {IErrorActions<T, R>}
  * @template T - Response type
  * @template R - Response builder type
@@ -25,7 +25,7 @@ import {
  * - **NoSuchBucket**: The specified bucket does not exist.
  * - **InvalidObjectState**: The operation is not valid for the object's storage class.
  */
-export class S3ErrorHandler<T, R extends IResponseBuilder<T>>
+export class S3FileStorageServiceErrorHandler<T, R extends IResponseBuilder<T>>
   implements IErrorActions<T, R>
 {
   /**

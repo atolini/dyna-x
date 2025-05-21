@@ -10,7 +10,6 @@ import {
   IFileStorageService,
   IFileStorageServiceEventLogger,
 } from '@file-storage/contracts';
-import { S3StorageEventLogger } from '@file-storage/implementations/s3';
 
 /**
  * @class S3StorageService
@@ -27,7 +26,7 @@ import { S3StorageEventLogger } from '@file-storage/implementations/s3';
  * const storage = new S3StorageService('my-bucket', 'us-east-1');
  * await storage.uploadFile('folder/file.txt', 'content', 'text/plain');
  */
-export class S3StorageService implements IFileStorageService {
+export class S3FileStorageService implements IFileStorageService {
   private s3: S3Client;
 
   /**

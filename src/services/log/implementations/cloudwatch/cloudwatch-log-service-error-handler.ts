@@ -27,7 +27,7 @@ import {
  * - **ServiceUnavailableException**: If the service is unavailable.
  * - **UnrecognizedClientException**: If the client is unrecognized.
  */
-export class CloudWatchLogErrorHandler<T, R extends IResponseBuilder<T>>
+export class CloudWatchLogServiceErrorHandler<T, R extends IResponseBuilder<T>>
   implements IErrorActions<T, R>
 {
   /**

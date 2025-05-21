@@ -5,7 +5,7 @@ import * as path from 'path';
 /**
  * Manages file operations within a specified directory.
  */
-export class LocalStorage implements IFileStorageService {
+export class LocalStorageService implements IFileStorageService {
   private dir: string;
 
   /**

@@ -3,7 +3,7 @@ import { ILogger } from '@logger/contracts';
 import { EventWrapper } from './event-wrapper';
 
 /**
- * @class EventBridgeServiceEventLogger
+ * @class EventBridgeEventDispatcherServiceEventLogger
  * @classdesc
  * Helper class responsible for logging domain events dispatched via {@link EventBridgeDomainEventDispatcher}.
  *
@@ -17,7 +17,7 @@ import { EventWrapper } from './event-wrapper';
  * const eventLogger = new EventBridgeServiceEventLogger(logger, 'my-event-bus');
  * eventLogger.eventPublished({ event: new UserCreatedEvent(...), requestId: 'abc-123' });
  */
-export class EventBridgeServiceEventLogger
+export class EventBridgeEventDispatcherServiceEventLogger
   implements IEventDispatcherServiceEventLogger<EventWrapper>
 {
   /**

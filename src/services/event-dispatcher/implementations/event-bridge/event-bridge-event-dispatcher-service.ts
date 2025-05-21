@@ -8,7 +8,7 @@ import { IEventDispatcherServiceEventLogger } from '@event-dispatcher/contracts/
 import { EventWrapper } from './event-wrapper';
 
 /**
- * @class EventBridgeServiceEventDispatcher
+ * @class EventBridgeEventDispatcherService
  * @implements {IEventDispatcherService<EventWrapper>}
  *
  * @classdesc
@@ -28,7 +28,7 @@ import { EventWrapper } from './event-wrapper';
  * const event = new UserCreatedEvent({ userId: '123', email: 'user@example.com' });
  * await bus.publish({ event, requestId: 'abc-123' });
  */
-export class EventBridgeDomainEventDispatcher
+export class EventBridgeEventDispatcherService
   implements IEventDispatcherService<EventWrapper>
 {
   private readonly client: EventBridgeClient;

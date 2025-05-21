@@ -28,7 +28,7 @@ import { ILogger } from '@logger/contracts';
  * const eventLogger = new AVPAuthorizationEventLogger(logger, 'store-id');
  * eventLogger.authorizationChecked(request, response);
  */
-export class AVPAuthorizationEventLogger
+export class AVPAuthorizationServiceEventLogger
   implements
     IAuthorizationServiceEventLogger<
       ActionIdentifier,

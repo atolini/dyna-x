@@ -26,7 +26,7 @@ import {
  * - **ThrottlingException**: Thrown if the request is throttled due to exceeding usage limits.
  * - **InternalServerException**: Thrown if an internal server error occurs.
  */
-export class AVPAuthorizationErrorHandler<T, R extends IResponseBuilder<T>>
+export class AVPAuthorizationServiceErrorHandler<T, R extends IResponseBuilder<T>>
   implements IErrorActions<T, R>
 {
   /**

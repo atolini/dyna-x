@@ -24,7 +24,7 @@ import {
  * - **MailFromDomainNotVerifiedException**: If the sender's email address is not verified with Amazon SES.
  * - **MessageRejected**: If the email message is rejected by Amazon SES.
  */
-export class SESEmailErrorHandler<T, R extends IResponseBuilder<T>>
+export class SESEmailServiceErrorHandler<T, R extends IResponseBuilder<T>>
   implements IErrorActions<T, R>
 {
   /**

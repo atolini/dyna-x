@@ -1,6 +1,6 @@
 import { TemplateDelegate, compile } from 'handlebars';
 import { ITemplateService } from '../../contracts';
-import { TemplateEventLogger } from './template-service-event-logger';
+import { TemplateServiceEventLogger } from './template-service-event-logger';
 import { ILogger } from '@logger/contracts';
 
 /**
@@ -19,7 +19,7 @@ import { ILogger } from '@logger/contracts';
  */
 export class TemplateService implements ITemplateService {
   private readonly template: TemplateDelegate;
-  private readonly eventsLogger: TemplateEventLogger;
+  private readonly eventsLogger: TemplateServiceEventLogger;
 
   /**
    * Initializes the service by compiling the provided Handlebars template string.
@@ -27,7 +27,7 @@ export class TemplateService implements ITemplateService {
    * @param templateString - A raw Handlebars template (e.g., "<h1>{{title}}</h1>").
    */
   constructor(templateString: string, logger: ILogger<unknown>) {
-    this.eventsLogger = new TemplateEventLogger(logger);
+    this.eventsLogger = new TemplateServiceEventLogger(logger);
     this.template = compile(templateString);
     this.eventsLogger.templateInitialized(templateString);
   }

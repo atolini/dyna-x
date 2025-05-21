@@ -15,7 +15,7 @@ import {
 } from '../../contracts';
 
 /**
- * @class CognitoUserService
+ * @class CognitoUserDirectoryService
  * @implements {IUserDirectoryService<AttributeType>}
  *
  * @classdesc
@@ -44,7 +44,7 @@ import {
  *   suppressMessage: true
  * });
  */
-export class CognitoUserService implements IUserDirectoryService<AttributeType> {
+export class CognitoUserDirectoryService implements IUserDirectoryService<AttributeType> {
   private readonly client: CognitoIdentityProviderClient;
   private readonly userPoolId: string;
   private readonly eventLogger: IUserDirectoryServiceEventLogger<AttributeType[]>;

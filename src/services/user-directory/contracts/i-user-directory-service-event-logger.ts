@@ -6,7 +6,7 @@
  * Interface for logging all user-related events such as creation, update, and deletion.
  * Intended to provide observability and traceability for identity management operations.
  */
-export interface IUserEventLogger<T> {
+export interface IUserDirectoryServiceEventLogger<T> {
   /**
    * Logs a user creation event.
    *

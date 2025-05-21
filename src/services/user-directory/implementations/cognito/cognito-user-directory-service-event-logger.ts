@@ -1,10 +1,10 @@
 import { AttributeType } from '@aws-sdk/client-cognito-identity-provider';
 import { ILogger } from '@logger/contracts';
-import { IUserEventLogger } from '../../contracts';
+import { IUserDirectoryServiceEventLogger } from '../../contracts';
 
 /**
  * @class UserEventLogger
- * @implements IUserEventLogger
+ * @implements IUserDirectoryServiceEventLogger
  *
  * @classdesc
  * Helper class responsible for logging user-related events performed by the {@link CognitoUserService}.
@@ -18,7 +18,7 @@ import { IUserEventLogger } from '../../contracts';
  * const eventLogger = new UserEventLogger(logger, 'us-east-1_example');
  * eventLogger.userCreated('john.doe', [{ Name: 'email', Value: 'john.doe@example.com' }]);
  */
-export class UserEventLogger implements IUserEventLogger<AttributeType[]> {
+export class UserEventLogger implements IUserDirectoryServiceEventLogger<AttributeType[]> {
   private logger: ILogger<unknown>;
   private readonly userPoolId: string;
 

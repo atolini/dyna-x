@@ -17,7 +17,7 @@ import {
  *
  * This interface supports logging of both single and batch authorization decisions.
  */
-export interface IAVPAuthorizationEventLogger<A, E, C, R> {
+export interface IAuthorizationServiceEventLogger<A, E, C, R> {
   /**
    * Logs a single authorization decision.
    *

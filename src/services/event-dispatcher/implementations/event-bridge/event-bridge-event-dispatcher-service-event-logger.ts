@@ -1,4 +1,4 @@
-import { IEventDispatcherEventLogger } from '@event-dispatcher/contracts/i-event-dispatcher-service-event-logger';
+import { IEventDispatcherServiceEventLogger } from '@event-dispatcher/contracts/i-event-dispatcher-service-event-logger';
 import { ILogger } from '@logger/contracts';
 import { EventWrapper } from './event-wrapper';
 
@@ -18,7 +18,7 @@ import { EventWrapper } from './event-wrapper';
  * eventLogger.eventPublished({ event: new UserCreatedEvent(...), requestId: 'abc-123' });
  */
 export class EventBridgeServiceEventLogger
-  implements IEventDispatcherEventLogger<EventWrapper>
+  implements IEventDispatcherServiceEventLogger<EventWrapper>
 {
   /**
    * Constructs a new EventBridgeServiceEventLogger.

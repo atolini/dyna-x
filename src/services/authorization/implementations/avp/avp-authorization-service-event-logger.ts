@@ -8,13 +8,13 @@ import {
   AuthorizationResponse,
   BatchAuthorizationRequest,
   BatchAuthorizationResponse,
-  IAVPAuthorizationEventLogger,
+  IAuthorizationServiceEventLogger,
 } from '../../contracts';
 import { ILogger } from '@logger/contracts';
 
 /**
  * @class AVPAuthorizationEventLogger
- * @implements IAVPAuthorizationEventLogger
+ * @implements IAuthorizationServiceEventLogger
  *
  * @classdesc
  * Logger utility for tracking authorization events within the {@link AVPAuthorizationService}.
@@ -30,7 +30,7 @@ import { ILogger } from '@logger/contracts';
  */
 export class AVPAuthorizationEventLogger
   implements
-    IAVPAuthorizationEventLogger<
+    IAuthorizationServiceEventLogger<
       ActionIdentifier,
       EntityIdentifier,
       ContextDefinition,

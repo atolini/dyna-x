@@ -11,7 +11,7 @@
  * mechanisms such as in-memory event buses, message queues, or cloud event systems
  * like AWS EventBridge.
  */
-export interface IEventDispatcher<E> {
+export interface IEventDispatcherService<E> {
   /**
    * Publishes a single domain event.
    *

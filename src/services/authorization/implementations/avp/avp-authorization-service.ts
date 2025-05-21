@@ -16,7 +16,7 @@ import {
   BatchAuthorizationRequest,
   BatchAuthorizationResponse,
   IAuthorizationService,
-  IAVPAuthorizationEventLogger,
+  IAuthorizationServiceEventLogger,
 } from '../../contracts';
 
 interface Token {
@@ -70,7 +70,7 @@ export class AVPAuthorizationService
   private readonly client: VerifiedPermissionsClient;
   private readonly policyStoreId: string;
   private readonly token: Token | null;
-  private readonly eventLogger: IAVPAuthorizationEventLogger<
+  private readonly eventLogger: IAuthorizationServiceEventLogger<
     ActionIdentifier,
     EntityIdentifier,
     ContextDefinition,
@@ -81,7 +81,7 @@ export class AVPAuthorizationService
    * Creates an instance of AVPAuthorizationService.
    *
    * @param {string} policyStoreId - The ID of the policy store to be used for authorization checks.
-   * @param {IAVPAuthorizationEventLogger} eventLogger -Logger instance responsible for recording events related to authorization checks.
+   * @param {IAuthorizationServiceEventLogger} eventLogger -Logger instance responsible for recording events related to authorization checks.
    * @param {Token} [token] - Optional token credentials containing an access token and an identity token.
    * If provided, the service will use token-based authorization for requests.
    * @param {VerifiedPermissionsClientConfig} [clientConfig] - Optional configuration for the VerifiedPermissionsClient.
@@ -99,7 +99,7 @@ export class AVPAuthorizationService
    */
   constructor(
     policyStoreId: string,
-    eventLogger: IAVPAuthorizationEventLogger<
+    eventLogger: IAuthorizationServiceEventLogger<
       ActionIdentifier,
       EntityIdentifier,
       ContextDefinition,

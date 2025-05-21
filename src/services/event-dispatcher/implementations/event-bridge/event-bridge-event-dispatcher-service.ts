@@ -3,13 +3,13 @@ import {
   PutEventsCommand,
   PutEventsRequestEntry,
 } from '@aws-sdk/client-eventbridge';
-import { IEventDispatcher } from '@event-dispatcher/contracts/i-event-dispatcher-service';
-import { IEventDispatcherEventLogger } from '@event-dispatcher/contracts/i-event-dispatcher-service-event-logger';
+import { IEventDispatcherService } from '@event-dispatcher/contracts/i-event-dispatcher-service';
+import { IEventDispatcherServiceEventLogger } from '@event-dispatcher/contracts/i-event-dispatcher-service-event-logger';
 import { EventWrapper } from './event-wrapper';
 
 /**
  * @class EventBridgeServiceEventDispatcher
- * @implements {IEventDispatcher<EventWrapper>}
+ * @implements {IEventDispatcherService<EventWrapper>}
  *
  * @classdesc
  * Implementation of IDomainEventDispatcher that sends domain events to AWS EventBridge.
@@ -29,7 +29,7 @@ import { EventWrapper } from './event-wrapper';
  * await bus.publish({ event, requestId: 'abc-123' });
  */
 export class EventBridgeDomainEventDispatcher
-  implements IEventDispatcher<EventWrapper>
+  implements IEventDispatcherService<EventWrapper>
 {
   private readonly client: EventBridgeClient;
 
@@ -39,7 +39,7 @@ export class EventBridgeDomainEventDispatcher
   constructor(
     private readonly eventBusName: string,
     private readonly service: string,
-    private readonly eventLogger: IEventDispatcherEventLogger<EventWrapper>,
+    private readonly eventLogger: IEventDispatcherServiceEventLogger<EventWrapper>,
     region?: string,
   ) {
     this.client = new EventBridgeClient(region ? { region } : {});

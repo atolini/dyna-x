@@ -6,7 +6,7 @@
  * Interface for logging events. Supports logging individual or multiple events
  * along with relevant metadata for observability and traceability.
  */
-export interface IEventDispatcherEventLogger<E> {
+export interface IEventDispatcherServiceEventLogger<E> {
   /**
    * Logs a single event.
    *

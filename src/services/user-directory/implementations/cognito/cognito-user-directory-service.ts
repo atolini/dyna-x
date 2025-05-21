@@ -11,7 +11,7 @@ import {
   CreateUserInput,
   UpdateUserAttributesInput,
   DeleteUserInput,
-  IUserEventLogger,
+  IUserDirectoryServiceEventLogger,
 } from '../../contracts';
 
 /**
@@ -47,7 +47,7 @@ import {
 export class CognitoUserService implements IUserDirectoryService<AttributeType> {
   private readonly client: CognitoIdentityProviderClient;
   private readonly userPoolId: string;
-  private readonly eventLogger: IUserEventLogger<AttributeType[]>;
+  private readonly eventLogger: IUserDirectoryServiceEventLogger<AttributeType[]>;
 
   /**
    * Creates an instance of CognitoUserService.
@@ -55,7 +55,7 @@ export class CognitoUserService implements IUserDirectoryService<AttributeType> 
    * Initializes the Cognito Identity Provider client to manage users in a specific User Pool.
    *
    * @param {string} userPoolId - The ID of the Cognito User Pool where users will be managed.
-   * @param {IUserEventLogger} eventLogger - Logger instance used to record user-related events.
+   * @param {IUserDirectoryServiceEventLogger} eventLogger - Logger instance used to record user-related events.
    * @param {string} [region] - (Optional) AWS region where the User Pool is located.
    * If not provided, the default region configured in the environment will be used.
    *
@@ -64,7 +64,7 @@ export class CognitoUserService implements IUserDirectoryService<AttributeType> 
    */
   constructor(
     userPoolId: string,
-    eventLogger: IUserEventLogger<AttributeType[]>,
+    eventLogger: IUserDirectoryServiceEventLogger<AttributeType[]>,
     region?: string,
   ) {
     this.client = new CognitoIdentityProviderClient(region ? { region } : {});

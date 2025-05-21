@@ -1,10 +1,10 @@
 import { IEmailMessage } from './i-email-message';
 
 /**
- * @interface IEmailEventLogger
+ * @interface IEmailServiceEventLogger
  * @description Interface for logging email-related events.
  */
-export interface IEmailEventLogger {
+export interface IEmailServiceEventLogger {
   /**
    * Logs a successful email sending event.
    *

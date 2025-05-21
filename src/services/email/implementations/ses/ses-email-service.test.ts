@@ -1,7 +1,9 @@
 import { mockClient } from 'aws-sdk-client-mock';
 import { SESClient, SendEmailCommand } from '@aws-sdk/client-ses';
-import { IEmailService } from '../../contracts';
-import { SESEmailService } from '.';
+import { SESEmailService } from './ses-email-service';
+import { IEmailService } from '../../contracts/i-email-service';
+import { SESEmailServiceEventLogger } from './ses-email-service-event-logger';
+import { Logger } from '../../../logger/implementations'; 
 
 describe('EmailService', () => {
   const sesMock = mockClient(SESClient);
@@ -11,7 +13,13 @@ describe('EmailService', () => {
 
   beforeEach(() => {
     sesMock.reset();
-    emailService = new SESEmailService(defaultSender, region);
+    emailService = new SESEmailService(defaultSender, new SESEmailServiceEventLogger(
+      new Logger({
+        requestId: 'req-1', 
+        service: 'email-service-test',
+        userId: 'user-1'
+      })
+    ), region);
   });
 
   describe('sendEmail', () => {

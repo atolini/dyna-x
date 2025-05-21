@@ -1,7 +1,7 @@
 import { SESClient, SendEmailCommand } from '@aws-sdk/client-ses';
-import { IEmailService, EmailMessage } from '../../contracts';
-import { EmailEventLogger } from './helpers/email-event-logger';
-import { ILogger } from '../../../logger/contracts';
+import { IEmailService } from '@email/contracts/i-email-service';
+import { IEmailMessage } from '@email/contracts/i-email-message';
+import { IEmailServiceEventLogger } from '@email/contracts/i-email-service-event-logger';
 
 /**
  * @class SESEmailService
@@ -43,7 +43,7 @@ import { ILogger } from '../../../logger/contracts';
 export class SESEmailService implements IEmailService {
   private sesClient: SESClient;
   private defaultSender: string;
-  private eventsLogger: EmailEventLogger;
+  private eventLogger: IEmailServiceEventLogger;
 
   /**
    * Creates an instance of SESEmailService.
@@ -53,18 +53,18 @@ export class SESEmailService implements IEmailService {
    */
   constructor(
     defaultSender: string,
-    logger: ILogger<unknown>,
+    eventLogger: IEmailServiceEventLogger,
     region?: string,
   ) {
     this.sesClient = new SESClient(region ? { region } : {});
     this.defaultSender = defaultSender;
-    this.eventsLogger = new EmailEventLogger(logger, defaultSender);
+    this.eventLogger = eventLogger;
   }
 
   /**
    * Sends an email using AWS SES.
    *
-   * @param {EmailMessage} message - The message to be sent, containing recipient(s), subject, and body content.
+   * @param {IEmailMessage} message - The message to be sent, containing recipient(s), subject, and body content.
    * @returns {Promise<void>} A promise that resolves once the email is sent.
    *
    * @example
@@ -101,11 +101,13 @@ export class SESEmailService implements IEmailService {
    * This function uses the AWS SDK command:
    * {@link https://docs.aws.amazon.com/AWSJavaScriptSDK/v3/latest/client/ses/command/SendEmailCommand/ | SendEmailCommand}
    */
-  async sendEmail(message: EmailMessage): Promise<void> {
+  async sendEmail(message: IEmailMessage): Promise<void> {
     const { to, subject, bodyText, bodyHtml, from } = message;
 
     const destination = Array.isArray(to) ? to : [to];
     const sender = from || this.defaultSender;
+
+    message.from = sender;
 
     const command = new SendEmailCommand({
       Source: sender,
@@ -126,6 +128,6 @@ export class SESEmailService implements IEmailService {
 
     await this.sesClient.send(command);
 
-    this.eventsLogger.emailSent(message);
+    this.eventLogger.emailSent(message);
   }
 }

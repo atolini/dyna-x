@@ -3,4 +3,4 @@ export * from './authorization-response';
 export * from './batch-authorization-request';
 export * from './batch-authorization-response';
 export * from './i-authorization-service';
-export * from './i-avp-authorization-event-logger';
+export * from './i-authorization-service-event-logger';

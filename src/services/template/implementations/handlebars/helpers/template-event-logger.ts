@@ -1,4 +1,4 @@
-import { ILogger } from '../../../../logger/contracts';
+import { ILogger } from '@logger/contracts';
 
 /**
  * @class TemplateEventLogger

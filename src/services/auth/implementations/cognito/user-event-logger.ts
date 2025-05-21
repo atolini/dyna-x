@@ -1,5 +1,5 @@
 import { AttributeType } from '@aws-sdk/client-cognito-identity-provider';
-import { ILogger } from '../../../logger/contracts';
+import { ILogger } from '@logger/contracts';
 import { IUserEventLogger } from '../../contracts';
 
 /**

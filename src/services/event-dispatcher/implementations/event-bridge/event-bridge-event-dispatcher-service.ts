@@ -3,9 +3,8 @@ import {
   PutEventsCommand,
   PutEventsRequestEntry,
 } from '@aws-sdk/client-eventbridge';
-import { IEventDispatcherService } from '@event-dispatcher/contracts/i-event-dispatcher-service';
-import { IEventDispatcherServiceEventLogger } from '@event-dispatcher/contracts/i-event-dispatcher-service-event-logger';
-import { EventWrapper } from './event-wrapper';
+import { IEventDispatcherService, IEventDispatcherServiceEventLogger } from '@event-dispatcher/contracts';
+import { EventWrapper } from '@event-dispatcher/implementations/event-bridge';
 
 /**
  * @class EventBridgeEventDispatcherService

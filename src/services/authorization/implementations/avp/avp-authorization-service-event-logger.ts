@@ -9,7 +9,7 @@ import {
   BatchAuthorizationRequest,
   BatchAuthorizationResponse,
   IAuthorizationServiceEventLogger,
-} from '../../contracts';
+} from '@authorization/contracts';
 import { ILogger } from '@logger/contracts';
 
 /**

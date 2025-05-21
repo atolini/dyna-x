@@ -1,6 +1,6 @@
-import { IEventDispatcherServiceEventLogger } from '@event-dispatcher/contracts/i-event-dispatcher-service-event-logger';
+import { IEventDispatcherServiceEventLogger } from '@event-dispatcher/contracts';
 import { ILogger } from '@logger/contracts';
-import { EventWrapper } from './event-wrapper';
+import { EventWrapper } from '@event-dispatcher/implementations/event-bridge';
 
 /**
  * @class EventBridgeEventDispatcherServiceEventLogger

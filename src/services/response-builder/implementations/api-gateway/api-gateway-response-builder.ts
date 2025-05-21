@@ -1,5 +1,5 @@
 import { APIGatewayProxyResult } from 'aws-lambda';
-import { IResponseBuilder } from '../../contracts';
+import { IResponseBuilder } from '@response-builder/contracts';
 
 /**
  *

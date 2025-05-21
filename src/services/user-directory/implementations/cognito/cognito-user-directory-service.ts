@@ -12,7 +12,7 @@ import {
   UpdateUserAttributesInput,
   DeleteUserInput,
   IUserDirectoryServiceEventLogger,
-} from '../../contracts';
+} from '@user-directory/contracts';
 
 /**
  * @class CognitoUserDirectoryService

@@ -3,7 +3,7 @@ import {
   DescribeLogStreamsCommand,
   PutLogEventsCommand,
 } from '@aws-sdk/client-cloudwatch-logs';
-import { ILogService } from '../../contracts';
+import { ILogService } from '@log/contracts';
 
 export interface LogContainer {
   logGroupName: string;

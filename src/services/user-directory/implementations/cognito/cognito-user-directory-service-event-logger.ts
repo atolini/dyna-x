@@ -1,6 +1,6 @@
 import { AttributeType } from '@aws-sdk/client-cognito-identity-provider';
 import { ILogger } from '@logger/contracts';
-import { IUserDirectoryServiceEventLogger } from '../../contracts';
+import { IUserDirectoryServiceEventLogger } from '@user-directory/contracts';
 
 /**
  * @class CognitoUserDirectoryServiceEventLogger

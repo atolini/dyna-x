@@ -17,7 +17,7 @@ import {
   BatchAuthorizationResponse,
   IAuthorizationService,
   IAuthorizationServiceEventLogger,
-} from '../../contracts';
+} from '@authorization/contracts';
 
 interface Token {
   accessToken: string;

@@ -1,6 +1,6 @@
 import { SESClient, SendEmailCommand } from '@aws-sdk/client-ses';
 import { IEmailService } from '@email/contracts/i-email-service';
-import { IEmailMessage } from '@email/contracts/i-email-message';
+import { IEmailMessageInput } from '@email/contracts/i-email-message-input';
 import { IEmailServiceEventLogger } from '@email/contracts/i-email-service-event-logger';
 
 /**
@@ -64,7 +64,7 @@ export class SESEmailService implements IEmailService {
   /**
    * Sends an email using AWS SES.
    *
-   * @param {IEmailMessage} message - The message to be sent, containing recipient(s), subject, and body content.
+   * @param {IEmailMessageInput} message - The message to be sent, containing recipient(s), subject, and body content.
    * @returns {Promise<void>} A promise that resolves once the email is sent.
    *
    * @example
@@ -101,7 +101,7 @@ export class SESEmailService implements IEmailService {
    * This function uses the AWS SDK command:
    * {@link https://docs.aws.amazon.com/AWSJavaScriptSDK/v3/latest/client/ses/command/SendEmailCommand/ | SendEmailCommand}
    */
-  async sendEmail(message: IEmailMessage): Promise<void> {
+  async sendEmail(message: IEmailMessageInput): Promise<void> {
     const { to, subject, bodyText, bodyHtml, from } = message;
 
     const destination = Array.isArray(to) ? to : [to];

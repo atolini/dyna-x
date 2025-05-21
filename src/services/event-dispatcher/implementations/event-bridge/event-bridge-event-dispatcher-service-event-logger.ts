@@ -1,4 +1,4 @@
-import { IEventDispatcherEventLogger } from '@event-dispatcher/contracts/i-event-dispatcher-event-logger';
+import { IEventDispatcherEventLogger } from '@event-dispatcher/contracts/i-event-dispatcher-service-event-logger';
 import { ILogger } from '@logger/contracts';
 import { EventWrapper } from './event-wrapper';
 

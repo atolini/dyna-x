@@ -1,4 +1,4 @@
-import { IEmailMessage } from './i-email-message';
+import { IEmailMessageInput } from './i-email-message-input';
 
 /**
  * Defines a service for sending emails.
@@ -11,7 +11,7 @@ export interface IEmailService {
   /**
    * Sends an email.
    *
-   * @param {IEmailMessage} message - The email message to be sent, containing recipient(s), subject, and body content.
+   * @param {IEmailMessageInput} message - The email message to be sent, containing recipient(s), subject, and body content.
    *
    * @returns {Promise<void>} A promise that resolves once the email is successfully sent.
    *
@@ -27,5 +27,5 @@ export interface IEmailService {
    *   .then(() => console.log('Email sent successfully!'))
    *   .catch((error) => console.error('Error sending email:', error));
    */
-  sendEmail(message: IEmailMessage): Promise<void>;
+  sendEmail(message: IEmailMessageInput): Promise<void>;
 }

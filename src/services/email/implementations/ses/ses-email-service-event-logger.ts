@@ -1,5 +1,5 @@
 import { ILogger } from '@logger/contracts';
-import { IEmailMessage } from '@email/contracts/i-email-message';
+import { IEmailMessageInput } from '@email/contracts/i-email-message-input';
 
 /**
  * @class SESEmailServiceEventLogger
@@ -30,9 +30,9 @@ export class SESEmailServiceEventLogger {
   /**
    * Logs a successful email sending event.
    *
-   * @param {IEmailMessage} message - The message that was sent.
+   * @param {IEmailMessageInput} message - The message that was sent.
    */
-  public emailSent(message: IEmailMessage) {
+  public emailSent(message: IEmailMessageInput) {
     this.logger.info({
       message: 'Email Sent',
       sender: message.from || 'undefined',

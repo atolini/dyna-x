@@ -1,4 +1,4 @@
-import { IEmailMessage } from './i-email-message';
+import { IEmailMessageInput } from './i-email-message-input';
 
 /**
  * @interface IEmailServiceEventLogger
@@ -8,7 +8,7 @@ export interface IEmailServiceEventLogger {
   /**
    * Logs a successful email sending event.
    *
-   * @param {IEmailMessage} message - The message that was sent.
+   * @param {IEmailMessageInput} message - The message that was sent.
    */
-  emailSent(message: IEmailMessage): void;
+  emailSent(message: IEmailMessageInput): void;
 }

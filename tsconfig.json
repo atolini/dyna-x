@@ -16,12 +16,12 @@
       "@database/*": ["services/database/*"],
       "@email/*": ["services/email/*"],
       "@event-dispatcher/*": ["services/event-dispatcher/*"],
-      "@logger-service/*": ["services/logger-service/*"],
+      "@log/*": ["services/log/*"],
       "@file-storage/*": ["services/file-storage/*"],
       "@template/*": ["services/template/*"],
-      "@logger/*": ["services/logger/*"],
+      "@logger/*": ["utils/logger/*"],
       "@event/*": ["utils/event/*"],
-      "@response-builder/*": ["utils/response-builder/*"],
+      "@response-builder/*": ["services/response-builder/*"],
       "@error-handler/*": ["utils/error-handler/*"]
     }
   },

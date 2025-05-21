@@ -6,7 +6,7 @@
  *
  * @interface IEmailMessage
  */
-export interface IEmailMessage {
+export interface IEmailMessageInput {
   /**
    * The recipient(s) of the email. Can be a single email address or an array of email addresses.
    *

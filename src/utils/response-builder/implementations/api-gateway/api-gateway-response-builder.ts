@@ -1,10 +1,10 @@
 import { APIGatewayProxyResult } from 'aws-lambda';
-import { IResponseBuilder } from '../contracts';
+import { IResponseBuilder } from '../../contracts';
 
 /**
  *
  */
-export class ResponseBuilder
+export class APIGatewayResponseBuilder
   implements IResponseBuilder<APIGatewayProxyResult>
 {
   /**

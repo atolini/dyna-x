@@ -1,10 +1,10 @@
-import { ResponseBuilder } from '.';
+import { APIGatewayResponseBuilder } from '.';
 
 describe('ApiResponse', () => {
-  let responseBuilder: ResponseBuilder;
+  let responseBuilder: APIGatewayResponseBuilder;
 
   beforeEach(() => {
-    responseBuilder = new ResponseBuilder();
+    responseBuilder = new APIGatewayResponseBuilder();
   });
 
   it('should return a 200 OK response', () => {

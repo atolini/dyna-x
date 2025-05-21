@@ -1,12 +1,11 @@
 /**
  * @interface IEvent
- * @template T - The shape of the event payload.
  *
  * @description
  * Represents a generic event structure with creation timestamp, type identification,
  * and payload serialization.
  */
-export interface IEvent<T> {
+export interface IEvent {
   /**
    * Returns the timestamp when the event was created.
    *
@@ -19,7 +18,7 @@ export interface IEvent<T> {
    *
    * @returns {T} The serialized payload of the event.
    */
-  getEvent(): T;
+  getEvent(): object;
 
   /**
    * Returns the type or name of the event.

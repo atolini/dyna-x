@@ -1,3 +1,5 @@
+import { IEvent } from "@event/contracts/i-event";
+
 /**
  * @class DomainEvent
  *
@@ -32,7 +34,7 @@
  * console.log(event.getType());     // Outputs 'UserCreatedEvent'
  * console.log(event.getEvent());     // Outputs { userId: '123', email: 'user@example.com' }
  */
-export abstract class DomainEvent<T> {
+export abstract class DomainEvent implements IEvent {
   private readonly createdAt: Date;
 
   /**
@@ -54,13 +56,9 @@ export abstract class DomainEvent<T> {
    * containing all its own enumerable properties.
    * Useful for sending or logging event data in a transport-safe format.
    */
-  public getEvent(): T {
-    const entries = Object.entries(this) as [keyof T, any][];
-    return entries.reduce((acc, [key, value]) => {
-      acc[key] = value;
-      return acc;
-    }, {} as T);
-  }
+ public getEvent(): object {
+  return JSON.parse(JSON.stringify(this));
+}
 
   /**
    * Returns the type of the event, which is the name of the class.

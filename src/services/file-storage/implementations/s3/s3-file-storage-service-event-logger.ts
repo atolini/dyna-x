@@ -14,7 +14,7 @@ import { ILogger } from '@logger/contracts';
  * storageLogger.fileUploaded('folder/file.txt', 'text/plain');
  */
 export class S3FileStorageServiceEventLogger {
-  private logger: ILogger<unknown>;
+  private readonly logger: ILogger<unknown>;
   private readonly bucketName: string;
 
   /**

@@ -28,9 +28,9 @@ import { IErrorActions } from '@error-handler/contracts';
  * const response: MyResponseType = errorHandler.handleError(new Error('Some error occurred'));
  */
 export class ErrorHandler<T, R extends IResponseBuilder<T>> {
-  private handlers: IErrorActions<T, R>[]; // List of error handlers
-  private logger: ILogger<any>; // Logger instance for error logging
-  private resBuilder: R; // Response builder (used to create error responses)
+  private readonly handlers: IErrorActions<T, R>[]; // List of error handlers
+  private readonly logger: ILogger<any>; // Logger instance for error logging
+  private readonly resBuilder: R; // Response builder (used to create error responses)
 
   /**
    * Creates an instance of the ErrorHandler.
@@ -78,6 +78,6 @@ export class ErrorHandler<T, R extends IResponseBuilder<T>> {
     });
 
     // Return a generic internal error response
-    return this.resBuilder.internalError('Unhandled error') as T;
+    return this.resBuilder.internalError('Unhandled error');
   }
 }

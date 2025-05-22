@@ -11,6 +11,7 @@ import {
 import { IResponseBuilder } from '@response-builder/contracts';
 import { ILogger } from '@logger/contracts';
 import { IErrorActions } from '@error-handler/contracts';
+import { InvalidKeyError } from '@database/schema/implementations/dynamo';
 
 /**
  * @class DynamoTransactionWriterErrorHandler
@@ -122,6 +123,13 @@ export class DynamoTransactionWriterErrorHandler<
         response: () =>
           resBuilder.tooManyRequests(
             'Transaction in progress. Please try again later.',
+          ),
+      },
+      {
+        type: InvalidKeyError,
+        response: () =>
+          resBuilder.badRequest(
+            'Invalid key. Please check the request parameters.',
           ),
       },
     ];

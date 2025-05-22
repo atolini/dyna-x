@@ -8,6 +8,7 @@ import {
 import { IResponseBuilder } from '@response-builder/contracts';
 import { ILogger } from '@logger/contracts';
 import { IErrorActions } from '@error-handler/contracts';
+import { InvalidKeyError } from '@database/schema/implementations/dynamo';
 
 /**
  * @class DynamoErrorHandler
@@ -96,6 +97,13 @@ export class DynamoErrorHandler<T, R extends IResponseBuilder<T>>
         log: {},
         response: () =>
           resBuilder.notFound('The specified resource was not found.'),
+      },
+      {
+        type: InvalidKeyError,
+        response: () =>
+          resBuilder.badRequest(
+            'Invalid key. Please check the request parameters.',
+          ),
       },
     ];
 

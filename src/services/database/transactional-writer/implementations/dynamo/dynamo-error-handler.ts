@@ -1,12 +1,10 @@
 import {
-  ConditionalCheckFailedException,
+  IdempotentParameterMismatchException,
+  InternalServerError,
+  InvalidEndpointException,
   ProvisionedThroughputExceededException,
   RequestLimitExceeded,
-  ItemCollectionSizeLimitExceededException,
-  InternalServerError,
   ResourceNotFoundException,
-  TransactionConflictException,
-  IdempotentParameterMismatchException,
   TransactionCanceledException,
   TransactionInProgressException,
 } from '@aws-sdk/client-dynamodb';
@@ -32,45 +30,31 @@ import { IErrorActions } from '@error-handler/contracts';
  * - **ProvisionedThroughputExceededException**: The request exceeded the provisioned throughput for the table.
  * - **RequestLimitExceeded**: The request limit for the account has been exceeded.
  * - **ResourceNotFoundException**: The specified table or index does not exist.
- * - **ItemCollectionSizeLimitExceededException**: The item collection size limit has been exceeded (typically for local secondary indexes).
- * - **TransactionConflictException**: A conflict occurred during a transactional operation.
- * - **ConditionalCheckFailedException**: A condition specified in the operation was not met.
- * - **MaxItemsExceededError**: The number of items exceeded the allowed maximum batch size.
- * - **IdempotentParameterMismatchException**: A transaction was retried with the same client token but different parameters within the 10-minute idempotency window.
- * - **TransactionCanceledException**: The transaction was canceled, possibly due to a condition check failure or other reasons.
- * - **TransactionInProgressException**: Another transaction is already in progress.
- * - **InvalidKeyError**: One or more items had invalid keys according to the schema.
+ * - **IdempotentParameterMismatchException**: Retry with a mismatched client token and parameters.
+ * - **TransactionCanceledException**: The transaction was canceled.
+ * - **TransactionInProgressException**: Another transaction is currently in progress.
+ * - **InvalidEndpointException**: The DynamoDB endpoint is incorrect or unavailable.
  */
 export class DynamoErrorHandler<T, R extends IResponseBuilder<T>>
   implements IErrorActions<T, R>
 {
   private readonly retryableErrors = new Set([
+    IdempotentParameterMismatchException,
     InternalServerError,
+    InvalidEndpointException,
     ProvisionedThroughputExceededException,
     RequestLimitExceeded,
     ResourceNotFoundException,
-    ItemCollectionSizeLimitExceededException,
-    TransactionConflictException,
-    ConditionalCheckFailedException,
-    //MaxItemsExceededError,
-    IdempotentParameterMismatchException,
     TransactionCanceledException,
     TransactionInProgressException,
-    //InvalidKeyError,
   ]);
 
-  /**
-   *
-   */
   canHandle(error: Error): boolean {
     return Array.from(this.retryableErrors).some(
       (errorType) => error instanceof errorType,
     );
   }
 
-  /**
-   *
-   */
   handle(error: Error, logger: ILogger<any>, resBuilder: R): T {
     const errorMap = [
       {
@@ -104,40 +88,6 @@ export class DynamoErrorHandler<T, R extends IResponseBuilder<T>>
           resBuilder.notFound('The specified resource was not found.'),
       },
       {
-        type: ItemCollectionSizeLimitExceededException,
-        log: {},
-        response: () =>
-          resBuilder.tooManyRequests(
-            'Item collection size limit exceeded. Please try again later.',
-          ),
-      },
-      {
-        type: TransactionConflictException,
-        log: {},
-        response: () =>
-          resBuilder.tooManyRequests(
-            'Transaction conflict. Please try again later.',
-          ),
-      },
-      {
-        type: ConditionalCheckFailedException,
-        log: {},
-        response: () =>
-          resBuilder.badRequest(
-            'Conditional check failed. Please check the request parameters.',
-          ),
-      },
-      /** 
-      {
-        type: MaxItemsExceededError,
-        log: {},
-        response: () =>
-          resBuilder.badRequest(
-            'Max items exceeded. Please check the request parameters.',
-          ),
-      },
-      */
-      {
         type: IdempotentParameterMismatchException,
         log: {},
         response: () =>
@@ -161,16 +111,14 @@ export class DynamoErrorHandler<T, R extends IResponseBuilder<T>>
             'Transaction in progress. Please try again later.',
           ),
       },
-      /** 
       {
-        type: InvalidKeyError,
+        type: InvalidEndpointException,
         log: {},
         response: () =>
-          resBuilder.badRequest(
-            'Invalid key. Please check the request parameters.',
+          resBuilder.internalError(
+            'Invalid endpoint. Please check your DynamoDB configuration.',
           ),
       },
-      */
     ];
 
     for (const entry of errorMap) {

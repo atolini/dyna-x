@@ -32,8 +32,10 @@ import { IErrorActions } from '@error-handler/contracts';
  * - {@link TransactionCanceledException}: The transaction was canceled.
  * - {@link TransactionInProgressException}: Another transaction is currently in progress.
  */
-export class DynamoTransactionWriterErrorHandler<T, R extends IResponseBuilder<T>>
-  implements IErrorActions<T, R>
+export class DynamoTransactionWriterErrorHandler<
+  T,
+  R extends IResponseBuilder<T>,
+> implements IErrorActions<T, R>
 {
   private readonly retryableErrors = new Set([
     IdempotentParameterMismatchException,

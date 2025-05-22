@@ -75,49 +75,49 @@ export class DynamoWriteErrorHandler<T, R extends IResponseBuilder<T>>
         type: ConditionalCheckFailedException,
         response: () =>
           resBuilder.badRequest(
-            'Conditional check failed. Please check the request parameters.'
+            'Conditional check failed. Please check the request parameters.',
           ),
       },
       {
         type: InternalServerError,
         response: () =>
           resBuilder.internalError(
-            'An internal server error occurred. Please try again later.'
+            'An internal server error occurred. Please try again later.',
           ),
       },
       {
         type: InvalidEndpointException,
         response: () =>
           resBuilder.internalError(
-            'Invalid endpoint. Please check your configuration.'
+            'Invalid endpoint. Please check your configuration.',
           ),
       },
       {
         type: ItemCollectionSizeLimitExceededException,
         response: () =>
           resBuilder.tooManyRequests(
-            'Item collection size limit exceeded. Please try again later.'
+            'Item collection size limit exceeded. Please try again later.',
           ),
       },
       {
         type: ProvisionedThroughputExceededException,
         response: () =>
           resBuilder.tooManyRequests(
-            'Provisioned throughput exceeded. Please try again later.'
+            'Provisioned throughput exceeded. Please try again later.',
           ),
       },
       {
         type: ReplicatedWriteConflictException,
         response: () =>
           resBuilder.tooManyRequests(
-            'Replicated write conflict. Please try again later.'
+            'Replicated write conflict. Please try again later.',
           ),
       },
       {
         type: RequestLimitExceeded,
         response: () =>
           resBuilder.tooManyRequests(
-            'Request limit exceeded. Please try again later.'
+            'Request limit exceeded. Please try again later.',
           ),
       },
       {
@@ -129,7 +129,7 @@ export class DynamoWriteErrorHandler<T, R extends IResponseBuilder<T>>
         type: TransactionConflictException,
         response: () =>
           resBuilder.tooManyRequests(
-            'Transaction conflict. Please try again later.'
+            'Transaction conflict. Please try again later.',
           ),
       },
     ];

@@ -111,5 +111,3 @@ export class DynamoErrorHandler<T, R extends IResponseBuilder<T>>
     }
   }
 }
-
-

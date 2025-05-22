@@ -1,5 +1,5 @@
 /**
- * @interface ITransactionalWriteUnit
+ * @interface ITransactionalWriterUnit
  *
  * @description
  * Represents a generic unit of data to be written transactionally to a specific container.
@@ -13,7 +13,7 @@
  * @property {Container} container - Identifier of the target container (e.g., table name, collection name).
  * @property {Item} item - The actual data item to be written to the container.
  */
-export interface ITransactionalWriteUnit<Container, Item> {
+export interface ITransactionalWriterUnit<Container, Item> {
   container: Container;
   item: Item;
 }

@@ -13,7 +13,7 @@ import { ILogger } from '@logger/contracts';
 import { IErrorActions } from '@error-handler/contracts';
 
 /**
- * @class DynamoTransactionWriteErrorHandler
+ * @class DynamoTransactionWriterErrorHandler
  * @implements {IErrorActions<T, R>}
  * @template T - Response type
  * @template R - Response builder type
@@ -32,7 +32,7 @@ import { IErrorActions } from '@error-handler/contracts';
  * - {@link TransactionCanceledException}: The transaction was canceled.
  * - {@link TransactionInProgressException}: Another transaction is currently in progress.
  */
-export class DynamoTransactionWriteErrorHandler<T, R extends IResponseBuilder<T>>
+export class DynamoTransactionWriterErrorHandler<T, R extends IResponseBuilder<T>>
   implements IErrorActions<T, R>
 {
   private readonly retryableErrors = new Set([

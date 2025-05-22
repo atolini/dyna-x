@@ -7,7 +7,7 @@ import { Key } from '@database/repository/implementations/dynamo/key';
 /**
  * @class DynamoWriteRepositoryEventLogger
  * @classdesc
- * Logs structured events related to write operations on a DynamoDB table using DynaXWriteRepository.
+ * Logs structured events related to write operations on a DynamoDB table using DynamoWriteRepository.
  *
  * This logger captures `putItem`, `update`, `deleteItem`, and `batchWriteItems` operations
  * for observability, audit trails, and debugging.
@@ -16,6 +16,9 @@ import { Key } from '@database/repository/implementations/dynamo/key';
  * const logger = new Logger<Context>({...}); // implements ILogger
  * const eventLogger = new DynamoWriteRepositoryEventLogger(logger, 'HiringRequestTable');
  * eventLogger.itemCreated({ id: '123', name: 'Test' });
+ * eventLogger.itemDeleted({ id: '123' });
+ * eventLogger.itemUpdated({ id: '123' }, updateExpression, conditions);
+ * eventLogger.batchWritePerformed([{ id: '1' }], [{ id: '2' }], [{ type: 'put', item: { id: '1' } }]);
  */
 export class DynamoWriteRepositoryEventLogger<T>
   implements
@@ -30,9 +33,10 @@ export class DynamoWriteRepositoryEventLogger<T>
   private readonly tableName: string;
 
   /**
+   * Creates an instance of DynamoWriteRepositoryEventLogger.
    *
-   * @param logger
-   * @param tableName
+   * @param logger - A logger instance that implements the ILogger interface.
+   * @param tableName - The name of the DynamoDB table being written to.
    */
   constructor(logger: ILogger<unknown>, tableName: string) {
     this.logger = logger;

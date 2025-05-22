@@ -6,14 +6,14 @@ import { Key } from '@database/repository/implementations/dynamo/key';
 /**
  * @class DynamoReadRepositoryEventLogger
  * @classdesc
- * Helper class responsible for logging read-related events performed by the {@link DynaXReadRepository}.
+ * Helper class responsible for logging read-related events performed by the {@link DynamoReadRepository}.
  *
  * Logs successful item retrievals and query operations in a structured format using the provided logger instance.
  * Useful for observability, auditing, and debugging read operations on a DynamoDB table.
  *
  * @example
  * const logger = new ConsoleLogger(); // implements ILogger
- * const readLogger = new DynaXReadEventLogger(logger, 'users-table');
+ * const readLogger = new DynamoReadRepositoryEventLogger(logger, 'users-table');
  * readLogger.itemFetched({ id: '123' }, { id: '123', name: 'Alice' });
  */
 export class DynamoReadRepositoryEventLogger<T>
@@ -23,7 +23,7 @@ export class DynamoReadRepositoryEventLogger<T>
   private readonly tableName: string;
 
   /**
-   * Creates an instance of DynaXReadEventLogger.
+   * Creates an instance of DynamoReadRepositoryEventLogger.
    *
    * @param {ILogger<any>} logger - A logger instance that implements the ILogger interface.
    * @param {string} tableName - The name of the DynamoDB table being read from.
@@ -51,8 +51,7 @@ export class DynamoReadRepositoryEventLogger<T>
   /**
    * Logs a query execution event.
    *
-   * @param {DynamoConditionExpressionResult} condition - The condition used in the query.
-   * @param conditions
+   * @param {DynamoConditionExpressionResult} conditions - The condition used in the query.
    * @param {T[]} results - The list of items returned by the query.
    * @param {Key | undefined} lastEvaluatedKey - The key used for pagination, if any.
    */

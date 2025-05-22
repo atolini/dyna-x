@@ -76,6 +76,7 @@ export class DynamoWriteRepository<T extends DynamoItem>
    * Deletes an item from the DynamoDB table based on the provided key.
    *
    * @param key - The primary key of the item to be deleted.
+   * @returns A promise that resolves when the item is deleted.
    */
   async deleteItem(key: Key): Promise<void> {
     this.schema.validateKey(key);
@@ -98,13 +99,13 @@ export class DynamoWriteRepository<T extends DynamoItem>
    * @param update - The update expression builder containing the update operations.
    * @param key - The primary key of the item to be updated.
    * @param condition - Optional condition expression builder to enforce update constraints.
-   * @returns The updated item.
+   * @returns The updated item or null if the item was not found.
    */
   async update(
     update: DynamoUpdateBuilder,
     key: Key,
     condition?: DynamoConditionBuilder,
-  ): Promise<T> {
+  ): Promise<T | null> {
     this.schema.validateKey(key);
 
     const {

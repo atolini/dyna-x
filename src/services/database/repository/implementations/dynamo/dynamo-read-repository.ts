@@ -34,7 +34,7 @@ export class DynamoReadRepository<T extends DynamoItem>
    * Constructs a new instance of DynamoReadRepository.
    *
    * @param schema The schema used to validate and describe the table structure.
-   * @param eventLogger Logger used to track read events.
+   * @param eventLogger Logger used to track read events on the table.
    * @param region AWS region where the DynamoDB table is located.
    */
   constructor(

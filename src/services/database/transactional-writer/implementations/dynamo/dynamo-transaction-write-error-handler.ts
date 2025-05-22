@@ -13,29 +13,26 @@ import { ILogger } from '@logger/contracts';
 import { IErrorActions } from '@error-handler/contracts';
 
 /**
- * @class DynamoErrorHandler
+ * @class DynamoTransactionWriteErrorHandler
  * @implements {IErrorActions<T, R>}
  * @template T - Response type
  * @template R - Response builder type
  *
  * @classdesc
- * Handles exceptions thrown within the {@link DynaXTransactionWrite} and {@link DynaXRepository} classes.
+ * Handles specific exceptions thrown within the {@link DynamoTransactionWrite} class during DynamoDB transactional operations.
  *
- * This class provides centralized error handling for various exceptions that may arise
- * during DynamoDB transactional and repository operations.
+ * This class provides centralized error handling for the following DynamoDB exceptions:
  *
- * The following exceptions may be handled:
- *
- * - **InternalServerError**: An internal error occurred within the AWS DynamoDB service.
- * - **ProvisionedThroughputExceededException**: The request exceeded the provisioned throughput for the table.
- * - **RequestLimitExceeded**: The request limit for the account has been exceeded.
- * - **ResourceNotFoundException**: The specified table or index does not exist.
- * - **IdempotentParameterMismatchException**: Retry with a mismatched client token and parameters.
- * - **TransactionCanceledException**: The transaction was canceled.
- * - **TransactionInProgressException**: Another transaction is currently in progress.
- * - **InvalidEndpointException**: The DynamoDB endpoint is incorrect or unavailable.
+ * - {@link IdempotentParameterMismatchException}: Retry with a mismatched client token and parameters.
+ * - {@link InternalServerError}: An internal error occurred within the AWS DynamoDB service.
+ * - {@link InvalidEndpointException}: The DynamoDB endpoint is incorrect or unavailable.
+ * - {@link ProvisionedThroughputExceededException}: The request exceeded the provisioned throughput for the table.
+ * - {@link RequestLimitExceeded}: The request limit for the account has been exceeded.
+ * - {@link ResourceNotFoundException}: The specified table or index does not exist.
+ * - {@link TransactionCanceledException}: The transaction was canceled.
+ * - {@link TransactionInProgressException}: Another transaction is currently in progress.
  */
-export class DynamoErrorHandler<T, R extends IResponseBuilder<T>>
+export class DynamoTransactionWriteErrorHandler<T, R extends IResponseBuilder<T>>
   implements IErrorActions<T, R>
 {
   private readonly retryableErrors = new Set([
@@ -50,7 +47,10 @@ export class DynamoErrorHandler<T, R extends IResponseBuilder<T>>
   ]);
 
   /**
+   * Checks if the provided error is one of the handled DynamoDB exceptions.
    *
+   * @param error - The error to check.
+   * @returns {boolean} True if the error can be handled by this handler, false otherwise.
    */
   canHandle(error: Error): boolean {
     return Array.from(this.retryableErrors).some(
@@ -59,21 +59,38 @@ export class DynamoErrorHandler<T, R extends IResponseBuilder<T>>
   }
 
   /**
+   * Handles the provided error by logging it and returning an appropriate response using the response builder.
    *
+   * @param error - The error to handle.
+   * @param logger - The logger instance used to log the error details.
+   * @param resBuilder - The response builder used to generate the response.
+   * @returns {T} The response generated for the handled error.
    */
   handle(error: Error, logger: ILogger<any>, resBuilder: R): T {
     const errorMap = [
       {
+        type: IdempotentParameterMismatchException,
+        response: () =>
+          resBuilder.badRequest(
+            'Idempotent parameter mismatch. Please check the request parameters.',
+          ),
+      },
+      {
         type: InternalServerError,
-        log: {},
         response: () =>
           resBuilder.internalError(
             'An internal server error occurred. Please try again later.',
           ),
       },
       {
+        type: InvalidEndpointException,
+        response: () =>
+          resBuilder.internalError(
+            'Invalid endpoint. Please check your DynamoDB configuration.',
+          ),
+      },
+      {
         type: ProvisionedThroughputExceededException,
-        log: {},
         response: () =>
           resBuilder.tooManyRequests(
             'Provisioned throughput exceeded. Please try again later.',
@@ -81,7 +98,6 @@ export class DynamoErrorHandler<T, R extends IResponseBuilder<T>>
       },
       {
         type: RequestLimitExceeded,
-        log: {},
         response: () =>
           resBuilder.tooManyRequests(
             'Request limit exceeded. Please try again later.',
@@ -89,21 +105,11 @@ export class DynamoErrorHandler<T, R extends IResponseBuilder<T>>
       },
       {
         type: ResourceNotFoundException,
-        log: {},
         response: () =>
           resBuilder.notFound('The specified resource was not found.'),
       },
       {
-        type: IdempotentParameterMismatchException,
-        log: {},
-        response: () =>
-          resBuilder.badRequest(
-            'Idempotent parameter mismatch. Please check the request parameters.',
-          ),
-      },
-      {
         type: TransactionCanceledException,
-        log: {},
         response: () =>
           resBuilder.badRequest(
             'Transaction canceled. Please check the request parameters.',
@@ -111,18 +117,9 @@ export class DynamoErrorHandler<T, R extends IResponseBuilder<T>>
       },
       {
         type: TransactionInProgressException,
-        log: {},
         response: () =>
           resBuilder.tooManyRequests(
             'Transaction in progress. Please try again later.',
-          ),
-      },
-      {
-        type: InvalidEndpointException,
-        log: {},
-        response: () =>
-          resBuilder.internalError(
-            'Invalid endpoint. Please check your DynamoDB configuration.',
           ),
       },
     ];
@@ -133,7 +130,6 @@ export class DynamoErrorHandler<T, R extends IResponseBuilder<T>>
           name: error.name,
           message: error.message,
         });
-
         return entry.response();
       }
     }

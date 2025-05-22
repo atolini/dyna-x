@@ -45,7 +45,7 @@ export class DynamoUpdateBuilder
    * @param {unknown} value The value to set
    * @returns {DynamoUpdateBuilder} The builder instance for chaining
    */
-  set(field: string, value: unknown): DynamoUpdateBuilder {
+  set(field: string, value: unknown): this {
     return this.addUpdateExpression('SET', field, value);
   }
 
@@ -69,7 +69,7 @@ export class DynamoUpdateBuilder
    * @param {number} value The numeric value to add
    * @returns {DynamoUpdateBuilder} The builder instance for chaining
    */
-  add(field: string, value: number): DynamoUpdateBuilder {
+  add(field: string, value: number): this {
     return this.addUpdateExpression('ADD', field, value);
   }
 

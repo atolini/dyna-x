@@ -17,7 +17,7 @@ import { ITemplateServiceEventLogger } from '@template/contracts/i-template-serv
  * eventLogger.templateCompiled({ title: 'Hello' });
  */
 export class TemplateServiceEventLogger implements ITemplateServiceEventLogger {
-  private logger: ILogger<unknown>;
+  private readonly logger: ILogger<unknown>;
 
   /**
    * Creates an instance of TemplateEventLogger.

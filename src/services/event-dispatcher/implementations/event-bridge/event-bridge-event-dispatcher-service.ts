@@ -14,19 +14,20 @@ import { EventWrapper } from '@event-dispatcher/implementations/event-bridge';
  * @implements {IEventDispatcherService<EventWrapper>}
  *
  * @classdesc
- * Implementation of IDomainEventDispatcher that sends domain events to AWS EventBridge.
+ * Implementation of IEventDispatcherService that sends events to AWS EventBridge.
  *
- * This class provides methods to publish single or multiple domain events to an EventBridge event bus.
- * It converts domain events into EventBridge entries and sends them using the AWS SDK.
+ * This class provides methods to publish single or multiple events to an EventBridge event bus.
+ * It converts event objects into EventBridge entries and sends them using the AWS SDK.
  *
- * To create an instance of this class, you need to provide the event bus name, service name, and optionally the AWS region.
+ * To create an instance of this class, you need to provide the event bus name, service name, an event logger, and optionally the AWS region.
  *
- * Each `Event` object sent to this class contains a `DomainEvent` instance and a `requestId`.
+ * Each `EventWrapper` object sent to this class contains an event instance and a `requestId` (and optionally a `userId`).
  * The `requestId` is a unique identifier for the request and is included in the event payload
  * to enable tracking across distributed systems (e.g., multiple Lambda functions or services).
  *
  * @example
- * const bus = new EventBridgeDomainEventDispatcher('my-event-bus', 'my-service', 'us-east-1');
+ * const eventLogger = new ConsoleEventLogger();
+ * const bus = new EventBridgeEventDispatcherService('my-event-bus', 'my-service', eventLogger, 'us-east-1');
  * const event = new UserCreatedEvent({ userId: '123', email: 'user@example.com' });
  * await bus.publish({ event, requestId: 'abc-123' });
  */
@@ -36,7 +37,12 @@ export class EventBridgeEventDispatcherService
   private readonly client: EventBridgeClient;
 
   /**
+   * Creates an instance of EventBridgeEventDispatcherService.
    *
+   * @param {string} eventBusName - The name of the EventBridge event bus to which events will be published.
+   * @param {string} service - The name of the service or source publishing the events.
+   * @param {IEventDispatcherServiceEventLogger<EventWrapper>} eventLogger - Logger instance for event publishing actions.
+   * @param {string} [region] - Optional AWS region. If not provided, uses the default SDK configuration.
    */
   constructor(
     private readonly eventBusName: string,
@@ -48,9 +54,9 @@ export class EventBridgeEventDispatcherService
   }
 
   /**
-   * Publishes a single domain event to AWS EventBridge.
+   * Publishes a single event to AWS EventBridge.
    *
-   * @param {IEvent<any>} event - Object containing the domain event instance and a unique requestId for tracing.
+   * @param {EventWrapper} event - Object containing the event instance and a unique requestId for tracing.
    * @returns {Promise<void>} A promise that resolves when the event has been successfully published.
    *
    * @throws {InternalException} Throws if there is an error on the EventBridge service side.
@@ -67,7 +73,7 @@ export class EventBridgeEventDispatcherService
   /**
    * Publishes multiple domain events to AWS EventBridge in a single batch request.
    *
-   * @param {IEvent<any>[]} events - Array of objects each containing a domain event instance and a requestId.
+   * @param {EventWrapper[]} events - Array of objects each containing a domain event instance and a requestId.
    * @returns {Promise<void>} A promise that resolves when all events have been successfully published.
    *
    * @throws {InternalException} Throws if there is an error on the EventBridge service side.

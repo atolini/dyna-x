@@ -4,18 +4,17 @@ import { EventWrapper } from '@event-dispatcher/implementations/event-bridge';
 
 /**
  * @class EventBridgeEventDispatcherServiceEventLogger
+ * @implements {IEventDispatcherServiceEventLogger<EventWrapper>}
+ *
  * @classdesc
- * Helper class responsible for logging domain events dispatched via {@link EventBridgeDomainEventDispatcher}.
+ * Logger class responsible for logging to the console the events published by an EventBridgeEventDispatcherService implementation.
  *
- * It provides structured logs of single or batch event dispatches including metadata
- * such as requestId, userId, event type and timestamp.
- *
- * This class enhances observability and supports tracing and auditing of event-driven workflows.
+ * Provides simple structured logs for single or batch event publishing actions, mainly for debugging or development purposes.
  *
  * @example
  * const logger = new Logger<Context>({...}); // implements ILogger
- * const eventLogger = new EventBridgeServiceEventLogger(logger, 'my-event-bus');
- * eventLogger.eventPublished({ event: new UserCreatedEvent(...), requestId: 'abc-123' });
+ * const eventLogger = new EventBridgeEventDispatcherServiceEventLogger(logger);
+ * eventLogger.eventPublished({ event: new UserCreatedEvent(...), requestId: 'abc-123' }, 'my-event-bus');
  */
 export class EventBridgeEventDispatcherServiceEventLogger
   implements IEventDispatcherServiceEventLogger<EventWrapper>
@@ -23,8 +22,7 @@ export class EventBridgeEventDispatcherServiceEventLogger
   /**
    * Constructs a new EventBridgeServiceEventLogger.
    *
-   * @param eventBusName - The name of the EventBridge bus where events are published.
-   * @param logger
+   * @param logger - The logger instance used to log event information.
    */
   constructor(private readonly logger: ILogger<any>) {}
 
@@ -32,7 +30,7 @@ export class EventBridgeEventDispatcherServiceEventLogger
    * Logs a single event dispatch.
    *
    * @param event - The event metadata and domain event instance.
-   * @param transport
+   * @param transport - The transport mechanism used for publishing the event.
    */
   public eventPublished(event: EventWrapper, transport: string): void {
     const { requestId, userId, event: domainEvent } = event;
@@ -51,7 +49,7 @@ export class EventBridgeEventDispatcherServiceEventLogger
    * Logs multiple event dispatches.
    *
    * @param events - An array of event metadata and domain event instances.
-   * @param transport
+   * @param transport - The transport mechanism used for publishing the events.
    */
   public batchEventsPublished(events: EventWrapper[], transport: string): void {
     events.forEach((event) => this.eventPublished(event, transport));

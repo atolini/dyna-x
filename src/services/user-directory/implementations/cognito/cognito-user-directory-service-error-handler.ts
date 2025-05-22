@@ -61,7 +61,7 @@ export class CognitoUserDirectoryServiceErrorHandler<T, R extends IResponseBuild
         name: error.name,
         message: error.message,
       });
-      return resBuilder.notFound(error.message) as T;
+      return resBuilder.notFound(error.message);
     }
 
     if (error instanceof InvalidParameterException) {
@@ -69,7 +69,7 @@ export class CognitoUserDirectoryServiceErrorHandler<T, R extends IResponseBuild
         name: error.name,
         message: error.message,
       });
-      return resBuilder.badRequest('Invalid parameter in the request') as T;
+      return resBuilder.badRequest('Invalid parameter in the request');
     }
 
     if (error instanceof InvalidPasswordException) {
@@ -77,7 +77,7 @@ export class CognitoUserDirectoryServiceErrorHandler<T, R extends IResponseBuild
         name: error.name,
         message: error.message,
       });
-      return resBuilder.badRequest('Password does not meet requirements') as T;
+      return resBuilder.badRequest('Password does not meet requirements');
     }
 
     if (error instanceof NotAuthorizedException) {
@@ -87,7 +87,7 @@ export class CognitoUserDirectoryServiceErrorHandler<T, R extends IResponseBuild
       });
       return resBuilder.forbidden(
         'Not authorized to perform this operation',
-      ) as T;
+      );
     }
 
     if (error instanceof UsernameExistsException) {
@@ -95,7 +95,7 @@ export class CognitoUserDirectoryServiceErrorHandler<T, R extends IResponseBuild
         name: error.name,
         message: error.message,
       });
-      return resBuilder.badRequest('User already exists') as T;
+      return resBuilder.badRequest('User already exists');
     }
 
     if (error instanceof TooManyRequestsException) {
@@ -105,7 +105,7 @@ export class CognitoUserDirectoryServiceErrorHandler<T, R extends IResponseBuild
       });
       return resBuilder.tooManyRequests(
         'Too many requests - throttling limit reached',
-      ) as T;
+      );
     }
 
     if (error instanceof LimitExceededException) {
@@ -115,7 +115,7 @@ export class CognitoUserDirectoryServiceErrorHandler<T, R extends IResponseBuild
       });
       return resBuilder.tooManyRequests(
         'Request limit exceeded for Cognito',
-      ) as T;
+      );
     }
 
     if (error instanceof InvalidEmailRoleAccessPolicyException) {
@@ -125,7 +125,7 @@ export class CognitoUserDirectoryServiceErrorHandler<T, R extends IResponseBuild
       });
       return resBuilder.internalError(
         'Invalid email role access policy configuration',
-      ) as T;
+      );
     }
 
     if (error instanceof InternalErrorException) {
@@ -135,7 +135,7 @@ export class CognitoUserDirectoryServiceErrorHandler<T, R extends IResponseBuild
       });
       return resBuilder.internalError(
         'Internal error occurred in Cognito',
-      ) as T;
+      );
     }
   }
 }

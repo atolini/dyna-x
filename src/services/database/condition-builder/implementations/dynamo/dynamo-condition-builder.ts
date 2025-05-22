@@ -85,7 +85,7 @@ export class DynamoConditionBuilder
    *
    * @returns {DynamoConditionBuilder} The builder instance for chaining
    */
-  and(): DynamoConditionBuilder {
+  and(): this {
     this.expressions.push('AND');
     return this;
   }
@@ -95,7 +95,7 @@ export class DynamoConditionBuilder
    *
    * @returns {DynamoConditionBuilder} The builder instance for chaining
    */
-  or(): DynamoConditionBuilder {
+  or(): this {
     this.expressions.push('OR');
     return this;
   }
@@ -127,7 +127,7 @@ export class DynamoConditionBuilder
     field: string,
     operator: string,
     value: any,
-  ): DynamoConditionBuilder {
+  ): this {
     const fieldPlaceholder = `#attr${this.index}`;
     const valuePlaceholder = `:val${this.index}`;
 

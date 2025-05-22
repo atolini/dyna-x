@@ -180,7 +180,7 @@ export class DynamoErrorHandler<T, R extends IResponseBuilder<T>>
           message: error.message,
         });
 
-        return entry.response() as T;
+        return entry.response();
       }
     }
   }

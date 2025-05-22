@@ -41,9 +41,9 @@ import { IEmailServiceEventLogger } from '@email/contracts/i-email-service-event
  * await emailService.sendEmail(message);
  */
 export class SESEmailService implements IEmailService {
-  private sesClient: SESClient;
-  private defaultSender: string;
-  private eventLogger: IEmailServiceEventLogger;
+  private readonly sesClient: SESClient;
+  private readonly defaultSender: string;
+  private readonly eventLogger: IEmailServiceEventLogger;
 
   /**
    * Creates an instance of SESEmailService.

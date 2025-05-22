@@ -110,7 +110,7 @@ export class AVPAuthorizationService
   ) {
     this.policyStoreId = policyStoreId;
     this.client = new VerifiedPermissionsClient(
-      clientConfig ? clientConfig : {},
+      clientConfig ?? clientConfig,
     );
     this.token = token || null;
     this.eventLogger = eventLogger;

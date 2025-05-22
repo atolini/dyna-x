@@ -23,7 +23,7 @@ import { DynamoItem } from '@database/transactional-writer/implementations/dynam
 export class DynamoTransactionWrite
   implements ITransactionalWriter<DynamoSchema<any>, DynamoItem>
 {
-  private client: DynamoDBClient;
+  private readonly client: DynamoDBClient;
   private readonly maxBatchItems: number = 100; // DynamoDB limit for batch write operations
 
   /**

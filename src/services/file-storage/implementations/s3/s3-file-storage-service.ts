@@ -27,7 +27,7 @@ import {
  * await storage.uploadFile('folder/file.txt', 'content', 'text/plain');
  */
 export class S3FileStorageService implements IFileStorageService {
-  private s3: S3Client;
+  private readonly s3: S3Client;
 
   /**
    * Constructs a new instance of S3StorageService.

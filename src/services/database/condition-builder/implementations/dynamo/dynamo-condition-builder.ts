@@ -31,7 +31,7 @@ import { DynamoConditionExpressionResult } from '@database/condition-builder/imp
 export class DynamoConditionBuilder
   implements IConditionBuilder<DynamoConditionExpressionResult>
 {
-  private expressions: string[] = [];
+  private readonly expressions: string[] = [];
   private attributeNames: Record<string, string> = {};
   private attributeValues: Record<string, any> = {};
   private index = 0;

@@ -14,7 +14,7 @@ import { DynamoConditionExpressionResult } from '@database/condition-builder/imp
  * It outputs a ready-to-use structure compatible with DynamoDB queries.
  *
  * @example
- * const builder = new DynamoDBConditionBuilder();
+ * const builder = new DynamoConditionBuilder();
  * const condition = builder
  *   .eq('status', 'ACTIVE')
  *   .and()

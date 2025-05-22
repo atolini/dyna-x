@@ -13,6 +13,7 @@ import {
 import { IResponseBuilder } from '@response-builder/contracts';
 import { ILogger } from '@logger/contracts';
 import { IErrorActions } from '@error-handler/contracts';
+import { InvalidKeyError } from '@database/schema/implementations/dynamo';
 
 /**
  * @class DynamoErrorHandler
@@ -52,11 +53,10 @@ export class DynamoErrorHandler<T, R extends IResponseBuilder<T>>
     ItemCollectionSizeLimitExceededException,
     TransactionConflictException,
     ConditionalCheckFailedException,
-    //MaxItemsExceededError,
     IdempotentParameterMismatchException,
     TransactionCanceledException,
     TransactionInProgressException,
-    //InvalidKeyError,
+    InvalidKeyError,
   ]);
 
   /**
@@ -127,16 +127,6 @@ export class DynamoErrorHandler<T, R extends IResponseBuilder<T>>
             'Conditional check failed. Please check the request parameters.',
           ),
       },
-      /** 
-      {
-        type: MaxItemsExceededError,
-        log: {},
-        response: () =>
-          resBuilder.badRequest(
-            'Max items exceeded. Please check the request parameters.',
-          ),
-      },
-      */
       {
         type: IdempotentParameterMismatchException,
         log: {},
@@ -160,8 +150,7 @@ export class DynamoErrorHandler<T, R extends IResponseBuilder<T>>
           resBuilder.tooManyRequests(
             'Transaction in progress. Please try again later.',
           ),
-      },
-      /** 
+      }, 
       {
         type: InvalidKeyError,
         log: {},
@@ -170,7 +159,6 @@ export class DynamoErrorHandler<T, R extends IResponseBuilder<T>>
             'Invalid key. Please check the request parameters.',
           ),
       },
-      */
     ];
 
     for (const entry of errorMap) {

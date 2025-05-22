@@ -44,7 +44,7 @@ export interface LogContainer {
  * });
  */
 export class CloudWatchLogService<T> implements ILogService<T, LogContainer> {
-  private client: CloudWatchLogsClient;
+  private readonly client: CloudWatchLogsClient;
 
   /**
    * Constructs a new instance of CloudWatchLogService.

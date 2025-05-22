@@ -173,7 +173,7 @@ export class AVPAuthorizationService
     const response = await this.client.send(command);
 
     const result = {
-      resourceId: request.resource,
+      resource: request.resource,
       decision: response.decision ?? 'DENY',
     };
 
@@ -253,7 +253,7 @@ export class AVPAuthorizationService
 
     const results: AuthorizationResponse<EntityIdentifier>[] =
       response.results?.map((result, index) => ({
-        resourceId: request.requests[index].resource,
+        resource: request.requests[index].resource,
         decision: result.decision ?? 'DENY',
       })) ?? [];
 

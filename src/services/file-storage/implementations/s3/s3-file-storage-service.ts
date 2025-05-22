@@ -151,7 +151,7 @@ export class S3FileStorageService implements IFileStorageService {
         }),
       );
 
-      keys.push(...(response.Contents?.map((item) => item.Key || '') || []));
+      keys.push(...(response.Contents?.map((item) => item.Key ?? '') ?? []));
       continuationToken = response.NextContinuationToken;
     } while (continuationToken);
 

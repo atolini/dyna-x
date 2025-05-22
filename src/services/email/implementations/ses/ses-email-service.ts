@@ -49,6 +49,7 @@ export class SESEmailService implements IEmailService {
    * Creates an instance of SESEmailService.
    *
    * @param {string} defaultSender - The default sender email address.
+   * @param {IEmailServiceEventLogger} eventLogger - Logger instance for email events.
    * @param {string} [region] - Optional AWS region to use for SES. If not provided, the default region is used.
    */
   constructor(

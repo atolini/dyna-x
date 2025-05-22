@@ -1,5 +1,5 @@
 import { ILogger } from '@logger/contracts';
-import { IEmailMessageInput } from '@email/contracts/i-email-message-input';
+import { IEmailMessageInput } from '@email/contracts';
 
 /**
  * @class SESEmailServiceEventLogger

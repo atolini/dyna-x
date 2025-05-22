@@ -92,7 +92,7 @@ export class S3FileStorageServiceErrorHandler<T, R extends IResponseBuilder<T>>
           name: error.name,
           message: error.message,
         });
-        return entry.response() as T;
+        return entry.response();
       }
     }
   }

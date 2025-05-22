@@ -50,36 +50,36 @@ export class CloudWatchLogServiceErrorHandler<T, R extends IResponseBuilder<T>>
   handle(error: Error, logger: ILogger<any>, resBuilder: R): T {
     if (error instanceof ResourceNotFoundException) {
       logger.error({ name: error.name, message: error.message });
-      return resBuilder.notFound('Log group or log stream not found') as T;
+      return resBuilder.notFound('Log group or log stream not found');
     }
 
     if (error instanceof InvalidSequenceTokenException) {
       logger.error({ name: error.name, message: error.message });
       return resBuilder.badRequest(
         'Invalid sequence token for log stream',
-      ) as T;
+      );
     }
 
     if (error instanceof DataAlreadyAcceptedException) {
       logger.error({ name: error.name, message: error.message });
-      return resBuilder.badRequest('Log event data was already accepted') as T;
+      return resBuilder.badRequest('Log event data was already accepted');
     }
 
     if (error instanceof InvalidParameterException) {
       logger.error({ name: error.name, message: error.message });
-      return resBuilder.badRequest('Invalid parameter for log request') as T;
+      return resBuilder.badRequest('Invalid parameter for log request');
     }
 
     if (error instanceof ServiceUnavailableException) {
       logger.error({ name: error.name, message: error.message });
       return resBuilder.internalError(
         'CloudWatch Logs service is temporarily unavailable',
-      ) as T;
+      );
     }
 
     if (error instanceof UnrecognizedClientException) {
       logger.error({ name: error.name, message: error.message });
-      return resBuilder.forbidden('AWS client is not recognized') as T;
+      return resBuilder.forbidden('AWS client is not recognized');
     }
   }
 }

@@ -24,9 +24,9 @@ import { Key } from '@database/schema/implementations/dynamo/key';
  * schema.validateKey({ userId: 'abc123', createdAt: 1692451820 }); // passes
  */
 export class DynamoSchema<T> implements IDatabaseSchema<Key, T> {
-  private tableName: string;
-  private partitionKey: KeyConfig;
-  private sortKey?: KeyConfig;
+  private readonly tableName: string;
+  private readonly partitionKey: KeyConfig;
+  private readonly sortKey?: KeyConfig;
 
   /**
    * Creates an instance of DynamoSchema.

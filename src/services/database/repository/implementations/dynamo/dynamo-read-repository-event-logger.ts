@@ -19,7 +19,7 @@ import { Key } from '@database/repository/implementations/dynamo/key';
 export class DynamoReadRepositoryEventLogger<T>
   implements IReadRepositoryEventLogger<T, Key, DynamoConditionExpressionResult>
 {
-  private logger: ILogger<unknown>;
+  private readonly logger: ILogger<unknown>;
   private readonly tableName: string;
 
   /**

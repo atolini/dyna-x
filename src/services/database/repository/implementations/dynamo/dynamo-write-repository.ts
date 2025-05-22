@@ -42,7 +42,7 @@ export class DynamoWriteRepository<T extends DynamoItem>
    */
   constructor(
     private readonly schema: DynamoSchema<T>,
-    private eventLogger: DynamoWriteRepositoryEventLogger<T>,
+    private readonly eventLogger: DynamoWriteRepositoryEventLogger<T>,
     region: string,
   ) {
     this.client = new DynamoDBClient(region ? { region: region } : {});

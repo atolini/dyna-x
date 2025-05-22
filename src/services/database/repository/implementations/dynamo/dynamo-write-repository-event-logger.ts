@@ -26,7 +26,7 @@ export class DynamoWriteRepositoryEventLogger<T>
       DynamoConditionExpressionResult
     >
 {
-  private logger: ILogger<unknown>;
+  private readonly logger: ILogger<unknown>;
   private readonly tableName: string;
 
   /**

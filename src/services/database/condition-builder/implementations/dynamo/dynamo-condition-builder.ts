@@ -43,7 +43,7 @@ export class DynamoConditionBuilder
    * @param {string | number | boolean} value The expected value
    * @returns {DynamoConditionBuilder} The builder instance for chaining
    */
-  eq(field: string, value: string | number | boolean): DynamoConditionBuilder {
+  eq(field: string, value: string | number | boolean): this {
     return this.addCondition(field, '=', value);
   }
 
@@ -54,7 +54,7 @@ export class DynamoConditionBuilder
    * @param {string | number | boolean} value The value to compare against
    * @returns {DynamoConditionBuilder} The builder instance for chaining
    */
-  ne(field: string, value: string | number | boolean): DynamoConditionBuilder {
+  ne(field: string, value: string | number | boolean): this {
     return this.addCondition(field, '<>', value);
   }
 
@@ -65,7 +65,7 @@ export class DynamoConditionBuilder
    * @param {string | number} value The value to compare against
    * @returns {DynamoConditionBuilder} The builder instance for chaining
    */
-  gt(field: string, value: string | number): DynamoConditionBuilder {
+  gt(field: string, value: string | number): this {
     return this.addCondition(field, '>', value);
   }
 
@@ -76,7 +76,7 @@ export class DynamoConditionBuilder
    * @param {string | number} value The value to compare against
    * @returns {DynamoConditionBuilder} The builder instance for chaining
    */
-  lt(field: string, value: string | number): DynamoConditionBuilder {
+  lt(field: string, value: string | number): this {
     return this.addCondition(field, '<', value);
   }
 

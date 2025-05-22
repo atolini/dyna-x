@@ -55,9 +55,7 @@ export class CloudWatchLogServiceErrorHandler<T, R extends IResponseBuilder<T>>
 
     if (error instanceof InvalidSequenceTokenException) {
       logger.error({ name: error.name, message: error.message });
-      return resBuilder.badRequest(
-        'Invalid sequence token for log stream',
-      );
+      return resBuilder.badRequest('Invalid sequence token for log stream');
     }
 
     if (error instanceof DataAlreadyAcceptedException) {

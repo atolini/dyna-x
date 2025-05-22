@@ -18,7 +18,9 @@ import { IUserDirectoryServiceEventLogger } from '@user-directory/contracts';
  * const eventLogger = new UserEventLogger(logger, 'us-east-1_example');
  * eventLogger.userCreated('john.doe', [{ Name: 'email', Value: 'john.doe@example.com' }]);
  */
-export class CognitoUserDirectoryServiceEventLogger implements IUserDirectoryServiceEventLogger<AttributeType[]> {
+export class CognitoUserDirectoryServiceEventLogger
+  implements IUserDirectoryServiceEventLogger<AttributeType[]>
+{
   private readonly logger: ILogger<unknown>;
   private readonly userPoolId: string;
 

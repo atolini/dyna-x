@@ -123,11 +123,7 @@ export class DynamoConditionBuilder
    * @param {any} value The value to compare against
    * @returns {DynamoConditionBuilder} The builder instance for chaining
    */
-  private addCondition(
-    field: string,
-    operator: string,
-    value: any,
-  ): this {
+  private addCondition(field: string, operator: string, value: any): this {
     const fieldPlaceholder = `#attr${this.index}`;
     const valuePlaceholder = `:val${this.index}`;
 

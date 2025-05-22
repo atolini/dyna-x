@@ -44,10 +44,14 @@ import {
  *   suppressMessage: true
  * });
  */
-export class CognitoUserDirectoryService implements IUserDirectoryService<AttributeType> {
+export class CognitoUserDirectoryService
+  implements IUserDirectoryService<AttributeType>
+{
   private readonly client: CognitoIdentityProviderClient;
   private readonly userPoolId: string;
-  private readonly eventLogger: IUserDirectoryServiceEventLogger<AttributeType[]>;
+  private readonly eventLogger: IUserDirectoryServiceEventLogger<
+    AttributeType[]
+  >;
 
   /**
    * Creates an instance of CognitoUserService.

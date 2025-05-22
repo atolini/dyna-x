@@ -33,8 +33,10 @@ import {
  * - **InvalidEmailRoleAccessPolicyException**: If Cognito isn't allowed to use your email identity.
  * - **UserNotFoundException**: If the specified user does not exist in the User Pool.
  */
-export class CognitoUserDirectoryServiceErrorHandler<T, R extends IResponseBuilder<T>>
-  implements IErrorActions<T, R>
+export class CognitoUserDirectoryServiceErrorHandler<
+  T,
+  R extends IResponseBuilder<T>,
+> implements IErrorActions<T, R>
 {
   /**
    *
@@ -85,9 +87,7 @@ export class CognitoUserDirectoryServiceErrorHandler<T, R extends IResponseBuild
         name: error.name,
         message: error.message,
       });
-      return resBuilder.forbidden(
-        'Not authorized to perform this operation',
-      );
+      return resBuilder.forbidden('Not authorized to perform this operation');
     }
 
     if (error instanceof UsernameExistsException) {
@@ -113,9 +113,7 @@ export class CognitoUserDirectoryServiceErrorHandler<T, R extends IResponseBuild
         name: error.name,
         message: error.message,
       });
-      return resBuilder.tooManyRequests(
-        'Request limit exceeded for Cognito',
-      );
+      return resBuilder.tooManyRequests('Request limit exceeded for Cognito');
     }
 
     if (error instanceof InvalidEmailRoleAccessPolicyException) {
@@ -133,9 +131,7 @@ export class CognitoUserDirectoryServiceErrorHandler<T, R extends IResponseBuild
         name: error.name,
         message: error.message,
       });
-      return resBuilder.internalError(
-        'Internal error occurred in Cognito',
-      );
+      return resBuilder.internalError('Internal error occurred in Cognito');
     }
   }
 }

@@ -150,7 +150,7 @@ export class DynamoErrorHandler<T, R extends IResponseBuilder<T>>
           resBuilder.tooManyRequests(
             'Transaction in progress. Please try again later.',
           ),
-      }, 
+      },
       {
         type: InvalidKeyError,
         log: {},

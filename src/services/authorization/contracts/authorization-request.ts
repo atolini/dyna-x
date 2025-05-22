@@ -9,10 +9,10 @@
  * Represents an authorization request for a specific resource, including the identity performing the action,
  * the action itself, the resource being accessed, and optional context information.
  *
- * @property {I} entityId - The identifier of the entity (e.g., user ID) making the request.
+ * @property {I} entity - The identifier of the entity (e.g., user ID) making the request.
  * @property {A} action - The action being requested (e.g., 'create', 'delete').
  * @property {C} [context] - Optional context related to the request (e.g., user roles, environment metadata).
- * @property {R} resourceId - The identifier of the resource being accessed (e.g., an object ID or ARN).
+ * @property {R} resource - The identifier of the resource being accessed (e.g., an object ID or ARN).
  */
 export interface AuthorizationRequest<A, I, C, R> {
   /** The identifier of the entity (e.g., user ID) making the request. */

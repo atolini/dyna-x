@@ -11,7 +11,7 @@
  */
 export interface AuthorizationResponse<R> {
   /** The identifier of the resource for which the authorization decision was made. */
-  resourceId: R;
+  resource: R;
 
   /** The result of the authorization check. */
   decision: 'ALLOW' | 'DENY';

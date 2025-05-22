@@ -33,7 +33,7 @@ import { DynamoUpdateExpressionResult } from '@database/update-builder/implement
 export class DynamoUpdateBuilder
   implements IUpdateBuilder<DynamoUpdateExpressionResult>
 {
-  private updateExpressions: string[] = [];
+  private readonly updateExpressions: string[] = [];
   private expressionAttributeNames: Record<string, string> = {};
   private expressionAttributeValues: Record<string, any> = {};
   private index = 0;
@@ -55,7 +55,7 @@ export class DynamoUpdateBuilder
    * @param {string} field The name of the attribute to remove
    * @returns {DynamoUpdateBuilder} The builder instance for chaining
    */
-  remove(field: string): DynamoUpdateBuilder {
+  remove(field: string): this {
     this.updateExpressions.push(`REMOVE #attr${this.index}`);
     this.expressionAttributeNames[`#attr${this.index}`] = field;
     this.index++;
@@ -100,7 +100,7 @@ export class DynamoUpdateBuilder
     type: 'SET' | 'ADD',
     field: string,
     value: any,
-  ): DynamoUpdateBuilder {
+  ): this {
     const fieldPlaceholder = `#attr${this.index}`;
     const valuePlaceholder = `:val${this.index}`;
 

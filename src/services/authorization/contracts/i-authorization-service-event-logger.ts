@@ -6,23 +6,22 @@ import {
 } from '.';
 
 /**
- * @interface IAVPAuthorizationEventLogger
+ * @interface IAuthorizationServiceEventLogger
  * @template A The type that identifies the action (e.g., 'read', 'delete').
- * @template I The type that identifies the identity or user (e.g., user ID).
+ * @template E The type that identifies the identity or user (e.g., user ID).
  * @template C The type that identifies the context of the request (e.g., roles, environment, metadata).
  * @template R The type that identifies the resource (e.g., resource ID or ARN).
  *
  * @description
- * Defines the contract for an event logger that tracks authorization checks made via AWS Verified Permissions.
- *
- * This interface supports logging of both single and batch authorization decisions.
+ * Defines the contract for an event logger that tracks authorization checks.
+ * Supports logging of both single and batch authorization decisions.
  */
 export interface IAuthorizationServiceEventLogger<A, E, C, R> {
   /**
    * Logs a single authorization decision.
    *
-   * @param request - The authorization request sent to AVP.
-   * @param response - The response received from AVP containing the decision.
+   * @param request - The authorization request being evaluated.
+   * @param response - The response containing the decision for the request.
    */
   authorizationChecked(
     request: AuthorizationRequest<A, E, C, R>,
@@ -32,8 +31,8 @@ export interface IAuthorizationServiceEventLogger<A, E, C, R> {
   /**
    * Logs a batch of authorization decisions.
    *
-   * @param request - The batch of authorization requests sent to AVP.
-   * @param response - The batch response from AVP containing decisions for each request.
+   * @param request - The batch of authorization requests being evaluated.
+   * @param response - The batch response containing decisions for each request.
    */
   batchAuthorizationChecked(
     request: BatchAuthorizationRequest<A, E, C, R>,

@@ -49,12 +49,18 @@ export class DynamoErrorHandler<T, R extends IResponseBuilder<T>>
     TransactionInProgressException,
   ]);
 
+  /**
+   *
+   */
   canHandle(error: Error): boolean {
     return Array.from(this.retryableErrors).some(
       (errorType) => error instanceof errorType,
     );
   }
 
+  /**
+   *
+   */
   handle(error: Error, logger: ILogger<any>, resBuilder: R): T {
     const errorMap = [
       {

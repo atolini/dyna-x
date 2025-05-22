@@ -10,5 +10,7 @@ import { AuthorizationResponse } from '.';
  * @property {AuthorizationResponse<R>[]} results - An array of authorization responses, each representing the decision for a specific resource.
  */
 export interface BatchAuthorizationResponse<R> {
+
+  /** An array of authorization responses, each representing the decision for a specific resource. */
   results: AuthorizationResponse<R>[];
 }

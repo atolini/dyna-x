@@ -24,6 +24,7 @@ export class EventBridgeEventDispatcherServiceEventLogger
    * Constructs a new EventBridgeServiceEventLogger.
    *
    * @param eventBusName - The name of the EventBridge bus where events are published.
+   * @param logger
    */
   constructor(private readonly logger: ILogger<any>) {}
 
@@ -31,6 +32,7 @@ export class EventBridgeEventDispatcherServiceEventLogger
    * Logs a single event dispatch.
    *
    * @param event - The event metadata and domain event instance.
+   * @param transport
    */
   public eventPublished(event: EventWrapper, transport: string): void {
     const { requestId, userId, event: domainEvent } = event;
@@ -49,6 +51,7 @@ export class EventBridgeEventDispatcherServiceEventLogger
    * Logs multiple event dispatches.
    *
    * @param events - An array of event metadata and domain event instances.
+   * @param transport
    */
   public batchEventsPublished(events: EventWrapper[], transport: string): void {
     events.forEach((event) => this.eventPublished(event, transport));

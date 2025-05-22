@@ -14,5 +14,7 @@ import { AuthorizationRequest } from '.';
  * @property {AuthorizationRequest<A, I, C, R>[]} requests - An array of individual authorization requests.
  */
 export interface BatchAuthorizationRequest<A, I, C, R> {
+
+  /** An array of individual authorization requests. */
   requests: AuthorizationRequest<A, I, C, R>[];
 }

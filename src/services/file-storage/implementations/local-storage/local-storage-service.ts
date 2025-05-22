@@ -6,7 +6,7 @@ import * as path from 'path';
  * Manages file operations within a specified directory.
  */
 export class LocalStorageService implements IFileStorageService {
-  private dir: string;
+  private readonly dir: string;
 
   /**
    * Initializes the LocalStorage with a given directory path.

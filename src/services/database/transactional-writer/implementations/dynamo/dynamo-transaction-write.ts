@@ -67,8 +67,6 @@ export class DynamoTransactionWrite
     const command = new TransactWriteItemsCommand(params);
 
     await this.client.send(command);
-
-    return;
   }
 
   /**

@@ -23,4 +23,4 @@ export type EventWrapper = {
   event: IEvent;
   requestId: string;
   userId?: string;
-}
+};

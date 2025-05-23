@@ -11,7 +11,11 @@ import {
 import { marshall, unmarshall } from '@aws-sdk/util-dynamodb';
 import { DynamoConditionBuilder } from '@database/condition-builder/implementations/dynamo';
 import { IWriteRepository } from '@database/repository/contracts';
-import { DynamoItem, DynamoWriteRepositoryEventLogger, Key } from '@database/repository/implementations/dynamo';
+import {
+  DynamoItem,
+  DynamoWriteRepositoryEventLogger,
+  Key,
+} from '@database/repository/implementations/dynamo';
 import { DynamoSchema } from '@database/schema/implementations/dynamo';
 import { DynamoUpdateBuilder } from '@database/update-builder/implementations/dynamo';
 import { merge } from 'lodash';

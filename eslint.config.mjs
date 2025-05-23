@@ -13,11 +13,11 @@ export default defineConfig([
       },
     },
     plugins: {
-      '@typescript-eslint': tseslint.plugin
+      '@typescript-eslint': tseslint.plugin,
     },
     rules: {
       ...tseslint.configs.recommended.rules,
-      ...tseslint.configs.recommendedTypeChecked.rules
+      ...tseslint.configs.recommendedTypeChecked.rules,
     },
   },
 ]);

@@ -23,4 +23,4 @@ export type Token = {
    * The identity token used to identify the principal.
    */
   identityToken: string;
-}
+};

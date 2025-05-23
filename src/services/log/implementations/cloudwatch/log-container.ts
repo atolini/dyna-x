@@ -17,4 +17,4 @@
 export type LogContainer = {
   logGroupName: string;
   logStreamName: string;
-}
+};

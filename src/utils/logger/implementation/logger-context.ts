@@ -17,4 +17,4 @@ export type LoggerContext = {
   requestId: string;
   service: string;
   userId?: string;
-}
+};

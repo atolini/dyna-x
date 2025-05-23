@@ -10,7 +10,11 @@ import {
 import { marshall, unmarshall } from '@aws-sdk/util-dynamodb';
 import { DynamoConditionBuilder } from '@database/condition-builder/implementations/dynamo';
 import { IReadRepository } from '@database/repository/contracts';
-import { DynamoItem, DynamoReadRepositoryEventLogger, Key } from '@database/repository/implementations/dynamo';
+import {
+  DynamoItem,
+  DynamoReadRepositoryEventLogger,
+  Key,
+} from '@database/repository/implementations/dynamo';
 import { DynamoSchema } from '@database/schema/implementations/dynamo';
 
 /**

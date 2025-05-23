@@ -6,9 +6,7 @@ import { ILogger } from '@logger/contracts';
  *
  * This logger captures log dispatch actions and enhances observability and debugging for log transmission to AWS CloudWatch Logs.
  */
-export class CloudWatchLogServiceEventLogger
-  implements ILogServiceEventLogger
-{
+export class CloudWatchLogServiceEventLogger implements ILogServiceEventLogger {
   private readonly logger: ILogger<unknown>;
 
   /**

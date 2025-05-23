@@ -46,7 +46,7 @@ export class CloudWatchLogService<T> implements ILogService<T, LogContainer> {
    */
   constructor(
     private readonly eventLogger: ILogServiceEventLogger,
-    region?: string
+    region?: string,
   ) {
     this.client = new CloudWatchLogsClient(region ? { region } : {});
   }

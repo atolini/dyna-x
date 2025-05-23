@@ -34,7 +34,7 @@
     "src/utils/event/contracts",
     "src/utils/event/implementation"
   ],
-  "entryPointStrategy": "resolve", 
-  "lang": "en", 
+  "entryPointStrategy": "resolve",
+  "lang": "en",
   "name": "Cloud Adapter Kit"
 }

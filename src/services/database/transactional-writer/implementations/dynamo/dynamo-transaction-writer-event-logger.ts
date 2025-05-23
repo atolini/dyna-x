@@ -1,5 +1,8 @@
 import { DynamoSchema } from '@database/schema/implementations/dynamo';
-import { ITransactionalWriterEventLogger, ITransactionalWriterUnit } from '@database/transactional-writer/contracts';
+import {
+  ITransactionalWriterEventLogger,
+  ITransactionalWriterUnit,
+} from '@database/transactional-writer/contracts';
 import { DynamoItem } from '@database/transactional-writer/implementations/dynamo';
 import { ILogger } from '@logger/contracts';
 

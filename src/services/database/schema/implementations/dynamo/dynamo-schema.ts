@@ -1,5 +1,9 @@
 import { IDatabaseSchema } from '@database/schema/contracts';
-import { InvalidKeyError, Key, KeyConfig } from '@database/schema/implementations/dynamo';
+import {
+  InvalidKeyError,
+  Key,
+  KeyConfig,
+} from '@database/schema/implementations/dynamo';
 
 /**
  * @template T - The full object type that includes key attributes and possibly additional data.

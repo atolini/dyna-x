@@ -3,7 +3,7 @@ import {
   DescribeLogStreamsCommand,
   PutLogEventsCommand,
 } from '@aws-sdk/client-cloudwatch-logs';
-import { ILogService } from '@log/contracts';
+import { ILogService, ILogServiceEventLogger } from '@log/contracts';
 import { LogContainer } from '.';
 
 /**
@@ -44,7 +44,10 @@ export class CloudWatchLogService<T> implements ILogService<T, LogContainer> {
    *
    * @param {string} [region] - AWS region for the CloudWatchLogs client (default: 'us-east-1').
    */
-  constructor(region?: string) {
+  constructor(
+    private readonly eventLogger: ILogServiceEventLogger,
+    region?: string
+  ) {
     this.client = new CloudWatchLogsClient(region ? { region } : {});
   }
 
@@ -98,5 +101,7 @@ export class CloudWatchLogService<T> implements ILogService<T, LogContainer> {
         sequenceToken,
       }),
     );
+
+    this.eventLogger.logsDispatched(logGroupName, logStreamName, logs.length);
   }
 }

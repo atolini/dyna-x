@@ -25,6 +25,7 @@
     "prettier": "^3.5.3",
     "ts-jest": "^29.3.0",
     "ts-node": "^10.9.2",
+    "typedoc": "^0.28.4",
     "typescript": "^5.8.2",
     "typescript-eslint": "^8.32.1"
   },
@@ -43,7 +44,6 @@
     "aws-lambda": "^1.0.7",
     "handlebars": "^4.7.8",
     "lodash": "^4.17.21",
-    "typedoc": "^0.28.4",
     "uuid": "^11.1.0"
   }
 }

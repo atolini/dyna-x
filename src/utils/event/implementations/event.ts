@@ -1,4 +1,4 @@
-import { IEvent } from "@event/contracts";
+import { IEvent } from '@event/contracts';
 
 /**
  * @class DomainEvent

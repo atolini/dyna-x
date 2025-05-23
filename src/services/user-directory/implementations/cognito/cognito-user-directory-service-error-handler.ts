@@ -38,7 +38,7 @@ export class CognitoUserDirectoryServiceErrorHandler<
   R extends IResponseBuilder<T>,
 > implements IErrorActions<T, R>
 {
-    /**
+  /**
    * Checks if the error can be handled by this handler.
    *
    * @param {Error} error - The error to check.
@@ -57,8 +57,8 @@ export class CognitoUserDirectoryServiceErrorHandler<
     );
   }
 
-    /**
-     *  Handles the provided error and builds an appropriate response using the response builder.
+  /**
+   *  Handles the provided error and builds an appropriate response using the response builder.
    *
    * @param {Error} error - The error to handle.
    * @param {ILogger<any>} logger - The logger instance for logging the error.

@@ -28,7 +28,6 @@ import {
 export class S3FileStorageServiceErrorHandler<T, R extends IResponseBuilder<T>>
   implements IErrorActions<T, R>
 {
-
   /**
    * Checks if the error can be handled by this handler.
    *

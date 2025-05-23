@@ -1,7 +1,7 @@
 import { ILogger } from '@logger/contracts';
 
 /**
- * @class S3FileStorageServiceEventLogger  
+ * @class S3FileStorageServiceEventLogger
  * @classdesc
  * Helper class responsible for logging file-related events performed by the {@link S3StorageService}.
  *

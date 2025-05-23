@@ -5,7 +5,7 @@ import * as path from 'path';
 /**
  * @class LocalStorageService
  * @implements {@link IFileStorageService}
- * 
+ *
  * @classdesc
  * Manages file operations within a specified directory.
  */

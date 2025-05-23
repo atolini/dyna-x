@@ -1,4 +1,4 @@
-import { IEvent } from '@event/contracts/i-event';
+import { IEvent } from "@event/contracts";
 
 /**
  * @class DomainEvent
@@ -18,7 +18,7 @@ import { IEvent } from '@event/contracts/i-event';
  *   email: string;
  * }
  *
- * class UserCreatedEvent extends DomainEvent<UserCreatedEvent> {
+ * class UserCreatedEvent extends DomainEvent {
  *   public readonly userId: string;
  *   public readonly email: string;
  *
@@ -31,21 +31,23 @@ import { IEvent } from '@event/contracts/i-event';
  *
  * const event = new UserCreatedEvent({ userId: '123', email: 'user@example.com' });
  * console.log(event.getCreatedAt()); // Outputs event creation timestamp
- * console.log(event.getType());     // Outputs 'UserCreatedEvent'
+ * console.log(event.getType());      // Outputs 'UserCreatedEvent'
  * console.log(event.getEvent());     // Outputs { userId: '123', email: 'user@example.com' }
  */
 export abstract class DomainEvent implements IEvent {
   private readonly createdAt: Date;
 
   /**
-   *
+   * Constructs a new DomainEvent instance and sets the creation timestamp.
    */
   constructor() {
     this.createdAt = new Date();
   }
 
   /**
-   * Returns the timestamp when the event was created.
+   * Returns the timestamp of when the event was created.
+   *
+   * @returns {Date} The creation time of the event.
    */
   public getCreatedAt(): Date {
     return this.createdAt;
@@ -53,16 +55,24 @@ export abstract class DomainEvent implements IEvent {
 
   /**
    * Returns a plain object representation of the current event,
-   * containing all its own enumerable properties.
-   * Useful for sending or logging event data in a transport-safe format.
+   * including all its own enumerable properties.
+   *
+   * This method is useful for serializing or logging the event
+   * in a format suitable for transport or storage.
+   *
+   * @returns {object} A plain object representation of the event.
    */
   public getEvent(): object {
     return JSON.parse(JSON.stringify(this));
   }
 
   /**
-   * Returns the type of the event, which is the name of the class.
-   * This can be useful for event routing or logging.
+   * Returns the name of the class that instantiated the event.
+   *
+   * This can be used for identifying the type of event during event dispatching,
+   * logging, or when routing events to handlers.
+   *
+   * @returns {string} The type (class name) of the event.
    */
   public getType(): string {
     return this.constructor.name;

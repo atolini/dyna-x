@@ -46,7 +46,7 @@ export class ErrorHandler<T, R extends IResponseBuilder<T>> {
   ) {
     this.resBuilder = resBuilder;
     this.logger = logger;
-    this.handlers = handlers ?? [];
+    this.handlers = handlers;
   }
 
   /**

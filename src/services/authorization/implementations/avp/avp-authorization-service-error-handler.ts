@@ -1,4 +1,4 @@
-import { ILogger } from '@logger/contracts/i-logger';
+import { ILogger } from '@logger/contracts';
 import { IResponseBuilder } from '@response-builder/contracts';
 import { IErrorActions } from '@error-handler/contracts';
 import {

@@ -19,10 +19,7 @@ import {
   IAuthorizationServiceEventLogger,
 } from '@authorization/contracts';
 
-interface Token {
-  accessToken: string;
-  identityToken: string;
-}
+import { IToken } from '.';
 
 /**
  * @template ActionIdentifier Type representing the action identifier.
@@ -66,7 +63,7 @@ export class AVPAuthorizationService
 {
   private readonly client: VerifiedPermissionsClient;
   private readonly policyStoreId: string;
-  private readonly token: Token | null;
+  private readonly token: IToken | null;
   private readonly eventLogger: IAuthorizationServiceEventLogger<
     ActionIdentifier,
     EntityIdentifier,
@@ -79,7 +76,7 @@ export class AVPAuthorizationService
    *
    * @param {string} policyStoreId - The ID of the policy store to be used for authorization checks.
    * @param {IAuthorizationServiceEventLogger} eventLogger -Logger instance responsible for recording events related to authorization checks.
-   * @param {Token} [token] - Optional token credentials containing an access token and an identity token.
+   * @param {IToken} [token] - Optional token credentials containing an access token and an identity token.
    * If provided, the service will use token-based authorization for requests.
    * @param {VerifiedPermissionsClientConfig} [clientConfig] - Optional configuration for the VerifiedPermissionsClient.
    *
@@ -102,7 +99,7 @@ export class AVPAuthorizationService
       ContextDefinition,
       EntityIdentifier
     >,
-    token?: Token,
+    token?: IToken,
     clientConfig?: VerifiedPermissionsClientConfig,
   ) {
     this.policyStoreId = policyStoreId;

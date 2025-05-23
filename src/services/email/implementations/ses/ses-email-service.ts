@@ -1,7 +1,5 @@
 import { SESClient, SendEmailCommand } from '@aws-sdk/client-ses';
-import { IEmailService } from '@email/contracts';
-import { IEmailMessageInput } from '@email/contracts';
-import { IEmailServiceEventLogger } from '@email/contracts';
+import { IEmailMessageInput, IEmailService, IEmailServiceEventLogger } from '@email/contracts';
 
 /**
  *

@@ -8,12 +8,12 @@
  * when creating an instance of {@link AVPAuthorizationService}.
  *
  * @example
- * const token: IToken = {
+ * const token: Token = {
  *   accessToken: 'your-access-token',
  *   identityToken: 'your-identity-token',
  * };
  */
-export interface IToken {
+export type Token = {
   /**
    * The access token used for authenticating the principal.
    */

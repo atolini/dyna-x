@@ -1,18 +1,25 @@
-import js from '@eslint/js';
-import globals from 'globals';
-import tseslint from 'typescript-eslint';
-import jsdoc from 'eslint-plugin-jsdoc';
 import { defineConfig } from 'eslint/config';
+import tseslint from 'typescript-eslint';
+import tsdoc from 'eslint-plugin-tsdoc';
 
 export default defineConfig([
   {
-    files: ['**/*.{ts}'],
-    plugins: ['@typescript-eslint/eslint-plugin', 'eslint-plugin-tsdoc'],
-    extends: ['plugin:@typescript-eslint/recommended'],
-    rules: {
-
+    files: ['**/*.ts', '**/*.tsx'],
+    languageOptions: {
+      parser: tseslint.parser,
+      parserOptions: {
+        project: './tsconfig.json',
+        tsconfigRootDir: process.cwd(),
+        sourceType: 'module'
+      }
+    },
+    plugins: {
+      '@typescript-eslint': tseslint.plugin,
+      tsdoc
     },
     rules: {
+      ...tseslint.configs.recommended.rules,
+      ...tseslint.configs.recommendedTypeChecked.rules,
       'tsdoc/syntax': 'warn'
     }
   }

@@ -1,10 +1,9 @@
 import { defineConfig } from 'eslint/config';
 import tseslint from 'typescript-eslint';
-import tsdoc from 'eslint-plugin-tsdoc';
 
 export default defineConfig([
   {
-    files: ['**/*.ts', '**/*.tsx'],
+    files: ['**/*.ts'],
     languageOptions: {
       parser: tseslint.parser,
       parserOptions: {
@@ -14,13 +13,11 @@ export default defineConfig([
       },
     },
     plugins: {
-      '@typescript-eslint': tseslint.plugin,
-      tsdoc,
+      '@typescript-eslint': tseslint.plugin
     },
     rules: {
       ...tseslint.configs.recommended.rules,
-      ...tseslint.configs.recommendedTypeChecked.rules,
-      'tsdoc/syntax': 'warn',
+      ...tseslint.configs.recommendedTypeChecked.rules
     },
   },
 ]);

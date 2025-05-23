@@ -1,25 +1,25 @@
 {
-  "name": "kernel",
+  "name": "cloud-adapter-kit",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "description": "A TypeScript toolkit for building modular cloud adapters with a focus on maintainability and reusability.",
   "scripts": {
     "test": "jest --detectOpenHandles --silent --forceExit",
     "docs": "typedoc --options typedoc.json",
     "format": "prettier --write .",
     "compile": "tsc --outDir dist",
-    "lint": "eslint . --ext .js,.ts",
+    "lint": "eslint . --ext .ts",
     "lint:fix": "eslint . --ext .js,.ts --fix"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "author": {
+    "name": "Lucas Atolini",
+    "url": "https://github.com/atolini/cloud-adapter-kit"
+  },
+  "license": "MIT",
   "devDependencies": {
     "@eslint/js": "^9.27.0",
     "@types/jest": "^29.5.14",
     "aws-sdk-client-mock": "^4.1.0",
     "eslint": "^9.27.0",
-    "eslint-plugin-tsdoc": "^0.4.0",
     "globals": "^16.1.0",
     "jest": "^29.7.0",
     "prettier": "^3.5.3",

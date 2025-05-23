@@ -25,14 +25,12 @@ interface Token {
 }
 
 /**
- * @class AVPAuthorizationService
  * @implements {IAuthorizationService<ActionIdentifier, EntityIdentifier, ContextDefinition, EntityIdentifier>}
  * @template ActionIdentifier Type representing the action identifier.
  * @template EntityIdentifier Type representing the entity identifier.
  * @template ContextDefinition Type representing the context definition.
  * @template EntityIdentifier Type representing the resource identifier.
  *
- * @classdesc
  * Service to manage authorization using AWS Verified Permissions (AVP).
  *
  * Provides methods to check if a principal is authorized for a specific action on a resource.

@@ -16,10 +16,8 @@ import { Key } from '@database/repository/implementations/dynamo/key';
 import { DynamoSchema } from '@database/schema/implementations/dynamo/dynamo-schema';
 
 /**
- * @class DynamoReadRepository
  * @template T The type of item stored in the DynamoDB table.
  *
- * @classdesc
  * Repository implementation for reading data from a DynamoDB table.
  * This class uses the AWS SDK v3 for DynamoDB and supports item fetching
  * and querying using a condition builder.

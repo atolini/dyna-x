@@ -15,10 +15,8 @@ import {
 } from '@user-directory/contracts';
 
 /**
- * @class CognitoUserDirectoryService
  * @implements {IUserDirectoryService<AttributeType>}
  *
- * @classdesc
  * Service class for managing users in an AWS Cognito User Pool using administrative operations.
  *
  * Provides methods to create, update, and delete users using the AWS SDK for JavaScript v3.

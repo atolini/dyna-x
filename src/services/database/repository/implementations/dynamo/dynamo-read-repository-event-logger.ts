@@ -4,8 +4,6 @@ import { IReadRepositoryEventLogger } from '@database/repository/contracts/i-rea
 import { Key } from '@database/repository/implementations/dynamo/key';
 
 /**
- * @class DynamoReadRepositoryEventLogger
- * @classdesc
  * Helper class responsible for logging read-related events performed by the {@link DynamoReadRepository}.
  *
  * Logs successful item retrievals and query operations in a structured format using the provided logger instance.

@@ -10,12 +10,10 @@ import {
 } from '@aws-sdk/client-s3';
 
 /**
- * @class S3FileStorageServiceErrorHandler
  * @implements {IErrorActions<T, R>}
  * @template T - Response type
  * @template R - Response builder type
  *
- * @classdesc
  * Handles excetions thrown within the {@link S3StorageService} class.
  *
  * The following exceptions may be handled:

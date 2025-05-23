@@ -3,10 +3,8 @@ import { ILogger } from '@logger/contracts';
 import { IUserDirectoryServiceEventLogger } from '@user-directory/contracts';
 
 /**
- * @class CognitoUserDirectoryServiceEventLogger
  * @implements IUserDirectoryServiceEventLogger
  *
- * @classdesc
  * Helper class responsible for logging user-related events performed by the {@link CognitoUserDirectoryService}.
  *
  * Logs creation, update, and deletion of users in a structured format using the provided logger instance.

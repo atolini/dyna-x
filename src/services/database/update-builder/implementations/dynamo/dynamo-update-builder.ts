@@ -2,10 +2,8 @@ import { IUpdateBuilder } from '@database/update-builder/contracts/i-update-buil
 import { DynamoUpdateExpressionResult } from '@database/update-builder/implementations/dynamo/dynamo-update-expression-result';
 
 /**
- * @class DynamoUpdateBuilder
  * @implements {IUpdateBuilder<DynamoUpdateExpressionResult>}
  *
- * @classdesc
  * A utility class for building DynamoDB update expressions dynamically.
  *
  * This class allows you to compose operations such as SET, REMOVE, and ADD

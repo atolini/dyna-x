@@ -12,10 +12,8 @@ import {
 } from '@file-storage/contracts';
 
 /**
- * @class S3FileStorageService
  * @implements {IFileStorageService}
  *
- * @classdesc
  * AWS S3 implementation of the IFileStorageService interface for file storage operations.
  *
  * This service provides methods to upload, retrieve, delete, and list files in an S3 bucket.

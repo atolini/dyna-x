@@ -13,10 +13,8 @@ import {
 import { ILogger } from '@logger/contracts';
 
 /**
- * @class AVPAuthorizationEventLogger
  * @implements IAuthorizationServiceEventLogger
  *
- * @classdesc
  * Logger utility for tracking authorization events within the {@link AVPAuthorizationService}.
  *
  * Logs single and batch authorization checks with relevant request and decision details.

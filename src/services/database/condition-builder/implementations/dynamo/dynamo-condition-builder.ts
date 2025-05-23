@@ -2,10 +2,8 @@ import { IConditionBuilder } from '@database/condition-builder/contracts/i-condi
 import { DynamoConditionExpressionResult } from '@database/condition-builder/implementations/dynamo/dynamo-condition-expression-result';
 
 /**
- * @class DynamoConditionBuilder
  * @implements {IConditionBuilder<DynamoConditionExpressionResult>}
  *
- * @classdesc
  * A utility class for building DynamoDB condition expressions dynamically.
  *
  * This class allows you to compose conditions such as equality, inequality, greater than, and less than,

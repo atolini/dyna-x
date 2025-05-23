@@ -1,8 +1,6 @@
 import { ILogger } from '@logger/contracts';
 
 /**
- * @class S3FileStorageServiceEventLogger
- * @classdesc
  * Helper class responsible for logging file-related events performed by the {@link S3StorageService}.
  *
  * Logs upload, retrieval, deletion, and listing of files from the S3 bucket in a structured format using the provided logger instance.

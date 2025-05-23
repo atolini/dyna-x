@@ -4,10 +4,8 @@ import { InvalidKeyError } from '@database/schema/implementations/dynamo/invalid
 import { Key } from '@database/schema/implementations/dynamo/key';
 
 /**
- * @class DynamoSchema
  * @template T - The full object type that includes key attributes and possibly additional data.
  *
- * @classdesc
  * Represents the schema definition for a DynamoDB-compatible table, including the table name
  * and key configuration (partition and optional sort key). It provides runtime validation to ensure
  * that the required key fields exist and match the expected types, either from a plain key object

@@ -12,7 +12,6 @@ import { DynamoSchema } from '@database/schema/implementations/dynamo/dynamo-sch
 import { DynamoItem } from '@database/transactional-writer/implementations/dynamo/dynamo-item';
 
 /**
- * @class DynamoTransactionWriter
  * @implements {ITransactionalWriter<DynamoSchema<any>, DynamoItem>}
  *
  * @description

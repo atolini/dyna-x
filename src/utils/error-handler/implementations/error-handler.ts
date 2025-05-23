@@ -3,7 +3,6 @@ import { IResponseBuilder } from '@response-builder/contracts';
 import { IErrorActions } from '@error-handler/contracts';
 
 /**
- * @class ErrorHandler
  * @implements {IErrorActions<T, R>}
  *
  * @template T The type of the response returned to the client.

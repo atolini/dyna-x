@@ -1,8 +1,6 @@
 /**
- * @class InvalidKeyError
  * @augments {Error}
  *
- * @classdesc
  * Error thrown when a provided key does not conform to the expected schema,
  * such as missing required fields or having incorrect types.
  *

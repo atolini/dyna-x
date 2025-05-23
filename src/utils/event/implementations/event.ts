@@ -1,9 +1,7 @@
 import { IEvent } from '@event/contracts';
 
 /**
- * @class DomainEvent
  *
- * @classdesc
  * Base class for all domain events.
  *
  * In the context of Domain-Driven Design (DDD), domain events represent something

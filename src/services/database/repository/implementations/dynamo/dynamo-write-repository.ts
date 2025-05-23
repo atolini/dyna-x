@@ -19,10 +19,8 @@ import { DynamoUpdateBuilder } from '@database/update-builder/implementations/dy
 import { merge } from 'lodash';
 
 /**
- * @class DynamoWriteRepository
  * @template T - The type of item managed by the repository, which extends DynamoItem.
  *
- * @classdesc
  * Repository implementation for writing data to a DynamoDB table.
  * Handles create, update, and delete operations.
  */

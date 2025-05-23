@@ -2,8 +2,6 @@ import { ILogger } from '@logger/contracts';
 import { IEmailMessageInput } from '@email/contracts';
 
 /**
- * @class SESEmailServiceEventLogger
- * @classdesc
  * Helper class responsible for logging email-related events performed by the {@link SESEmailService}.
  *
  * Logs successful and failed email deliveries in a structured format using the provided logger instance.

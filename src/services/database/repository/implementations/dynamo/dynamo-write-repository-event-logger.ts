@@ -5,8 +5,6 @@ import { IWriteRepositoryEventLogger } from '@database/repository/contracts/i-wr
 import { Key } from '@database/repository/implementations/dynamo/key';
 
 /**
- * @class DynamoWriteRepositoryEventLogger
- * @classdesc
  * Logs structured events related to write operations on a DynamoDB table using DynamoWriteRepository.
  *
  * This logger captures `putItem`, `update`, `deleteItem`, and `batchWriteItems` operations

@@ -14,12 +14,10 @@ import { IErrorActions } from '@error-handler/contracts';
 import { InvalidKeyError } from '@database/schema/implementations/dynamo';
 
 /**
- * @class DynamoTransactionWriterErrorHandler
  * @implements {IErrorActions<T, R>}
  * @template T - Response type
  * @template R - Response builder type
  *
- * @classdesc
  * Handles specific exceptions thrown within the {@link DynamoTransactionWrite} class during DynamoDB transactional operations.
  *
  * This class provides centralized error handling for the following DynamoDB exceptions:

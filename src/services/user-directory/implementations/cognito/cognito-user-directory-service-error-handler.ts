@@ -14,12 +14,10 @@ import {
 } from '@aws-sdk/client-cognito-identity-provider';
 
 /**
- * @class CognitoUserDirectoryServiceErrorHandler
  * @implements {IErrorActions<T, R>}
  * @template T - Response type
  * @template R - Response builder type
  *
- * @classdesc
  * Handles exceptions thrown within the {@link CognitoUserService} class.
  *
  * The following exceptions may be handled by this class:

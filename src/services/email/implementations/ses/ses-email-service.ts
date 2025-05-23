@@ -4,10 +4,8 @@ import { IEmailMessageInput } from '@email/contracts/i-email-message-input';
 import { IEmailServiceEventLogger } from '@email/contracts/i-email-service-event-logger';
 
 /**
- * @class SESEmailService
  * @implements {IEmailService}
  *
- * @classdesc
  * AWS SES implementation of the IEmailService interface for sending emails.
  *
  * This service uses Amazon Simple Email Service (SES) to send emails. The service can send text

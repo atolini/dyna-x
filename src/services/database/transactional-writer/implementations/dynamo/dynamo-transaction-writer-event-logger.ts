@@ -5,8 +5,6 @@ import { ITransactionalWriterUnit } from '@database/transactional-writer/contrac
 import { ITransactionalWriterEventLogger } from '@database/transactional-writer/contracts/i-transactional-writer-event-logger';
 
 /**
- * @class DynamoTransactionWriterEventLogger
- * @classdesc
  * Logs the success of transactional write operations performed by the DynamoTransactionWriter.
  *
  * This logger helps trace successfully executed transactional writes for observability and auditing.

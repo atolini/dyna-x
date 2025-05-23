@@ -10,12 +10,10 @@ import {
 } from '@aws-sdk/client-ses';
 
 /**
- * @class SESEmailServiceErrorHandler
  * @implements {IErrorActions<T, R>}
  * @template T - Response type
  * @template R - Response builder type
  *
- * @classdesc
  * Handles specific exceptions thrown within the {@link SESEmailService} class during email sending operations with AWS SES.
  *
  * This class provides centralized error handling for the following SES exceptions:

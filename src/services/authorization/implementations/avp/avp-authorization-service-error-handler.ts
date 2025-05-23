@@ -10,12 +10,10 @@ import {
 } from '@aws-sdk/client-verifiedpermissions';
 
 /**
- * @class AVPAuthorizationErrorHandler
  * @implements {IErrorActions<T, R>}
  * @template T - Response type
  * @template R - Response builder type
  *
- * @classdesc
  * Handles exceptions thrown within the {@link AVPAuthorizationService} class.
  *
  * The following exceptions may be handled by this class:

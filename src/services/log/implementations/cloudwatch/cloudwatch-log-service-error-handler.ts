@@ -11,12 +11,10 @@ import {
 } from '@aws-sdk/client-cloudwatch-logs';
 
 /**
- * @class CloudWatchLogServiceErrorHandler
  * @implements {IErrorActions<T, R>}
  * @template T - Response type
  * @template R - Response builder type
  *
- * @classdesc
  * Handles exceptions thrown within the {@link CloudWatchLogService} class.
  *
  * This class is responsible for identifying and handling specific AWS CloudWatch

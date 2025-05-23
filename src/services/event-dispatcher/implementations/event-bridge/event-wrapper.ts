@@ -19,7 +19,7 @@ import { IEvent } from '@event/contracts';
  *   userId: 'user-789'
  * };
  */
-export interface EventWrapper {
+export type EventWrapper = {
   event: IEvent;
   requestId: string;
   userId?: string;

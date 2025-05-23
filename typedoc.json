@@ -26,13 +26,13 @@
     "src/services/database/repository/contracts",
     "src/services/database/repository/implementations/dynamo",
     "src/services/database/transactional-writer/contracts",
-    "src/services/database/transactional-writer/implementations/dynamo", 
-    "src/utils/error-handler/contracts", 
-    "src/utils/error-handler/implementation", 
+    "src/services/database/transactional-writer/implementations/dynamo",
+    "src/utils/error-handler/contracts",
+    "src/utils/error-handler/implementation",
     "src/utils/logger/contracts",
     "src/utils/logger/implementation",
-    "src/utils/event/contracts", 
-    "src/utils/event/implementation",
+    "src/utils/event/contracts",
+    "src/utils/event/implementation"
   ],
   "entryPointStrategy": "resolve"
 }

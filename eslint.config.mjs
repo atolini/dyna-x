@@ -10,17 +10,17 @@ export default defineConfig([
       parserOptions: {
         project: './tsconfig.json',
         tsconfigRootDir: process.cwd(),
-        sourceType: 'module'
-      }
+        sourceType: 'module',
+      },
     },
     plugins: {
       '@typescript-eslint': tseslint.plugin,
-      tsdoc
+      tsdoc,
     },
     rules: {
       ...tseslint.configs.recommended.rules,
       ...tseslint.configs.recommendedTypeChecked.rules,
-      'tsdoc/syntax': 'warn'
-    }
-  }
+      'tsdoc/syntax': 'warn',
+    },
+  },
 ]);

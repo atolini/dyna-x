@@ -6,31 +6,14 @@ import { defineConfig } from 'eslint/config';
 
 export default defineConfig([
   {
-    files: ['**/*.{js,mjs,cjs,ts}'],
-    plugins: { js, jsdoc },
-    extends: ['js/recommended'],
+    files: ['**/*.{ts}'],
+    plugins: ['@typescript-eslint/eslint-plugin', 'eslint-plugin-tsdoc'],
+    extends: ['plugin:@typescript-eslint/recommended'],
     rules: {
-      'jsdoc/check-alignment': 'warn',
-      'jsdoc/check-param-names': 'error',
-      'jsdoc/check-tag-names': 'warn',
-      'jsdoc/check-types': 'warn',
-      'jsdoc/require-jsdoc': [
-        'warn',
-        {
-          require: {
-            FunctionDeclaration: true,
-            MethodDefinition: true,
-            ClassDeclaration: true,
-          },
-        },
-      ],
-      'jsdoc/require-param': 'error',
-      'jsdoc/require-returns': 'error',
+
     },
-  },
-  {
-    files: ['**/*.{js,mjs,cjs,ts}'],
-    languageOptions: { globals: globals.node },
-  },
-  tseslint.configs.recommended,
+    rules: {
+      'tsdoc/syntax': 'warn'
+    }
+  }
 ]);

@@ -25,6 +25,6 @@
       "@error-handler/*": ["utils/error-handler/*"]
     }
   },
-  "include": ["src/**/*", "_to_delete"],
-  "exclude": ["src/**/*.test.ts", "src/**/*.spec.ts", "node_modules"]
+  "include": ["src/**/*"],
+  "exclude": ["src/**/*.test.ts", "src/**/*.spec.ts", "node_modules", "docs"]
 }

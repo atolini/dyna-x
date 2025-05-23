@@ -1,0 +1,9 @@
+{
+  "entryPoints": ["src"],
+  "entryPointStrategy": "resolve",
+  "excludePrivate": true,
+  "excludeInternal": true,
+  "excludeProtected": true,
+  "excludeNotDocumented": true,
+  "categorizeByGroup": false
+}

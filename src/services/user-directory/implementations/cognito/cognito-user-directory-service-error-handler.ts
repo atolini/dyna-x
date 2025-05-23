@@ -14,7 +14,6 @@ import {
 } from '@aws-sdk/client-cognito-identity-provider';
 
 /**
- * @implements {IErrorActions<T, R>}
  * @template T - Response type
  * @template R - Response builder type
  *

@@ -13,7 +13,6 @@ import {
 import { ILogger } from '@logger/contracts';
 
 /**
- * @implements IAuthorizationServiceEventLogger
  *
  * Logger utility for tracking authorization events within the {@link AVPAuthorizationService}.
  *

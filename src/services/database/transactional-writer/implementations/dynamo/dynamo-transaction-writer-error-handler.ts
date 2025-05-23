@@ -14,7 +14,6 @@ import { IErrorActions } from '@error-handler/contracts';
 import { InvalidKeyError } from '@database/schema/implementations/dynamo';
 
 /**
- * @implements {IErrorActions<T, R>}
  * @template T - Response type
  * @template R - Response builder type
  *

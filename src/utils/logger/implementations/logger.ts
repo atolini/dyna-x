@@ -2,7 +2,6 @@ import { ILogger } from '@logger/contracts';
 import { LoggerContext } from '.';
 
 /**
- * @implements {ILogger<LoggerContext>}
  *
  * Structured logger for JSON-based logging, optimized for AWS CloudWatch.
  *

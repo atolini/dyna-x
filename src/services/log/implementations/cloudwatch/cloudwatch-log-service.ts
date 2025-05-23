@@ -11,7 +11,6 @@ export interface LogContainer {
 }
 
 /**
- * @implements {ILogService}
  * @template T - The type of individual log entries.
  *
  * AWS CloudWatch implementation of the ILogService interface for sending logs.

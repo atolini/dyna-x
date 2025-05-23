@@ -12,7 +12,6 @@ import {
 } from '@file-storage/contracts';
 
 /**
- * @implements {IFileStorageService}
  *
  * AWS S3 implementation of the IFileStorageService interface for file storage operations.
  *

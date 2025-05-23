@@ -2,7 +2,6 @@ import { IConditionBuilder } from '@database/condition-builder/contracts/i-condi
 import { DynamoConditionExpressionResult } from '@database/condition-builder/implementations/dynamo/dynamo-condition-expression-result';
 
 /**
- * @implements {IConditionBuilder<DynamoConditionExpressionResult>}
  *
  * A utility class for building DynamoDB condition expressions dynamically.
  *

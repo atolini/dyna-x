@@ -10,7 +10,6 @@ import {
 } from '@aws-sdk/client-s3';
 
 /**
- * @implements {IErrorActions<T, R>}
  * @template T - Response type
  * @template R - Response builder type
  *

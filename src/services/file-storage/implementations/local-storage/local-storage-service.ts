@@ -3,7 +3,6 @@ import * as fs from 'fs';
 import * as path from 'path';
 
 /**
- * @implements {@link IFileStorageService}
  *
  * Manages file operations within a specified directory.
  */

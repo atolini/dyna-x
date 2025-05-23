@@ -2,7 +2,6 @@ import { APIGatewayProxyResult } from 'aws-lambda';
 import { IResponseBuilder } from '@response-builder/contracts';
 
 /**
- * @implements {IResponseBuilder<APIGatewayProxyResult>}
  *
  * Provides standardized methods to build HTTP responses compatible with AWS API Gateway.
  * Each method constructs a response object with appropriate status code, headers, and body format.

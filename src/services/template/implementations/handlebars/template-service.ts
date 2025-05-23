@@ -4,7 +4,6 @@ import { TemplateServiceEventLogger } from '@template/implementations/handlebars
 import { ILogger } from '@logger/contracts';
 
 /**
- * @implements {ITemplateService}
  *
  * TemplateService provides a simple interface for compiling Handlebars templates.
  *

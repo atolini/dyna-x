@@ -12,7 +12,6 @@ import { DynamoSchema } from '@database/schema/implementations/dynamo/dynamo-sch
 import { DynamoItem } from '@database/transactional-writer/implementations/dynamo/dynamo-item';
 
 /**
- * @implements {ITransactionalWriter<DynamoSchema<any>, DynamoItem>}
  *
  * @description
  * Provides a transactional writer implementation for DynamoDB using AWS SDK.

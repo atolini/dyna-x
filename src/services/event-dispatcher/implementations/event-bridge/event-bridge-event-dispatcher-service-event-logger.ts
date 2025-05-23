@@ -3,7 +3,6 @@ import { ILogger } from '@logger/contracts';
 import { EventWrapper } from '@event-dispatcher/implementations/event-bridge';
 
 /**
- * @implements {IEventDispatcherServiceEventLogger<EventWrapper>}
  *
  * Logger class responsible for logging to the console the events published by an EventBridgeEventDispatcherService implementation.
  *

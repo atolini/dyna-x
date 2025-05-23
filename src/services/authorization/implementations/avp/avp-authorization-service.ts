@@ -25,7 +25,6 @@ interface Token {
 }
 
 /**
- * @implements {IAuthorizationService<ActionIdentifier, EntityIdentifier, ContextDefinition, EntityIdentifier>}
  * @template ActionIdentifier Type representing the action identifier.
  * @template EntityIdentifier Type representing the entity identifier.
  * @template ContextDefinition Type representing the context definition.

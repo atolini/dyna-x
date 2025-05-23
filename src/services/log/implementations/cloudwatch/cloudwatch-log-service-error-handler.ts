@@ -11,7 +11,6 @@ import {
 } from '@aws-sdk/client-cloudwatch-logs';
 
 /**
- * @implements {IErrorActions<T, R>}
  * @template T - Response type
  * @template R - Response builder type
  *

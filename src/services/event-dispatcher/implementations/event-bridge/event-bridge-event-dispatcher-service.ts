@@ -10,7 +10,6 @@ import {
 import { EventWrapper } from '@event-dispatcher/implementations/event-bridge';
 
 /**
- * @implements {IEventDispatcherService<EventWrapper>}
  *
  * Implementation of IEventDispatcherService that sends events to AWS EventBridge.
  *

@@ -15,7 +15,6 @@ import {
 } from '@user-directory/contracts';
 
 /**
- * @implements {IUserDirectoryService<AttributeType>}
  *
  * Service class for managing users in an AWS Cognito User Pool using administrative operations.
  *

@@ -1,5 +1,4 @@
 /**
- * @interface IEventDispatcherService
  * @template E - The type of event to be dispatched.
  *
  * @description

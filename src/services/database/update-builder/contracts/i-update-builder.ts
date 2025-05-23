@@ -1,5 +1,4 @@
 /**
- * @interface IUpdateBuilder
  * @template T - Type of the result returned by the build() method.
  *
  * @description

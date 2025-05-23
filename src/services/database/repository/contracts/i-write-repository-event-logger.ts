@@ -1,5 +1,4 @@
 /**
- * @interface IWriteRepositoryEventLogger
  * @template T - The type representing an individual item in the repository.
  * @template K - The type representing the key used to identify items.
  * @template U - The type representing the update expression or object used during updates.

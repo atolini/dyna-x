@@ -4,7 +4,6 @@
  * This interface defines the structure of an email message, including the recipient(s), subject,
  * and optional body content in both text and HTML formats.
  *
- * @interface IEmailMessage
  */
 export interface IEmailMessageInput {
   /**

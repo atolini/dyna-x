@@ -1,7 +1,6 @@
 import { AttributeValue } from '@aws-sdk/client-dynamodb';
 
 /**
- * @interface DynamoConditionExpressionResult
  *
  * @description
  * Result structure returned by the DynamoConditionBuilder after building the condition expression.

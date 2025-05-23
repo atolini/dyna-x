@@ -1,5 +1,4 @@
 /**
- * @interface DynamoUpdateExpressionResult
  *
  * @description
  * Structure returned by an UpdateBuilder or similar utility after generating a DynamoDB update expression.

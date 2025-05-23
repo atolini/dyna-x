@@ -1,7 +1,6 @@
 import { IEvent } from '@event/contracts/i-event';
 
 /**
- * @interface EventWrapper
  * @template T - Event type.
  *
  * @description

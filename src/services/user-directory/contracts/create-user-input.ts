@@ -1,5 +1,4 @@
 /**
- * @interface CreateUserInput
  * @template T - The shape of each user attribute.
  *
  * @description

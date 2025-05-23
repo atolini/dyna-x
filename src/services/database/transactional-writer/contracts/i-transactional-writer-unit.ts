@@ -1,5 +1,4 @@
 /**
- * @interface ITransactionalWriterUnit
  *
  * @description
  * Represents a generic unit of data to be written transactionally to a specific container.

@@ -1,5 +1,4 @@
 /**
- * @interface IUserEventLogger
  * @template T - The shape of user attributes used throughout the service.
  *
  * @description

@@ -1,5 +1,4 @@
 /**
- * @interface IEvent
  *
  * @description
  * Represents a generic event structure with creation timestamp, type identification,

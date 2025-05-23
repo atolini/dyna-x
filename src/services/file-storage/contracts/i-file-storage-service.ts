@@ -1,7 +1,6 @@
 import { Readable } from 'stream';
 
 /**
- * @interface IFileStorageService
  *
  * @description
  * Interface for file storage operations, providing methods to upload, retrieve, delete, and list files in a storage system.

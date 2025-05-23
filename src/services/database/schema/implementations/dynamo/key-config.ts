@@ -1,5 +1,4 @@
 /**
- * @interface KeyConfig
  *
  * @description
  * Configuration for a key field used in database operations.

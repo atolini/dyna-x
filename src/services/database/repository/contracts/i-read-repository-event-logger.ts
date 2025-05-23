@@ -1,5 +1,4 @@
 /**
- * @interface IReadRepositoryEventLogger
  * @template T - The type of the item being read from the repository.
  * @template K - The type representing the key used to fetch an item.
  * @template C - The type representing the built query conditions (e.g., from a condition builder).

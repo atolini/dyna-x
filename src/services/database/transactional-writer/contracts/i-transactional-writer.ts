@@ -1,7 +1,6 @@
 import { ITransactionalWriterUnit } from '.';
 
 /**
- * @interface ITransactionalWriter
  *
  * @description
  * Represents an abstract contract for performing batched, write-only operations

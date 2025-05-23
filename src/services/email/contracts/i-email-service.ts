@@ -5,7 +5,6 @@ import { IEmailMessageInput } from './i-email-message-input';
  *
  * The service allows sending emails using various methods (e.g., through SES or another email service provider).
  *
- * @interface IEmailService
  */
 export interface IEmailService {
   /**

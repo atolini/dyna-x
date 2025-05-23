@@ -1,5 +1,4 @@
 /**
- * @interface DeleteUserInput
  *
  * @description
  * Represents the input required to delete a user.

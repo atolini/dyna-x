@@ -1,7 +1,6 @@
 import { CreateUserInput, DeleteUserInput, UpdateUserAttributesInput } from '.';
 
 /**
- * @interface IUserService
  * @template T - The shape of user attributes used throughout the service.
  *
  * @description

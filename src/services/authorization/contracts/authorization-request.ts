@@ -1,5 +1,4 @@
 /**
- * @interface AuthorizationRequest
  * @template A The type that identifies the action (e.g., 'read', 'delete').
  * @template I The type that identifies the identity or user (e.g., user ID).
  * @template C The type that identifies the context of the request (e.g., roles, environment, metadata).

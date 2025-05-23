@@ -1,5 +1,4 @@
 /**
- * @interface IEventDispatcherServiceEventLogger
  * @template E - The type representing the event payload.
  *
  * @description

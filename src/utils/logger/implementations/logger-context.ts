@@ -1,5 +1,4 @@
 /**
- * @interface LoggerContext
  *
  * @description
  * Contextual metadata to be included in every log entry.

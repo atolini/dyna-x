@@ -1,5 +1,4 @@
 /**
- * @interface IDatabaseSchema
  * @template K - Key (unique identifier)
  * @template T - Complete entity or object type that contains the key
  *

@@ -2,7 +2,6 @@ import { IConditionBuilder } from '@database/condition-builder/contracts/i-condi
 import { IUpdateBuilder } from '@database/update-builder/contracts/i-update-builder';
 
 /**
- * @interface IWriteRepository
  * @template T - Type of the item to be written.
  * @template K - Type of the key used to identify items.
  * @template C - Type of the condition builder used for conditional operations.

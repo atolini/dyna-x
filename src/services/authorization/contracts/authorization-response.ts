@@ -1,5 +1,4 @@
 /**
- * @interface AuthorizationResponse
  * @template R The type that identifies the resource.
  *
  * @description

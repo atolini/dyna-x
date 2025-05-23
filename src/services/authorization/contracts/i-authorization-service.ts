@@ -6,7 +6,6 @@ import {
 } from '.';
 
 /**
- * @interface IAuthorizationService
  * @template A The type that identifies the action.
  * @template I The type that identifies the identity.
  * @template C The type that identifies the context.

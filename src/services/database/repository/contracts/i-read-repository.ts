@@ -1,7 +1,6 @@
 import { IConditionBuilder } from '@database/condition-builder/contracts/i-condition-builder';
 
 /**
- * @interface IReadRepository
  * @template T - The type of the item stored in the database.
  * @template K - The type of the key used to uniquely identify an item.
  * @template C - The type of the condition builder used for queries, extending IConditionBuilder<any>.

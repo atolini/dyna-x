@@ -1,8 +1,8 @@
+import { DynamoConditionExpressionResult } from '@database/condition-builder/implementations/dynamo';
+import { IWriteRepositoryEventLogger } from '@database/repository/contracts';
+import { Key } from '@database/repository/implementations/dynamo';
+import { DynamoUpdateExpressionResult } from '@database/update-builder/implementations/dynamo';
 import { ILogger } from '@logger/contracts';
-import { DynamoConditionExpressionResult } from '@database/condition-builder/implementations/dynamo/dynamo-condition-expression-result';
-import { DynamoUpdateExpressionResult } from '@database/update-builder/implementations/dynamo/dynamo-update-expression-result';
-import { IWriteRepositoryEventLogger } from '@database/repository/contracts/i-write-repository-event-logger';
-import { Key } from '@database/repository/implementations/dynamo/key';
 
 /**
  * Logs structured events related to write operations on a DynamoDB table using DynamoWriteRepository.

@@ -8,12 +8,10 @@ import {
   QueryCommandOutput,
 } from '@aws-sdk/client-dynamodb';
 import { marshall, unmarshall } from '@aws-sdk/util-dynamodb';
-import { DynamoConditionBuilder } from '@database/condition-builder/implementations/dynamo/dynamo-condition-builder';
-import { IReadRepository } from '@database/repository/contracts/i-read-repository';
-import { DynamoItem } from '@database/repository/implementations/dynamo/dynamo-item';
-import { DynamoReadRepositoryEventLogger } from '@database/repository/implementations/dynamo/dynamo-read-repository-event-logger';
-import { Key } from '@database/repository/implementations/dynamo/key';
-import { DynamoSchema } from '@database/schema/implementations/dynamo/dynamo-schema';
+import { DynamoConditionBuilder } from '@database/condition-builder/implementations/dynamo';
+import { IReadRepository } from '@database/repository/contracts';
+import { DynamoItem, DynamoReadRepositoryEventLogger, Key } from '@database/repository/implementations/dynamo';
+import { DynamoSchema } from '@database/schema/implementations/dynamo';
 
 /**
  * @template T The type of item stored in the DynamoDB table.

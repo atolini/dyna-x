@@ -1,4 +1,4 @@
-import { IEvent } from '@event/contracts/i-event';
+import { IEvent } from '@event/contracts';
 
 /**
  * @template T - Event type.

@@ -1,8 +1,7 @@
+import { DynamoSchema } from '@database/schema/implementations/dynamo';
+import { ITransactionalWriterEventLogger, ITransactionalWriterUnit } from '@database/transactional-writer/contracts';
+import { DynamoItem } from '@database/transactional-writer/implementations/dynamo';
 import { ILogger } from '@logger/contracts';
-import { DynamoSchema } from '@database/schema/implementations/dynamo/dynamo-schema';
-import { DynamoItem } from '@database/transactional-writer/implementations/dynamo/dynamo-item';
-import { ITransactionalWriterUnit } from '@database/transactional-writer/contracts';
-import { ITransactionalWriterEventLogger } from '@database/transactional-writer/contracts/i-transactional-writer-event-logger';
 
 /**
  * Logs the success of transactional write operations performed by the DynamoTransactionWriter.

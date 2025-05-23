@@ -1,5 +1,4 @@
 /**
- *
  * Represents a generic unit of data to be written transactionally to a specific container.
  * This interface is typically used in the context of transactional write operations,
  * such as DynamoDB's `TransactWriteItems`, allowing the grouping of multiple writes

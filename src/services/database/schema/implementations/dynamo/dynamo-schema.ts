@@ -1,7 +1,5 @@
-import { IDatabaseSchema } from '@database/schema/contracts/i-database-schema';
-import { KeyConfig } from '@database/schema/implementations/dynamo/key-config';
-import { InvalidKeyError } from '@database/schema/implementations/dynamo/invalid-key-error';
-import { Key } from '@database/schema/implementations/dynamo/key';
+import { IDatabaseSchema } from '@database/schema/contracts';
+import { InvalidKeyError, Key, KeyConfig } from '@database/schema/implementations/dynamo';
 
 /**
  * @template T - The full object type that includes key attributes and possibly additional data.

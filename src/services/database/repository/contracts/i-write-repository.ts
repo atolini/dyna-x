@@ -1,5 +1,5 @@
-import { IConditionBuilder } from '@database/condition-builder/contracts/i-condition-builder';
-import { IUpdateBuilder } from '@database/update-builder/contracts/i-update-builder';
+import { IConditionBuilder } from '@database/condition-builder/contracts';
+import { IUpdateBuilder } from '@database/update-builder/contracts';
 
 /**
  * @template T - Type of the item to be written.

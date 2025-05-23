@@ -1,5 +1,5 @@
 import { ILogger } from '@logger/contracts';
-import { ITemplateServiceEventLogger } from '@template/contracts/i-template-service-event-logger';
+import { ITemplateServiceEventLogger } from '@template/contracts';
 
 /**
  * Helper class responsible for logging template-related events performed by the {@link TemplateService}.

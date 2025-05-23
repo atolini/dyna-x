@@ -1,5 +1,5 @@
-import { IUpdateBuilder } from '@database/update-builder/contracts/i-update-builder';
-import { DynamoUpdateExpressionResult } from '@database/update-builder/implementations/dynamo/dynamo-update-expression-result';
+import { IUpdateBuilder } from '@database/update-builder/contracts';
+import { DynamoUpdateExpressionResult } from '@database/update-builder/implementations/dynamo';
 
 /**
  *

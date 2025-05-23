@@ -1,4 +1,4 @@
-import { IEmailMessageInput } from './i-email-message-input';
+import { IEmailMessageInput } from '.';
 
 /**
  * Defines a service for sending emails.

@@ -1,4 +1,4 @@
-import { IEmailMessageInput } from './i-email-message-input';
+import { IEmailMessageInput } from '.';
 
 /**
  * Interface for logging email-related events.

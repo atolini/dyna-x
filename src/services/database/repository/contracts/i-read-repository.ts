@@ -1,4 +1,4 @@
-import { IConditionBuilder } from '@database/condition-builder/contracts/i-condition-builder';
+import { IConditionBuilder } from '@database/condition-builder/contracts';
 
 /**
  * @template T - The type of the item stored in the database.

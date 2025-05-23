@@ -4,11 +4,7 @@ import {
   PutLogEventsCommand,
 } from '@aws-sdk/client-cloudwatch-logs';
 import { ILogService } from '@log/contracts';
-
-export interface LogContainer {
-  logGroupName: string;
-  logStreamName: string;
-}
+import { LogContainer } from '.';
 
 /**
  * @template T - The type of individual log entries.

@@ -1,7 +1,6 @@
 /**
  * @template T - The shape of each user attribute.
  *
- * @description
  * Represents the input required to update an existing user's attributes.
  *
  * @property {string} id - The unique identifier of the user to update.

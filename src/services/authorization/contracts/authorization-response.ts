@@ -1,7 +1,6 @@
 /**
  * @template R The type that identifies the resource.
  *
- * @description
  * Represents the result of an individual authorization check, indicating whether access
  * to a specific resource is allowed or denied.
  *

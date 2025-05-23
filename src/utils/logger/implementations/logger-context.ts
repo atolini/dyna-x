@@ -1,6 +1,5 @@
 /**
  *
- * @description
  * Contextual metadata to be included in every log entry.
  * Helps trace logs across distributed systems by providing consistent identifiers.
  *

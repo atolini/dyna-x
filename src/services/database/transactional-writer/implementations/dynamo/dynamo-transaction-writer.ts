@@ -13,7 +13,6 @@ import { DynamoItem } from '@database/transactional-writer/implementations/dynam
 
 /**
  *
- * @description
  * Provides a transactional writer implementation for DynamoDB using AWS SDK.
  * It handles writing multiple items in a single atomic transaction and performs
  * validation on batch size and item keys.

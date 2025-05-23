@@ -4,7 +4,6 @@
  * @template U - The type representing the update expression or object used during updates.
  * @template C - The type representing conditions used for conditional operations.
  *
- * @description
  * Defines the contract for logging write operations in a repository context, including
  * creation, deletion, updates, and batch write events. This is useful for auditing,
  * debugging, and monitoring purposes in systems interacting with databases like DynamoDB.

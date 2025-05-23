@@ -5,7 +5,6 @@ import { IConditionBuilder } from '@database/condition-builder/contracts/i-condi
  * @template K - The type of the key used to uniquely identify an item.
  * @template C - The type of the condition builder used for queries, extending IConditionBuilder<any>.
  *
- * @description
  * Defines the contract for a repository that supports read-only operations,
  * such as fetching a single item by key or querying multiple items using conditions.
  */

@@ -1,7 +1,7 @@
 import { IEmailMessageInput } from './i-email-message-input';
 
 /**
- * @description Interface for logging email-related events.
+ * Interface for logging email-related events.
  */
 export interface IEmailServiceEventLogger {
   /**

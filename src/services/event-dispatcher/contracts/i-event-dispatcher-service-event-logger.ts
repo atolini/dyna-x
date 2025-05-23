@@ -1,7 +1,6 @@
 /**
  * @template E - The type representing the event payload.
  *
- * @description
  * Interface for logging to the console the events that occur during the use of an IEventDispatcherService implementation.
  * Intended for simple logging of event publishing actions, both for single and batch events, mainly for debugging or development purposes.
  */

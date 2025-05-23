@@ -1,6 +1,5 @@
 /**
  *
- * @description
  * Represents a generic event structure with creation timestamp, type identification,
  * and payload serialization.
  */

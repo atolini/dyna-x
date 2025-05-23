@@ -2,7 +2,6 @@ import { Readable } from 'stream';
 
 /**
  *
- * @description
  * Interface for file storage operations, providing methods to upload, retrieve, delete, and list files in a storage system.
  * Implementations may use local storage, cloud storage (e.g., AWS S3), or other storage backends.
  */

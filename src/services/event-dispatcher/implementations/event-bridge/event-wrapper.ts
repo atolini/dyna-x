@@ -3,7 +3,6 @@ import { IEvent } from '@event/contracts/i-event';
 /**
  * @template T - Event type.
  *
- * @description
  * Represents a wrapper object for a event that includes metadata for tracing.
  * This interface is used when dispatching events to external systems, such as AWS EventBridge,
  * to ensure consistent inclusion of contextual information like `requestId`.

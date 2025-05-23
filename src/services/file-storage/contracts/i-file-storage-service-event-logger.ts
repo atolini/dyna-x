@@ -1,5 +1,4 @@
 /**
- * @description
  * Defines a contract for logging events related to file storage operations.
  * This interface abstracts away the storage provider and focuses on generic file event logging.
  */

@@ -3,7 +3,6 @@ import { CreateUserInput, DeleteUserInput, UpdateUserAttributesInput } from '.';
 /**
  * @template T - The shape of user attributes used throughout the service.
  *
- * @description
  * Interface for user service operations such as creating, updating, and deleting users.
  */
 export interface IUserDirectoryService<T> {

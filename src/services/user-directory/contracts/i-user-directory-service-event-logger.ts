@@ -1,7 +1,6 @@
 /**
  * @template T - The shape of user attributes used throughout the service.
  *
- * @description
  * Interface for logging all user-related events such as creation, update, and deletion.
  * Intended to provide observability and traceability for identity management operations.
  */

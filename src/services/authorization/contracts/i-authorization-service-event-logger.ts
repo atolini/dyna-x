@@ -11,7 +11,6 @@ import {
  * @template C The type that identifies the context of the request (e.g., roles, environment, metadata).
  * @template R The type that identifies the resource (e.g., resource ID or ARN).
  *
- * @description
  * Defines the contract for an event logger that tracks authorization checks.
  * Supports logging of both single and batch authorization decisions.
  */

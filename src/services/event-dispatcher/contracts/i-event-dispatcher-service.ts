@@ -1,7 +1,6 @@
 /**
  * @template E - The type of event to be dispatched.
  *
- * @description
  * Contract for dispatching events within a system.
  *
  * This interface abstracts the mechanism of event dispatching, allowing implementations for different transport

@@ -3,7 +3,6 @@
  * @template K - The type representing the key used to fetch an item.
  * @template C - The type representing the built query conditions (e.g., from a condition builder).
  *
- * @description
  * Defines the contract for logging read-related events in a repository context,
  * such as fetching individual items or executing queries. Useful for auditing, debugging,
  * or monitoring read operations.

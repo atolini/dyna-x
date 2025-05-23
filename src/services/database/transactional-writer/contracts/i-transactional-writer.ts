@@ -2,7 +2,6 @@ import { ITransactionalWriterUnit } from '.';
 
 /**
  *
- * @description
  * Represents an abstract contract for performing batched, write-only operations
  * in a transactional manner. Each write targets a specific container (e.g., a table or collection),
  * and the entire batch must be treated atomically — either all writes succeed or none are applied.

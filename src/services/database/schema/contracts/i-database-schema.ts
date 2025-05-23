@@ -2,7 +2,6 @@
  * @template K - Key (unique identifier)
  * @template T - Complete entity or object type that contains the key
  *
- * @description
  * Describes the contract for a database schema that provides key validation
  * and access to a table or collection name.
  */

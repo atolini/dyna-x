@@ -1,7 +1,6 @@
 /**
  * @template T - The shape of each user attribute.
  *
- * @description
  * Represents the input required to create a new user.
  *
  * @property {string} login - The user's login name (usually email or username).

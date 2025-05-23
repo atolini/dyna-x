@@ -3,7 +3,6 @@ import { AuthorizationResponse } from '.';
 /**
  * @template R The type that identifies the resource.
  *
- * @description
  * Represents the result of a batch authorization check, containing the decision for each individual resource.
  *
  * @property {AuthorizationResponse<R>[]} results - An array of authorization responses, each representing the decision for a specific resource.

@@ -2,7 +2,6 @@ import { AttributeValue } from '@aws-sdk/client-dynamodb';
 
 /**
  *
- * @description
  * Result structure returned by the DynamoConditionBuilder after building the condition expression.
  * This object is used in DynamoDB operations (e.g., UpdateItem, DeleteItem)
  * that require conditional expressions.

@@ -11,7 +11,6 @@ import {
  * @template C The type that identifies the context.
  * @template R The type that identifies the resource.
  *
- * @description
  * Interface for an authorization service that validates whether identities are allowed to perform actions on resources.
  */
 export interface IAuthorizationService<A, I, C, R> {

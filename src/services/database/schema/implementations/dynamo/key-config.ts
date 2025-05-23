@@ -1,6 +1,5 @@
 /**
  *
- * @description
  * Configuration for a key field used in database operations.
  * Specifies the key's name and its expected primitive type.
  *

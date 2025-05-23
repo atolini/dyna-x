@@ -1,6 +1,5 @@
 /**
  *
- * @description
  * Structure returned by an UpdateBuilder or similar utility after generating a DynamoDB update expression.
  * This object is used to safely construct update operations for DynamoDB by separating the expression
  * from its attribute names and values, preventing issues with reserved words and injection.

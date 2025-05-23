@@ -1,7 +1,6 @@
 import { ITransactionalWriterUnit } from '@database/transactional-writer/contracts';
 
 /**
- * @description
  * Defines a contract for logging events related to transactional writer operations,
  * such as successful writes.
  *

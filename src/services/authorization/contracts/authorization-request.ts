@@ -4,7 +4,6 @@
  * @template C The type that identifies the context of the request (e.g., roles, environment, metadata).
  * @template R The type that identifies the resource (e.g., resource ID or ARN).
  *
- * @description
  * Represents an authorization request for a specific resource, including the identity performing the action,
  * the action itself, the resource being accessed, and optional context information.
  *

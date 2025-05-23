@@ -7,7 +7,6 @@ import { IUpdateBuilder } from '@database/update-builder/contracts/i-update-buil
  * @template C - Type of the condition builder used for conditional operations.
  * @template U - Type of the update builder used for update operations.
  *
- * @description
  * Interface for write operations in a database.
  * Supports inserting, updating, deleting, and performing batch writes of items.
  */

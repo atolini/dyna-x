@@ -11,13 +11,16 @@ import {
 } from '@aws-sdk/client-cloudwatch-logs';
 
 /**
- * @class CloudWatchLogErrorHandler
+ * @class CloudWatchLogServiceErrorHandler
  * @implements {IErrorActions<T, R>}
  * @template T - Response type
  * @template R - Response builder type
  *
  * @classdesc
  * Handles exceptions thrown within the {@link CloudWatchLogService} class.
+ *
+ * This class is responsible for identifying and handling specific AWS CloudWatch
+ * logging-related errors and returning meaningful HTTP responses using a response builder.
  *
  * The following exceptions may be handled by this class:
  * - **DataAlreadyAcceptedException**: If the logs are already accepted.
@@ -31,7 +34,10 @@ export class CloudWatchLogServiceErrorHandler<T, R extends IResponseBuilder<T>>
   implements IErrorActions<T, R>
 {
   /**
+   * Checks if the provided error can be handled by this error handler.
    *
+   * @param {Error} error - The error object thrown during log submission.
+   * @returns {boolean} Returns `true` if the error is one of the known CloudWatch log-related exceptions.
    */
   canHandle(error: Error): boolean {
     return (
@@ -45,6 +51,12 @@ export class CloudWatchLogServiceErrorHandler<T, R extends IResponseBuilder<T>>
   }
 
   /**
+   * Handles the provided error by logging its details and returning an appropriate response using the response builder.
+   *
+   * @param {Error} error - The error to handle.
+   * @param {ILogger<any>} logger - Logger instance used to log error details.
+   * @param {R} resBuilder - Response builder used to construct the final response.
+   * @returns {T} A structured response indicating the error condition.
    *
    */
   handle(error: Error, logger: ILogger<any>, resBuilder: R): T {

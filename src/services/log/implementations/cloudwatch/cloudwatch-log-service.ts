@@ -49,10 +49,10 @@ export class CloudWatchLogService<T> implements ILogService<T, LogContainer> {
   /**
    * Constructs a new instance of CloudWatchLogService.
    *
-   * @param region - AWS region for the CloudWatchLogs client (default: 'us-east-1').
+   * @param {string} [region] - AWS region for the CloudWatchLogs client (default: 'us-east-1').
    */
   constructor(region?: string) {
-    this.client = new CloudWatchLogsClient(region ? {} : { region });
+    this.client = new CloudWatchLogsClient(region ? { region } : {});
   }
 
   /**

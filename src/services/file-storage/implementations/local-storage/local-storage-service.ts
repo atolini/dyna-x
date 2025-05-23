@@ -3,6 +3,10 @@ import * as fs from 'fs';
 import * as path from 'path';
 
 /**
+ * @class LocalStorageService
+ * @implements {@link IFileStorageService}
+ * 
+ * @classdesc
  * Manages file operations within a specified directory.
  */
 export class LocalStorageService implements IFileStorageService {

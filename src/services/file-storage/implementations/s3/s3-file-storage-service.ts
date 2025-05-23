@@ -12,27 +12,28 @@ import {
 } from '@file-storage/contracts';
 
 /**
- * @class S3StorageService
+ * @class S3FileStorageService
  * @implements {IFileStorageService}
  *
  * @classdesc
- * AWS S3 implementation of the IStorageService interface for file storage operations.
+ * AWS S3 implementation of the IFileStorageService interface for file storage operations.
  *
  * This service provides methods to upload, retrieve, delete, and list files in an S3 bucket.
  * It supports sending files as Buffers, strings, or Readable streams and retrieves files as strings.
  *
  * @example
  * // Example: Create an S3 storage service and upload a file
- * const storage = new S3StorageService('my-bucket', 'us-east-1');
+ * const storage = new S3FileStorageService('my-bucket', eventLogger, 'us-east-1');
  * await storage.uploadFile('folder/file.txt', 'content', 'text/plain');
  */
 export class S3FileStorageService implements IFileStorageService {
   private readonly s3: S3Client;
 
   /**
-   * Constructs a new instance of S3StorageService.
+   * Constructs a new instance of S3FileStorageService.
    *
    * @param {string} bucketName - The name of the S3 bucket to operate on.
+   * @param {IFileStorageServiceEventLogger} eventLogger - The logger instance used to log file-related events.
    * @param {string} [region] - AWS region for the S3 client (optional).
    */
   constructor(
@@ -51,11 +52,8 @@ export class S3FileStorageService implements IFileStorageService {
    * @param {string} contentType - The MIME type of the file.
    * @returns {Promise<void>} A promise that resolves once the file is uploaded.
    *
-   * @throws {EncryptionTypeMismatch} If the encryption type of the file does not match the expected type.
-   * @throws {InvalidRequest} If the request is invalid.
-   *
-   * This function uses the AWS SDK commands:
-   * - {@link https://docs.aws.amazon.com/AWSJavaScriptSDK/v3/latest/client/s3/command/PutObjectCommand/ | PutObjectCommand}
+   * @remarks
+   * This method uses the AWS SDK {@link https://docs.aws.amazon.com/AWSJavaScriptSDK/v3/latest/client/s3/command/PutObjectCommand/ PutObjectCommand}.
    */
   async uploadFile(
     key: string,
@@ -77,19 +75,14 @@ export class S3FileStorageService implements IFileStorageService {
   /**
    * Retrieves the content of a file from the configured S3 bucket.
    *
-   * This method fetches an object using the specified key (path) from the S3 bucket configured during service initialization.
-   * If the object is stored in an archived storage class (e.g., S3 Glacier or S3 Intelligent-Tiering archive tiers), it must be
-   * restored first using the `RestoreObjectCommand`, otherwise an `InvalidObjectState` error will be thrown.
-   *
    * @param {string} key - The object key (path) of the file to retrieve from the bucket.
    * @returns {Promise<string>} A promise that resolves to the file content as a string.
    *
-   * @throws {NoSuchKey} If the specified object key does not exist in the bucket.
-   * @throws {NoSuchBucket} If the specified bucket does not exist.
-   * @throws {InvalidObjectState} If the object is archived and must be restored before access.
+   * @remarks
+   * If the object is archived in a storage class like S3 Glacier or Intelligent-Tiering archive tiers,
+   * it must be restored manually using the RestoreObjectCommand before it can be accessed.
    *
-   * This function uses the AWS SDK command:
-   * - {@link https://docs.aws.amazon.com/AWSJavaScriptSDK/v3/latest/client/s3/command/GetObjectCommand/ | GetObjectCommand}
+   * This method uses the AWS SDK {@link https://docs.aws.amazon.com/AWSJavaScriptSDK/v3/latest/client/s3/command/GetObjectCommand/ GetObjectCommand}.
    */
   async getFile(key: string): Promise<string> {
     const command = new GetObjectCommand({
@@ -115,8 +108,8 @@ export class S3FileStorageService implements IFileStorageService {
    * @param {string} key - The object key (path) of the file to delete.
    * @returns {Promise<void>} A promise that resolves once the file is deleted.
    *
-   * This function uses the AWS SDK command:
-   * - {@link https://docs.aws.amazon.com/AWSJavaScriptSDK/v3/latest/client/s3/command/DeleteObjectCommand/ | DeleteObjectCommand}
+   * @remarks
+   * This method uses the AWS SDK {@link https://docs.aws.amazon.com/AWSJavaScriptSDK/v3/latest/client/s3/command/DeleteObjectCommand/ DeleteObjectCommand}.
    */
   async deleteFile(key: string): Promise<void> {
     const command = new DeleteObjectCommand({
@@ -134,10 +127,8 @@ export class S3FileStorageService implements IFileStorageService {
    *
    * @returns {Promise<string[]>} An array of object keys (paths) found in the bucket.
    *
-   * @throws {NoSuchBucket} If the specified bucket does not exist.
-   *
-   * This function uses the AWS SDK command:
-   * - {@link https://docs.aws.amazon.com/AWSJavaScriptSDK/v3/latest/client/s3/command/ListObjectsV2Command/ | ListObjectsV2Command}
+   * @remarks
+   * This method uses the AWS SDK {@link https://docs.aws.amazon.com/AWSJavaScriptSDK/v3/latest/client/s3/command/ListObjectsV2Command/ ListObjectsV2Command}.
    */
   async listFiles(): Promise<string[]> {
     const keys: string[] = [];

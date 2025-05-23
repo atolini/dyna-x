@@ -28,8 +28,12 @@ import {
 export class S3FileStorageServiceErrorHandler<T, R extends IResponseBuilder<T>>
   implements IErrorActions<T, R>
 {
+
   /**
+   * Checks if the error can be handled by this handler.
    *
+   * @param {Error} error - The error to check.
+   * @returns {boolean} True if the error is one of the handled S3 exceptions, false otherwise.
    */
   canHandle(error: Error): boolean {
     return (
@@ -42,7 +46,12 @@ export class S3FileStorageServiceErrorHandler<T, R extends IResponseBuilder<T>>
   }
 
   /**
+   * Handles the provided error and builds an appropriate response using the response builder.
    *
+   * @param {Error} error - The error to handle.
+   * @param {ILogger<any>} logger - The logger instance for logging the error.
+   * @param {R} resBuilder - The response builder instance.
+   * @returns {T} The built response for the handled error.
    */
   handle(error: Error, logger: ILogger<any>, resBuilder: R): T {
     const errorMap = [

@@ -1,17 +1,12 @@
 import { ILogger } from '@logger/contracts';
 
 /**
- * @class S3StorageLogger
+ * @class S3FileStorageServiceEventLogger  
  * @classdesc
  * Helper class responsible for logging file-related events performed by the {@link S3StorageService}.
  *
  * Logs upload, retrieval, deletion, and listing of files from the S3 bucket in a structured format using the provided logger instance.
  * This logger improves observability and auditability of file operations.
- *
- * @example
- * const logger = new ConsoleLogger(); // implements ILogger
- * const storageLogger = new S3StorageLogger(logger, 'my-bucket');
- * storageLogger.fileUploaded('folder/file.txt', 'text/plain');
  */
 export class S3FileStorageServiceEventLogger {
   private readonly logger: ILogger<unknown>;

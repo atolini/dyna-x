@@ -52,7 +52,6 @@ export class S3FileStorageService implements IFileStorageService {
    * @param {string} contentType - The MIME type of the file.
    * @returns {Promise<void>} A promise that resolves once the file is uploaded.
    *
-   * @remarks
    * This method uses the AWS SDK {@link https://docs.aws.amazon.com/AWSJavaScriptSDK/v3/latest/client/s3/command/PutObjectCommand/ PutObjectCommand}.
    */
   async uploadFile(
@@ -78,7 +77,6 @@ export class S3FileStorageService implements IFileStorageService {
    * @param {string} key - The object key (path) of the file to retrieve from the bucket.
    * @returns {Promise<string>} A promise that resolves to the file content as a string.
    *
-   * @remarks
    * If the object is archived in a storage class like S3 Glacier or Intelligent-Tiering archive tiers,
    * it must be restored manually using the RestoreObjectCommand before it can be accessed.
    *
@@ -108,7 +106,6 @@ export class S3FileStorageService implements IFileStorageService {
    * @param {string} key - The object key (path) of the file to delete.
    * @returns {Promise<void>} A promise that resolves once the file is deleted.
    *
-   * @remarks
    * This method uses the AWS SDK {@link https://docs.aws.amazon.com/AWSJavaScriptSDK/v3/latest/client/s3/command/DeleteObjectCommand/ DeleteObjectCommand}.
    */
   async deleteFile(key: string): Promise<void> {
@@ -127,7 +124,6 @@ export class S3FileStorageService implements IFileStorageService {
    *
    * @returns {Promise<string[]>} An array of object keys (paths) found in the bucket.
    *
-   * @remarks
    * This method uses the AWS SDK {@link https://docs.aws.amazon.com/AWSJavaScriptSDK/v3/latest/client/s3/command/ListObjectsV2Command/ ListObjectsV2Command}.
    */
   async listFiles(): Promise<string[]> {

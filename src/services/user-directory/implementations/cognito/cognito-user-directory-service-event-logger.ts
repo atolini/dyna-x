@@ -7,7 +7,7 @@ import { IUserDirectoryServiceEventLogger } from '@user-directory/contracts';
  * @implements IUserDirectoryServiceEventLogger
  *
  * @classdesc
- * Helper class responsible for logging user-related events performed by the {@link CognitoUserService}.
+ * Helper class responsible for logging user-related events performed by the {@link CognitoUserDirectoryService}.
  *
  * Logs creation, update, and deletion of users in a structured format using the provided logger instance.
  *
@@ -15,7 +15,7 @@ import { IUserDirectoryServiceEventLogger } from '@user-directory/contracts';
  *
  * @example
  * const logger = new ConsoleLogger(); // implements ILogger
- * const eventLogger = new UserEventLogger(logger, 'us-east-1_example');
+ * const eventLogger = new CognitoUserDirectoryServiceEventLogger(logger, 'us-east-1_example');
  * eventLogger.userCreated('john.doe', [{ Name: 'email', Value: 'john.doe@example.com' }]);
  */
 export class CognitoUserDirectoryServiceEventLogger

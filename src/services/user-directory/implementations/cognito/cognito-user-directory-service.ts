@@ -25,15 +25,15 @@ import {
  *
  * It is intended for use in server-side environments where AWS credentials are available.
  *
- * The constructor requires the AWS region and the Cognito User Pool ID.
+ * The constructor requires the AWS region, the Cognito User Pool ID e o eventLogger.
  *
  * Note: This service focuses on administrative user operations and does not handle authentication flows (tokens, login, refresh, etc.).
  *
  * This class is stateless and safe to be used concurrently across multiple requests.
  *
  * @example
- * const logger: ILogger<Context> = new Logger<Context>({...});
- * const userService = new CognitoUserService('us-east-1_example', logger, 'us-east-1');
+ * const logger: IUserDirectoryServiceEventLogger<AttributeType[]> = ...;
+ * const userService = new CognitoUserDirectoryService('us-east-1_examplePoolId', logger, 'us-east-1');
  * await userService.createUser({
  *   login: 'example@mail.com',
  *   userAttributes: [

@@ -4,12 +4,10 @@ import {
   TransactWriteItemsCommand,
   TransactWriteItemsInput,
 } from '@aws-sdk/client-dynamodb';
-import { ITransactionalWriter } from '@database/transactional-writer/contracts';
-import { v4 as uuidv4 } from 'uuid';
-import { ITransactionalWriterUnit } from '@database/transactional-writer/contracts';
-import { MaxItemsExceededError } from '@database/transactional-writer/implementations/dynamo';
 import { DynamoSchema } from '@database/schema/implementations/dynamo';
-import { DynamoItem } from '@database/transactional-writer/implementations/dynamo';
+import { ITransactionalWriter, ITransactionalWriterUnit } from '@database/transactional-writer/contracts';
+import { DynamoItem, MaxItemsExceededError } from '@database/transactional-writer/implementations/dynamo';
+import { v4 as uuidv4 } from 'uuid';
 
 /**
  *
